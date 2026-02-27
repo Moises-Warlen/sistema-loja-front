@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Clientes</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+</head>
+<body class="uk-container">
+
+<h2 class="uk-margin-top">Clientes</h2>
+
+<div class="uk-grid-small" uk-grid>
+<input id="nome" class="uk-input uk-width-1-3@m" placeholder="Nome">
+<input id="telefone" class="uk-input uk-width-1-3@m" placeholder="Telefone">
+<button onclick="salvar()" class="uk-button uk-button-primary">Salvar</button>
+</div>
+
+<table class="uk-table uk-table-striped uk-margin">
+<thead>
+<tr>
+<th>Nome</th>
+<th>Telefone</th>
+<th>Ações</th>
+</tr>
+</thead>
+<tbody id="lista"></tbody>
+</table>
+
+<script>
+const API="http://localhost:3000";
+
+async function salvar(){
+await fetch(API+"/clientes",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({nome:nome.value,telefone:telefone.value})
+});
+listar();
+}
+
+async function excluir(id){
+await fetch(API+"/clientes/"+id,{method:"DELETE"});
+listar();
+}
+
+async function listar(){
+const res=await fetch(API+"/clientes");
+const data=await res.json();
+lista.innerHTML="";
+data.forEach(c=>{
+lista.innerHTML+=`
+<tr>
+<td>${c.nome}</td>
+<td>${c.telefone}</td>
+<td>
+<button onclick="excluir('${c.id}')" class="uk-button uk-button-danger uk-button-small">Excluir</button>
+</td>
+</tr>`;
+});
+}
+listar();
+</script>
+
+</body>
+</html>

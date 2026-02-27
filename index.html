@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+</head>
+<body>
+
+<nav class="uk-navbar-container uk-navbar-dark uk-background-primary" uk-navbar>
+<div class="uk-navbar-left">
+<span class="uk-navbar-item uk-logo">Mariá skincare</span>
+</div>
+<div class="uk-navbar-right">
+<button onclick="logout()" class="uk-button uk-button-danger uk-button-small">Sair</button>
+</div>
+</nav>
+
+<div class="uk-container uk-margin-large-top">
+<div class="uk-grid-small uk-child-width-1-4@m uk-text-center" uk-grid>
+
+<div>
+<a href="clientes.html" class="uk-card uk-card-default uk-card-body uk-card-hover">
+<span uk-icon="users" ratio="2"></span>
+<h4>Clientes</h4>
+</a>
+</div>
+
+<div>
+<a href="produtos.html" class="uk-card uk-card-default uk-card-body uk-card-hover">
+<span uk-icon="cart" ratio="2"></span>
+<h4>Produtos</h4>
+</a>
+</div>
+
+<div>
+<a href="vendas.html" class="uk-card uk-card-default uk-card-body uk-card-hover">
+<span uk-icon="credit-card" ratio="2"></span>
+<h4>Vendas</h4>
+</a>
+</div>
+
+<div>
+<a href="relatorio.html" class="uk-card uk-card-default uk-card-body uk-card-hover">
+<span uk-icon="file-text" ratio="2"></span>
+<h4>Relatórios</h4>
+</a>
+</div>
+
+</div>
+</div>
+
+<script>
+function logout(){
+localStorage.removeItem("token");
+location.href="login.html";
+}
+</script>
+
+</body>
+</html>

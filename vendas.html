@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Vendas</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+</head>
+<body class="uk-container">
+
+<h2 class="uk-margin-top">Vendas</h2>
+
+<div class="uk-grid-small" uk-grid>
+<select id="produto" class="uk-select uk-width-1-3@m"></select>
+<select id="cliente" class="uk-select uk-width-1-3@m"></select>
+<input id="quantidade" type="number" class="uk-input uk-width-1-3@m" placeholder="Quantidade">
+<button onclick="salvar()" class="uk-button uk-button-primary">Salvar</button>
+</div>
+
+<script>
+const API="http://localhost:3000";
+
+async function carregar(){
+const p=await fetch(API+"/produtos").then(r=>r.json());
+const c=await fetch(API+"/clientes").then(r=>r.json());
+
+p.forEach(x=>produto.innerHTML+=`<option value="${x.id}">${x.nome}</option>`);
+c.forEach(x=>cliente.innerHTML+=`<option value="${x.id}">${x.nome}</option>`);
+}
+carregar();
+
+async function salvar(){
+await fetch(API+"/vendas",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+produtoId:produto.value,
+clienteId:cliente.value,
+quantidade:Number(quantidade.value)
+})
+});
+UIkit.notification("Venda registrada",{status:"success"});
+}
+</script>
+
+</body>
+</html>

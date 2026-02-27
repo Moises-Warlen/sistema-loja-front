@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+
+</head>
+<body class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-muted">
+
+<div class="uk-card uk-card-default uk-card-body uk-width-1-3@m">
+<h3 class="uk-text-center">Mariá skincare</h3>
+
+<input id="usuario" class="uk-input uk-margin" placeholder="Usuário">
+<input id="senha" type="password" class="uk-input uk-margin" placeholder="Senha">
+
+<button onclick="logar()" class="uk-button uk-button-primary uk-width-1-1">
+Entrar
+</button>
+</div>
+
+<script>
+const API = "http://localhost:3000";
+
+async function logar(){
+  const res = await fetch(API+"/login",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      usuario:usuario.value,
+      senha:senha.value
+    })
+  });
+
+  const data = await res.json();
+
+  if(res.ok){
+    localStorage.setItem("token",data.token);
+    location.href="index.html";
+  }else{
+    UIkit.notification(data.error,{status:'danger'});
+  }
+}
+</script>
+
+</body>
+</html>
