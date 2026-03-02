@@ -2,226 +2,250 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard</title>
 
-<!-- UIkit (apenas para compatibilidade) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
-
-<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dashboard {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 40px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.3);
+  padding: 40px;
+  width: 90%;
+  max-width: 1100px;
+  margin: 20px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.welcome h1 {
+  font-size: 2.2rem;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcome p {
+  color: #64748b;
+  margin-top: 5px;
+}
+
+.logout-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+}
+
+.logout-btn:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 25px;
+  margin: 30px 0;
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 30px;
+  padding: 40px 20px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #2563eb, #7c3aed);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.card:hover::before {
+  transform: translateX(0);
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: 0 30px 50px rgba(37, 99, 235, 0.2);
+}
+
+.card-icon {
+  width: 120px;
+  height: 120px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  color: white;
+  font-size: 60px;
+  transition: all 0.3s ease;
+}
+
+.card:hover .card-icon {
+  transform: rotate(10deg) scale(1.1);
+  border-radius: 30px;
+}
+
+.card h2 {
+  font-size: 2rem;
+  margin: 15px 0 10px;
+  font-weight: 700;
+}
+
+.card p {
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Cores */
+.card:nth-child(1) .card-icon { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+.card:nth-child(2) .card-icon { background: linear-gradient(135deg, #10b981, #34d399); }
+.card:nth-child(3) .card-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.card:nth-child(4) .card-icon { background: linear-gradient(135deg, #ef4444, #f87171); }
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: #94a3b8;
+  margin-top: 50px;
+  padding-top: 20px;
+  border-top: 2px solid #e2e8f0;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
+  .dashboard {
+    padding: 25px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
 
   body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    padding: 20px 0;
   }
 
   .dashboard {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 40px;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.3);
-    padding: 40px;
-    width: 90%;
-    max-width: 1100px;
-    margin: 20px;
+    padding: 20px;
+    border-radius: 25px;
+    margin: 10px;
   }
 
-  /* Header */
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
   .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 50px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e2e8f0;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+    margin-bottom: 30px;
   }
 
   .welcome h1 {
-    font-size: 2.2rem;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0;
+    font-size: 1.6rem;
   }
 
-  .welcome p {
-    color: #64748b;
-    margin-top: 5px;
-  }
-
-  .logout-btn {
-    background: #ef4444;
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    border-radius: 30px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1rem;
-  }
-
-  .logout-btn:hover {
-    background: #dc2626;
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
-  }
-
-  /* Grid de cards */
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 25px;
-    margin: 30px 0;
-  }
-
-  /* Cards */
   .card {
-    background: white;
-    border-radius: 30px;
-    padding: 40px 20px;
-    text-align: center;
-    text-decoration: none;
-    color: inherit;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-  }
-
-  .card:hover::before {
-    transform: translateX(0);
-  }
-
-  .card:hover {
-    transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 30px 50px rgba(37, 99, 235, 0.2);
+    padding: 25px 15px;
   }
 
   .card-icon {
-    width: 120px;
-    height: 120px;
-    border-radius: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 25px;
-    color: white;
-    font-size: 60px;
-    transition: all 0.3s ease;
-  }
-
-  .card:hover .card-icon {
-    transform: rotate(10deg) scale(1.1);
-    border-radius: 30px;
+    width: 90px;
+    height: 90px;
+    font-size: 40px;
+    border-radius: 25px;
   }
 
   .card h2 {
-    font-size: 2rem;
-    margin: 15px 0 10px;
-    font-weight: 700;
+    font-size: 1.5rem;
   }
 
   .card p {
-    color: #64748b;
-    font-size: 1.1rem;
-    line-height: 1.5;
+    font-size: 1rem;
   }
 
-  /* Cores dos cards */
-  .card:nth-child(1) .card-icon { background: linear-gradient(135deg, #2563eb, #7c3aed); }
-  .card:nth-child(2) .card-icon { background: linear-gradient(135deg, #10b981, #34d399); }
-  .card:nth-child(3) .card-icon { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
-  .card:nth-child(4) .card-icon { background: linear-gradient(135deg, #ef4444, #f87171); }
-
-  /* Footer */
   .footer {
-    text-align: center;
-    color: #94a3b8;
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: 2px solid #e2e8f0;
+    margin-top: 30px;
   }
-
-  /* Responsivo */
-  @media (max-width: 900px) {
-    .cards-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .dashboard {
-      padding: 25px;
-    }
-  }
-
-  @media (max-width: 600px) {
-    .cards-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .header {
-      flex-direction: column;
-      gap: 15px;
-      text-align: center;
-    }
-    
-    .welcome h1 {
-      font-size: 1.8rem;
-    }
-    
-    .card {
-      padding: 30px 15px;
-    }
-    
-    .card h2 {
-      font-size: 1.8rem;
-    }
-  }
+}
 </style>
-
 </head>
+
 <body>
 
 <div class="dashboard">
   
-  <!-- Header -->
   <div class="header">
     <div class="welcome">
-      <h1> Bem-vindo!</h1>
-      <p>Sistema de Gestão  Mariá Skincare</p>
+      <h1>Bem-vindo!</h1>
+      <p>Sistema de Gestão Mariá Skincare</p>
     </div>
     <button onclick="logout()" class="logout-btn">
       <i class="fas fa-sign-out-alt"></i> Sair
     </button>
   </div>
 
-  <!-- Cards de Acesso Rápido -->
   <div class="cards-grid">
     
     <a href="produtos.html" class="card">
@@ -258,7 +282,6 @@
     
   </div>
 
-  <!-- Footer -->
   <div class="footer">
     <p>© 2024 - Sistema de Gestão</p>
   </div>
