@@ -2,65 +2,1080 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Clientes</title>
+<title>Clientes - Mariá Skincare</title>
 
+<!-- UIkit -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+
+<!-- Input mask para telefone -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .uk-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 20px !important;
+    margin: 20px auto;
+    backdrop-filter: blur(10px);
+    max-width: 1200px !important;
+  }
+
+  @media (min-width: 640px) {
+    .uk-container {
+      padding: 30px !important;
+      margin: 30px auto;
+    }
+  }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header {
+      margin: -30px -30px 30px -30px;
+      padding: 25px 30px;
+    }
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  /* Menu Hamburguer */
+  .menu-container {
+    position: relative;
+  }
+
+  .hamburger-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.3rem;
+  }
+
+  .hamburger-btn:hover {
+    background: white;
+    color: var(--primary);
+    border-color: white;
+    transform: scale(1.05);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    min-width: 220px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--dark);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+  }
+
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-item:hover {
+    background: #f8fafc;
+    color: var(--primary);
+    padding-left: 25px;
+  }
+
+  .dropdown-item i {
+    width: 20px;
+    color: var(--primary);
+  }
+
+  .dropdown-item.logout:hover {
+    background: #fee2e2;
+    color: var(--danger);
+  }
+
+  .dropdown-item.logout i {
+    color: var(--danger);
+  }
+
+  /* Barra de pesquisa */
+  .search-section {
+    margin-bottom: 20px;
+  }
+
+  .search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .search-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1.1rem;
+  }
+
+  .search-wrapper input {
+    padding-left: 45px;
+    height: 45px;
+    border-radius: 25px;
+    border: 2px solid #e2e8f0;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+  }
+
+  .search-wrapper input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  @media (min-width: 640px) {
+    .search-wrapper input {
+      height: 50px;
+      font-size: 1rem;
+    }
+  }
+
+  /* Card do formulário */
+  .form-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  @media (min-width: 640px) {
+    .form-card {
+      padding: 25px;
+    }
+  }
+
+  .form-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.3rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  @media (min-width: 640px) {
+    .form-card h3 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .form-card h3 i {
+    color: var(--primary);
+  }
+
+  /* Inputs */
+  .modern-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+  }
+
+  @media (min-width: 640px) {
+    .modern-input {
+      padding: 12px 15px;
+      font-size: 1rem;
+    }
+  }
+
+  .modern-input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  /* Botões */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+
+  @media (min-width: 640px) {
+    .btn-primary {
+      padding: 12px 30px;
+      font-size: 1rem;
+    }
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--dark);
+    border: 2px solid #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+
+  @media (min-width: 640px) {
+    .btn-secondary {
+      padding: 12px 30px;
+      font-size: 1rem;
+    }
+  }
+
+  .btn-secondary:hover {
+    background: #f8fafc;
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* Container da tabela */
+  .table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    overflow-x: auto;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      padding: 20px;
+    }
+  }
+
+  /* Tabela */
+  .modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    min-width: 500px;
+  }
+
+  .modern-table thead th {
+    background: #f8fafc;
+    padding: 12px 10px;
+    font-weight: 600;
+    color: var(--dark);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-radius: 8px;
+  }
+
+  @media (min-width: 640px) {
+    .modern-table thead th {
+      padding: 15px;
+      font-size: 0.85rem;
+    }
+  }
+
+  .modern-table tbody tr {
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .modern-table tbody tr:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+  }
+
+  .modern-table td {
+    padding: 12px 10px;
+    border: none;
+    color: var(--dark);
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .modern-table td {
+      padding: 15px;
+      font-size: 1rem;
+    }
+  }
+
+  .modern-table td:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .modern-table td:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* Botões de ação */
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 2px;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .action-btn {
+      width: 38px;
+      height: 38px;
+      font-size: 1rem;
+      margin: 0 3px;
+    }
+  }
+
+  .action-btn.info {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .action-btn.info:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .action-btn.edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .action-btn.edit:hover {
+    background: var(--warning);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .action-btn.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  .action-btn.delete:hover {
+    background: var(--danger);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Paginação */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: var(--dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+  }
+
+  .page-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Modal */
+  .uk-modal-dialog {
+    border-radius: 20px !important;
+    padding: 20px !important;
+    margin: 20px !important;
+    max-width: 500px !important;
+    width: calc(100% - 40px) !important;
+  }
+
+  @media (min-width: 640px) {
+    .uk-modal-dialog {
+      padding: 30px !important;
+      margin: auto !important;
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--dark);
+  }
+
+  @media (min-width: 640px) {
+    .modal-header h2 {
+      font-size: 1.6rem;
+    }
+  }
+
+  .modal-header i {
+    font-size: 1.8rem;
+  }
+
+  .detail-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+
+  .detail-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 5px;
+  }
+
+  .detail-value {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  /* Badge de status (opcional) */
+  .status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .status-badge.ativo {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  /* Loading e estados vazios */
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .empty-state i {
+    font-size: 50px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+  }
+
+  .empty-state p {
+    color: #64748b;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+</style>
+
 </head>
-<body class="uk-container">
 
-<h2 class="uk-margin-top">Clientes</h2>
+<body>
 
-<div class="uk-grid-small" uk-grid>
-<input id="nome" class="uk-input uk-width-1-3@m" placeholder="Nome">
-<input id="telefone" class="uk-input uk-width-1-3@m" placeholder="Telefone">
-<button onclick="salvar()" class="uk-button uk-button-primary">Salvar</button>
+<div class="uk-container">
+
+  <!-- HEADER COM MENU HAMBURGUER -->
+  <div class="page-header">
+    <h1>
+      <i class="fas fa-users"></i>
+      Clientes
+    </h1>
+    
+    <div class="menu-container">
+      <div class="hamburger-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="index.html" class="dropdown-item">
+          <i class="fas fa-home"></i>
+          Dashboard
+        </a>
+        <a href="produtos.html" class="dropdown-item">
+          <i class="fas fa-box"></i>
+          Produtos
+        </a>
+        <a href="vendas.html" class="dropdown-item">
+          <i class="fas fa-shopping-cart"></i>
+          Vendas
+        </a>
+        <a href="relatorio.html" class="dropdown-item">
+          <i class="fas fa-chart-line"></i>
+          Relatórios
+        </a>
+        <div class="dropdown-item logout" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Sair
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESQUISA -->
+  <div class="search-section">
+    <div class="search-wrapper">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        id="pesquisa" 
+        placeholder="Pesquisar clientes por nome ou telefone..." 
+        onkeyup="filtrarClientes()"
+        class="modern-input"
+      >
+    </div>
+  </div>
+
+  <!-- FORMULÁRIO DE CADASTRO -->
+  <div class="form-card">
+    <h3>
+      Novo Cliente 
+    </h3>
+    
+    <div class="uk-grid-small" uk-grid>
+      <div class="uk-width-1-2@s uk-width-1-3@m">
+        <input 
+          id="nome" 
+          class="modern-input" 
+          placeholder="Nome completo"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="uk-width-1-2@s uk-width-1-3@m">
+        <input 
+          id="telefone" 
+          type="text" 
+          class="modern-input telefone-mask" 
+          placeholder="(00) 00000-0000"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="uk-width-1-1@s uk-width-1-3@m">
+        <button onclick="salvar()" class="btn-primary" style="width: 100%;">
+          <i class="fas fa-save"></i>
+          Salvar Cliente
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA DE CLIENTES -->
+  <div class="table-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+      <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 1.2rem;">
+        <i class="fas fa-list" style="color: var(--primary);"></i>
+        Lista de Clientes
+      </h3>
+      <span style="color: #64748b; font-size: 0.9rem;" id="totalClientes">Total: 0</span>
+    </div>
+    
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Telefone</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="lista"></tbody>
+    </table>
+
+    <!-- Paginação -->
+    <div class="pagination" id="paginacao"></div>
+  </div>
+
+  <!-- MODAL DETALHES -->
+  <div id="modal-detalhes" uk-modal>
+    <div class="uk-modal-dialog">
+      <div class="modal-header">
+        <i class="fas fa-user-circle" style="color: var(--primary);"></i>
+        <h2>Detalhes do Cliente</h2>
+      </div>
+      
+      <div id="detalhes-cliente"></div>
+      
+      <div style="text-align: right; margin-top: 25px;">
+        <button class="btn-secondary uk-modal-close">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EDIÇÃO -->
+  <div id="modal-editar" uk-modal>
+    <div class="uk-modal-dialog">
+      <div class="modal-header">
+        <i class="fas fa-user-edit" style="color: var(--warning);"></i>
+        <h2>Editar Cliente</h2>
+      </div>
+      
+      <input type="hidden" id="edit-id">
+      
+      <div class="uk-margin">
+        <label class="form-label">Nome</label>
+        <input id="edit-nome" class="modern-input">
+      </div>
+      
+      <div class="uk-margin">
+        <label class="form-label">Telefone</label>
+        <input id="edit-telefone" class="modern-input telefone-mask">
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 25px;">
+        <button class="btn-secondary uk-modal-close" style="flex: 1;">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </button>
+        <button onclick="atualizarCliente()" class="btn-primary" style="flex: 1;">
+          <i class="fas fa-save"></i>
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<table class="uk-table uk-table-striped uk-margin">
-<thead>
-<tr>
-<th>Nome</th>
-<th>Telefone</th>
-<th>Ações</th>
-</tr>
-</thead>
-<tbody id="lista"></tbody>
-</table>
 
+<!-- ===================== IMPORTA api.js ===================== -->
+<script src="api.js"></script>
 <script>
-const API="https://sistema-loja-api.onrender.com";
 
-async function salvar(){
-await fetch(API+"/clientes",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({nome:nome.value,telefone:telefone.value})
+
+// Verificar autenticação
+if (!localStorage.getItem("token")) {
+  window.location.href = "login.html";
+}
+
+// Variáveis globais
+let todosClientes = [];
+let clientesFiltrados = [];
+let paginaAtual = 1;
+const itensPorPagina = 5;
+
+// Máscara de telefone
+$(document).ready(function() {
+  $('.telefone-mask').mask('(00) 00000-0000');
 });
-listar();
+
+// Menu hamburguer
+function toggleMenu() {
+  document.getElementById('dropdownMenu').classList.toggle('show');
 }
 
-async function excluir(id){
-await fetch(API+"/clientes/"+id,{method:"DELETE"});
-listar();
-}
-
-async function listar(){
-const res=await fetch(API+"/clientes");
-const data=await res.json();
-lista.innerHTML="";
-data.forEach(c=>{
-lista.innerHTML+=`
-<tr>
-<td>${c.nome}</td>
-<td>${c.telefone}</td>
-<td>
-<button onclick="excluir('${c.id}')" class="uk-button uk-button-danger uk-button-small">Excluir</button>
-</td>
-</tr>`;
+// Fechar menu ao clicar fora
+document.addEventListener('click', function(event) {
+  if (!event.target.closest('.menu-container')) {
+    document.getElementById('dropdownMenu').classList.remove('show');
+  }
 });
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
 }
+
+// Funções da API
+async function salvar() {
+  const nomeCliente = nome.value.trim();
+  const telefoneCliente = telefone.value.trim();
+
+  if (!nomeCliente || !telefoneCliente) {
+    UIkit.notification({ 
+      message: '<i class="fas fa-exclamation-triangle"></i> Preencha todos os campos!', 
+      status: 'warning' 
+    });
+    return;
+  }
+
+  try {
+    await fetch(API + "/clientes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      },
+      body: JSON.stringify({
+        nome: nomeCliente,
+        telefone: telefoneCliente
+      })
+    });
+
+    UIkit.notification({ 
+      message: '<i class="fas fa-check-circle"></i> Cliente cadastrado com sucesso!', 
+      status: 'success' 
+    });
+    
+    // Limpar campos
+    nome.value = "";
+    telefone.value = "";
+    
+    listar();
+  } catch (error) {
+    UIkit.notification({ 
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao cadastrar cliente', 
+      status: 'danger' 
+    });
+  }
+}
+
+async function excluir(id) {
+  UIkit.modal.confirm('Tem certeza que deseja excluir este cliente?').then(async function() {
+    try {
+      await fetch(API + "/clientes/" + id, {
+        method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + localStorage.getItem("token")
+        }
+      });
+      
+      UIkit.notification({ 
+        message: '<i class="fas fa-check-circle"></i> Cliente excluído com sucesso!', 
+        status: 'success' 
+      });
+      
+      listar();
+    } catch (error) {
+      UIkit.notification({ 
+        message: '<i class="fas fa-exclamation-circle"></i> Erro ao excluir cliente', 
+        status: 'danger' 
+      });
+    }
+  });
+}
+
+function verDetalhes(cliente) {
+  const detalhes = document.getElementById('detalhes-cliente');
+  
+  detalhes.innerHTML = `
+    <div class="detail-item">
+      <div class="detail-label">👤 Nome</div>
+      <div class="detail-value">${cliente.nome}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">📞 Telefone</div>
+      <div class="detail-value">${cliente.telefone}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">📅 Cliente desde</div>
+      <div class="detail-value">${new Date(cliente.createdAt || Date.now()).toLocaleDateString()}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">🆔 ID</div>
+      <div class="detail-value" style="font-size: 0.9rem;">${cliente.id}</div>
+    </div>
+  `;
+  
+  UIkit.modal('#modal-detalhes').show();
+}
+
+function editar(cliente) {
+  document.getElementById('edit-id').value = cliente.id;
+  document.getElementById('edit-nome').value = cliente.nome;
+  document.getElementById('edit-telefone').value = cliente.telefone;
+  
+  $('#edit-telefone').mask('(00) 00000-0000');
+  
+  UIkit.modal('#modal-editar').show();
+}
+
+async function atualizarCliente() {
+  const id = document.getElementById('edit-id').value;
+  const nome = document.getElementById('edit-nome').value.trim();
+  const telefone = document.getElementById('edit-telefone').value.trim();
+  
+  if (!nome || !telefone) {
+    UIkit.notification({ 
+      message: '<i class="fas fa-exclamation-triangle"></i> Preencha todos os campos!', 
+      status: 'warning' 
+    });
+    return;
+  }
+  
+  try {
+    await fetch(API + "/clientes/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      },
+      body: JSON.stringify({ nome, telefone })
+    });
+    
+    UIkit.notification({ 
+      message: '<i class="fas fa-check-circle"></i> Cliente atualizado com sucesso!', 
+      status: 'success' 
+    });
+    
+    UIkit.modal('#modal-editar').hide();
+    listar();
+  } catch (error) {
+    UIkit.notification({ 
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao atualizar cliente', 
+      status: 'danger' 
+    });
+  }
+}
+
+// Filtro e paginação
+function filtrarClientes() {
+  const termo = pesquisa.value.toLowerCase().trim();
+  
+  if (!termo) {
+    clientesFiltrados = [...todosClientes];
+  } else {
+    clientesFiltrados = todosClientes.filter(c => 
+      c.nome.toLowerCase().includes(termo) || 
+      c.telefone.includes(termo)
+    );
+  }
+  
+  paginaAtual = 1;
+  renderizarPaginacao();
+  renderizarTabela();
+  document.getElementById('totalClientes').innerText = `Total: ${clientesFiltrados.length}`;
+}
+
+function renderizarPaginacao() {
+  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacao');
+  
+  if (clientesFiltrados.length <= itensPorPagina) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  // Botão anterior
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual - 1})" ${paginaAtual === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  // Botões de página
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtual - 1 && i <= paginaAtual + 1)) {
+      html += `<button class="page-btn ${i === paginaAtual ? 'active' : ''}" onclick="mudarPagina(${i})">${i}</button>`;
+    } else if (i === paginaAtual - 2 || i === paginaAtual + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  // Botão próximo
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual + 1})" ${paginaAtual === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPagina(novaPagina) {
+  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtual = novaPagina;
+    renderizarPaginacao();
+    renderizarTabela();
+  }
+}
+
+function renderizarTabela() {
+  const inicio = (paginaAtual - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const clientesPagina = clientesFiltrados.slice(inicio, fim);
+  
+  const lista = document.getElementById('lista');
+  lista.innerHTML = "";
+  
+  clientesPagina.forEach(c => {
+    lista.innerHTML += `
+      <tr>
+        <td><strong>${c.nome}</strong></td>
+        <td>${c.telefone}</td>
+        <td><span class="status-badge ativo"><i class="fas fa-circle" style="font-size: 0.5rem; margin-right: 5px;"></i>Ativo</span></td>
+        <td>
+          <button onclick='verDetalhes(${JSON.stringify(c).replace(/'/g, "\\'")})' 
+                  class="action-btn info" title="Detalhes">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button onclick='editar(${JSON.stringify(c).replace(/'/g, "\\'")})' 
+                  class="action-btn edit" title="Editar">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button onclick="excluir('${c.id}')" 
+                  class="action-btn delete" title="Excluir">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>`;
+  });
+  
+  if (clientesPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="4">
+          <div class="empty-state">
+            <i class="fas fa-users-slash"></i>
+            <p>Nenhum cliente encontrado</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+async function listar() {
+  try {
+    const res = await fetch(API + "/clientes", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    const data = await res.json();
+    
+    todosClientes = data;
+    clientesFiltrados = [...todosClientes];
+    paginaAtual = 1;
+    
+    document.getElementById('totalClientes').innerText = `Total: ${todosClientes.length}`;
+    renderizarPaginacao();
+    renderizarTabela();
+  } catch (error) {
+    console.error('Erro ao listar clientes:', error);
+    UIkit.notification({ 
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao carregar clientes', 
+      status: 'danger' 
+    });
+  }
+}
+
+// Inicializar
 listar();
 </script>
 

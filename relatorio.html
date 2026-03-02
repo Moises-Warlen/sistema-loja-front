@@ -1,114 +1,2186 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Relatório</title>
+<title>Relatórios - Mariá Skincare</title>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.17.0/dist/css/uikit.min.css" />
+<!-- UIkit -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- Bibliotecas para PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+
+<!-- html2canvas para capturar gráficos -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .uk-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 20px !important;
+    margin: 20px auto;
+    backdrop-filter: blur(10px);
+    max-width: 1400px !important;
+  }
+
+  @media (min-width: 640px) {
+    .uk-container {
+      padding: 30px !important;
+      margin: 30px auto;
+    }
+  }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header {
+      margin: -30px -30px 30px -30px;
+      padding: 25px 30px;
+    }
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  /* Menu Hamburguer */
+  .menu-container {
+    position: relative;
+  }
+
+  .hamburger-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.3rem;
+  }
+
+  .hamburger-btn:hover {
+    background: white;
+    color: var(--primary);
+    border-color: white;
+    transform: scale(1.05);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    min-width: 220px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--dark);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+  }
+
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-item:hover {
+    background: #f8fafc;
+    color: var(--primary);
+    padding-left: 25px;
+  }
+
+  .dropdown-item i {
+    width: 20px;
+    color: var(--primary);
+  }
+
+  .dropdown-item.logout:hover {
+    background: #fee2e2;
+    color: var(--danger);
+  }
+
+  .dropdown-item.logout i {
+    color: var(--danger);
+  }
+
+  /* Botões de tipo de relatório */
+  .report-type-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+  }
+
+  .type-btn {
+    padding: 12px 20px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+    min-width: 150px;
+  }
+
+  .type-btn i {
+    font-size: 1.2rem;
+  }
+
+  .type-btn.active {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-color: transparent;
+  }
+
+  .type-btn:hover:not(.active) {
+    background: #f8fafc;
+    border-color: var(--primary);
+  }
+
+  /* Cards de filtro */
+  .filter-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  .filter-card h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark);
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .filter-card h3 i {
+    color: var(--primary);
+  }
+
+  /* Inputs modernos */
+  .modern-input, .modern-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background: white;
+  }
+
+  .modern-input:focus, .modern-select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .modern-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+  }
+
+  /* Botões */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--dark);
+    border: 2px solid #e2e8f0;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-secondary:hover {
+    background: #f8fafc;
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-pdf {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-pdf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+  }
+
+  .btn-success {
+    background: linear-gradient(135deg, var(--success), #34d399);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+  }
+
+  /* Cards de estatísticas */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  .stat-card.primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+  }
+
+  .stat-card.success {
+    background: linear-gradient(135deg, var(--success), #34d399);
+    color: white;
+  }
+
+  .stat-card.warning {
+    background: linear-gradient(135deg, var(--warning), #fbbf24);
+    color: white;
+  }
+
+  .stat-card.info {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    color: white;
+  }
+
+  .stat-label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .stat-sub {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-top: 5px;
+  }
+
+  /* Cards de gráfico */
+  .chart-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  .chart-card h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark);
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .chart-card h3 i {
+    color: var(--primary);
+  }
+
+  .chart-container {
+    height: 400px;
+    position: relative;
+  }
+
+  /* Tabelas modernas */
+  .table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    margin-bottom: 30px;
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .table-header h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--dark);
+  }
+
+  .table-header h3 i {
+    color: var(--primary);
+  }
+
+  .modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+  }
+
+  .modern-table thead th {
+    background: #f8fafc;
+    padding: 12px 15px;
+    font-weight: 600;
+    color: var(--dark);
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    border-radius: 8px;
+  }
+
+  .modern-table tbody tr {
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .modern-table tbody tr:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+  }
+
+  .modern-table td {
+    padding: 12px 15px;
+    border: none;
+    color: var(--dark);
+  }
+
+  .modern-table td:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .modern-table td:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* Badges */
+  .payment-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .payment-badge.dinheiro {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .payment-badge.pix {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .payment-badge.credito {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .payment-badge.debito {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--secondary);
+  }
+
+  .status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .status-badge.success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .status-badge.warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .status-badge.danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  /* Botões de ação */
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 3px;
+  }
+
+  .action-btn.info {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .action-btn.info:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Paginação */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: var(--dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 50px;
+  }
+
+  .empty-state i {
+    font-size: 60px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+  }
+
+  .empty-state p {
+    color: #64748b;
+    font-size: 1.1rem;
+  }
+
+  /* Loading para PDF */
+  .pdf-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+  }
+
+  .pdf-loading.show {
+    display: flex;
+  }
+
+  .pdf-loading-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+
+  .pdf-loading-content i {
+    font-size: 50px;
+    color: var(--primary);
+    margin-bottom: 15px;
+    animation: spin 1s linear infinite;
+  }
+
+  .pdf-loading-content p {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--dark);
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Responsivo */
+  @media (max-width: 960px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+
 </head>
+
 <body>
 
-<div class="uk-container uk-margin-top">
-
-<h2>Relatório de Vendas</h2>
-
-<div class="uk-grid-small" uk-grid>
-    <div class="uk-width-1-3@s">
-        <input type="date" id="inicio" class="uk-input">
-    </div>
-
-    <div class="uk-width-1-3@s">
-        <input type="date" id="fim" class="uk-input">
-    </div>
-
-    <div class="uk-width-1-3@s">
-        <button onclick="buscarRelatorio()" class="uk-button uk-button-primary uk-width-1-1">
-            Buscar
-        </button>
-    </div>
+<!-- Loading PDF -->
+<div class="pdf-loading" id="pdfLoading">
+  <div class="pdf-loading-content">
+    <i class="fas fa-spinner"></i>
+    <p>Gerando PDF...</p>
+  </div>
 </div>
 
-<hr>
+<div class="uk-container">
 
-<h3>Total do Período: R$ <span id="total">0</span></h3>
+  <!-- HEADER COM MENU HAMBURGUER -->
+  <div class="page-header">
+    <h1>
+      <i class="fas fa-chart-line"></i>
+      Relatórios
+    </h1>
+    
+    <div class="menu-container">
+      <div class="hamburger-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="index.html" class="dropdown-item">
+          <i class="fas fa-home"></i>
+          Dashboard
+        </a>
+        <a href="produtos.html" class="dropdown-item">
+          <i class="fas fa-box"></i>
+          Produtos
+        </a>
+        <a href="clientes.html" class="dropdown-item">
+          <i class="fas fa-users"></i>
+          Clientes
+        </a>
+        <a href="vendas.html" class="dropdown-item">
+          <i class="fas fa-shopping-cart"></i>
+          Vendas
+        </a>
+        <div class="dropdown-item logout" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Sair
+        </div>
+      </div>
+    </div>
+  </div>
 
-<table class="uk-table uk-table-striped uk-table-small">
-    <thead>
-        <tr>
-            <th>Produto</th>
+  <!-- BOTÕES DE TIPO DE RELATÓRIO -->
+  <div class="report-type-buttons">
+    <button onclick="tipoRelatorio('vendas')" class="type-btn active" id="btn-vendas">
+      <i class="fas fa-shopping-cart"></i>
+      Vendas
+    </button>
+    <button onclick="tipoRelatorio('produtos')" class="type-btn" id="btn-produtos">
+      <i class="fas fa-box"></i>
+      Produtos
+    </button>
+    <button onclick="tipoRelatorio('clientes')" class="type-btn" id="btn-clientes">
+      <i class="fas fa-users"></i>
+      Clientes
+    </button>
+  </div>
+
+  <!-- ===================== ÁREA VENDAS ===================== -->
+  <div id="area-vendas" style="display: block;">
+    
+    <!-- FILTROS VENDAS -->
+    <div class="filter-card">
+      <h3>
+        <i class="fas fa-filter"></i>
+        Filtros de Vendas
+      </h3>
+      
+      <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-4@m">
+          <label class="form-label">Data Inicial</label>
+          <input type="date" id="inicio" class="modern-input">
+        </div>
+        
+        <div class="uk-width-1-4@m">
+          <label class="form-label">Data Final</label>
+          <input type="date" id="fim" class="modern-input">
+        </div>
+        
+        <div class="uk-width-1-4@m">
+          <label class="form-label">Forma de Pagamento</label>
+          <select id="filtroPagamento" class="modern-select">
+            <option value="">Todas</option>
+            <option value="dinheiro">💵 Dinheiro</option>
+            <option value="pix">📱 Pix</option>
+            <option value="credito">💳 Cartão de Crédito</option>
+            <option value="debito">💳 Cartão de Débito</option>
+          </select>
+        </div>
+        
+        <div class="uk-width-1-4@m">
+          <label class="form-label">&nbsp;</label>
+          <button onclick="aplicarFiltrosVendas()" class="btn-primary" style="width: 100%;">
+            <i class="fas fa-search"></i>
+            Filtrar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARDS DE RESUMO VENDAS -->
+    <div class="stats-grid">
+      <div class="stat-card primary">
+        <div class="stat-label">
+          <i class="fas fa-calendar-day"></i> Total no Período
+        </div>
+        <div class="stat-value" id="totalPeriodo">R$ 0,00</div>
+        <div class="stat-sub" id="qtdPeriodo">0 vendas</div>
+      </div>
+      
+      <div class="stat-card success">
+        <div class="stat-label">
+          <i class="fas fa-tag"></i> Ticket Médio
+        </div>
+        <div class="stat-value" id="ticketMedio">R$ 0,00</div>
+        <div class="stat-sub">por venda</div>
+      </div>
+      
+      <div class="stat-card warning">
+        <div class="stat-label">
+          <i class="fas fa-box"></i> Total de Itens
+        </div>
+        <div class="stat-value" id="totalItens">0</div>
+        <div class="stat-sub">produtos vendidos</div>
+      </div>
+      
+      <div class="stat-card info">
+        <div class="stat-label">
+          <i class="fas fa-chart-pie"></i> Pagamento mais usado
+        </div>
+        <div class="stat-value" id="pagamentoMaisUsado">-</div>
+        <div class="stat-sub" id="percentualPagamento">0% das vendas</div>
+      </div>
+    </div>
+
+    <!-- GRÁFICO DE MAIS VENDIDOS -->
+    <div class="chart-card">
+      <h3>
+        <i class="fas fa-trophy"></i>
+        Produtos Mais Vendidos
+      </h3>
+      <div class="chart-container">
+        <canvas id="graficoMaisVendidos"></canvas>
+      </div>
+    </div>
+
+    <!-- TABELA DE VENDAS -->
+    <div class="table-container">
+      <div class="table-header">
+        <h3>
+          <i class="fas fa-history"></i>
+          Histórico de Vendas
+        </h3>
+        <div style="display: flex; gap: 10px;">
+          <button onclick="exportarVendasPDF()" class="btn-pdf">
+            <i class="fas fa-file-pdf"></i>
+            Exportar PDF
+          </button>
+          <button onclick="exportarVendasCompletoPDF()" class="btn-success">
+            <i class="fas fa-file-pdf"></i>
+            Relatório Completo
+          </button>
+        </div>
+      </div>
+      
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
             <th>Cliente</th>
-            <th>Qtd</th>
-            <th>Total</th>
-            <th>Data</th>
-        </tr>
-    </thead>
-    <tbody id="tabelaVendas"></tbody>
-</table>
+            <th>Produtos</th>
+            <th>Qtd Itens</th>
+            <th>Valor Total</th>
+            <th>Pagamento</th>
+            <th>Detalhes</th>
+          </tr>
+        </thead>
+        <tbody id="listaVendas"></tbody>
+      </table>
 
-<canvas id="grafico"></canvas>
+      <!-- Paginação -->
+      <div class="pagination" id="paginacaoVendas"></div>
+    </div>
+  </div>
+
+  <!-- ===================== ÁREA PRODUTOS ===================== -->
+  <div id="area-produtos" style="display: none;">
+    
+    <!-- FILTROS PRODUTOS -->
+    <div class="filter-card">
+      <h3>
+        <i class="fas fa-filter"></i>
+        Filtros de Produtos
+      </h3>
+      
+      <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-3@m">
+          <input type="text" id="pesquisa-produto" class="modern-input" placeholder="🔍 Pesquisar produtos..." onkeyup="filtrarProdutos()">
+        </div>
+        
+        <div class="uk-width-1-3@m">
+          <select id="filtroStatus" class="modern-select" onchange="filtrarProdutos()">
+            <option value="">Todos os status</option>
+            <option value="normal">Estoque normal</option>
+            <option value="baixo">Estoque baixo</option>
+            <option value="falta">Em falta</option>
+          </select>
+        </div>
+        
+        <div class="uk-width-1-3@m">
+          <button onclick="exportarProdutosPDF()" class="btn-pdf" style="width: 100%;">
+            <i class="fas fa-file-pdf"></i>
+            Exportar PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARDS DE RESUMO PRODUTOS -->
+    <div class="stats-grid">
+      <div class="stat-card primary">
+        <div class="stat-label">
+          <i class="fas fa-boxes"></i> Total de Produtos
+        </div>
+        <div class="stat-value" id="totalProdutos">0</div>
+        <div class="stat-sub">cadastrados</div>
+      </div>
+      
+      <div class="stat-card success">
+        <div class="stat-label">
+          <i class="fas fa-dollar-sign"></i> Valor em Estoque
+        </div>
+        <div class="stat-value" id="valorTotalEstoque">R$ 0,00</div>
+        <div class="stat-sub">em produtos</div>
+      </div>
+      
+      <div class="stat-card warning">
+        <div class="stat-label">
+          <i class="fas fa-exclamation-triangle"></i> Estoque Baixo
+        </div>
+        <div class="stat-value" id="produtosBaixo">0</div>
+        <div class="stat-sub">produtos</div>
+      </div>
+      
+      <div class="stat-card danger">
+        <div class="stat-label">
+          <i class="fas fa-times-circle"></i> Em Falta
+        </div>
+        <div class="stat-value" id="produtosFalta">0</div>
+        <div class="stat-sub">produtos</div>
+      </div>
+    </div>
+
+    <!-- TABELA DE PRODUTOS -->
+    <div class="table-container">
+      <div class="table-header">
+        <h3>
+          <i class="fas fa-box"></i>
+          Lista de Produtos
+        </h3>
+      </div>
+      
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Referência</th>
+            <th>Produto</th>
+            <th>Preço Compra</th>
+            <th>Preço Venda</th>
+            <th>Estoque</th>
+            <th>Valor Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="listaProdutos"></tbody>
+      </table>
+
+      <!-- Paginação -->
+      <div class="pagination" id="paginacaoProdutos"></div>
+    </div>
+  </div>
+
+  <!-- ===================== ÁREA CLIENTES ===================== -->
+  <div id="area-clientes" style="display: none;">
+    
+    <!-- FILTROS CLIENTES -->
+    <div class="filter-card">
+      <h3>
+        <i class="fas fa-filter"></i>
+        Filtros de Clientes
+      </h3>
+      
+      <div class="uk-grid-small" uk-grid>
+        <div class="uk-width-1-2@m">
+          <input type="text" id="pesquisa-cliente" class="modern-input" placeholder="🔍 Pesquisar clientes..." onkeyup="filtrarClientes()">
+        </div>
+        
+        <div class="uk-width-1-2@m">
+          <button onclick="exportarClientesPDF()" class="btn-pdf" style="width: 100%;">
+            <i class="fas fa-file-pdf"></i>
+            Exportar PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARDS DE RESUMO CLIENTES -->
+    <div class="stats-grid">
+      <div class="stat-card primary">
+        <div class="stat-label">
+          <i class="fas fa-users"></i> Total de Clientes
+        </div>
+        <div class="stat-value" id="totalClientes">0</div>
+        <div class="stat-sub">cadastrados</div>
+      </div>
+      
+      <div class="stat-card success">
+        <div class="stat-label">
+          <i class="fas fa-shopping-cart"></i> Compraram no mês
+        </div>
+        <div class="stat-value" id="clientesCompraramMes">0</div>
+        <div class="stat-sub">clientes ativos</div>
+      </div>
+      
+      <div class="stat-card warning">
+        <div class="stat-label">
+          <i class="fas fa-clock"></i> Última semana
+        </div>
+        <div class="stat-value" id="clientesUltimaSemana">0</div>
+        <div class="stat-sub">novos clientes</div>
+      </div>
+      
+      <div class="stat-card info">
+        <div class="stat-label">
+          <i class="fas fa-calendar"></i> Média por dia
+        </div>
+        <div class="stat-value" id="clientesPorDia">0</div>
+        <div class="stat-sub">cadastros/dia</div>
+      </div>
+    </div>
+
+    <!-- TABELA DE CLIENTES -->
+    <div class="table-container">
+      <div class="table-header">
+        <h3>
+          <i class="fas fa-users"></i>
+          Lista de Clientes
+        </h3>
+      </div>
+      
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Telefone</th>
+            <th>Data Cadastro</th>
+            <th>Total Compras</th>
+            <th>Última Compra</th>
+          </tr>
+        </thead>
+        <tbody id="listaClientes"></tbody>
+      </table>
+
+      <!-- Paginação -->
+      <div class="pagination" id="paginacaoClientes"></div>
+    </div>
+  </div>
+
+  <!-- MODAL DETALHES DA VENDA -->
+  <div id="modalDetalhesVenda" uk-modal>
+    <div class="uk-modal-dialog">
+      <div class="modal-header">
+        <i class="fas fa-receipt" style="color: var(--primary);"></i>
+        <h2>Detalhes da Venda</h2>
+      </div>
+      
+      <div id="detalhesVenda"></div>
+      
+      <div style="text-align: right; margin-top: 25px;">
+        <button class="btn-secondary uk-modal-close">
+          <i class="fas fa-times"></i>
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
 
 </div>
+
+
+<!-- ===================== IMPORTA api.js ===================== -->
+<script src="api.js"></script>
 
 <script>
-
-const API = "https://sistema-loja-api.onrender.com"; 
-// ⬆️ DEPOIS NO RENDER você troca isso
-
-async function buscarRelatorio() {
-
-    const token = localStorage.getItem("token");
-    const inicio = document.getElementById("inicio").value;
-    const fim = document.getElementById("fim").value;
-
-    const response = await fetch(
-        `${API}/relatorio?inicio=${inicio}&fim=${fim}`,
-        {
-            headers: { Authorization: token }
-        }
-    );
-
-    const data = await response.json();
-
-    document.getElementById("total").innerText =
-        data.totalPeriodo.toFixed(2);
-
-    const tabela = document.getElementById("tabelaVendas");
-    tabela.innerHTML = "";
-
-    data.vendas.forEach(v => {
-        tabela.innerHTML += `
-            <tr>
-                <td>${v.produto.nome}</td>
-                <td>${v.cliente.nome}</td>
-                <td>${v.quantidade}</td>
-                <td>R$ ${v.total.toFixed(2)}</td>
-                <td>${new Date(v.data).toLocaleDateString()}</td>
-            </tr>
-        `;
-    });
-
-    montarGrafico(data.maisVendidos);
+/* =====================================================
+   PROTEÇÃO DE ACESSO
+===================================================== */
+if (!localStorage.getItem("token")) {
+  window.location.href = "login.html";
 }
 
-function montarGrafico(dados) {
-
-    const nomes = dados.map(d => "Produto " + d.produtoId);
-    const quantidades = dados.map(d => d._sum.quantidade);
-
-    new Chart(document.getElementById("grafico"), {
-        type: "bar",
-        data: {
-            labels: nomes,
-            datasets: [{
-                label: "Mais vendidos",
-                data: quantidades
-            }]
-        }
-    });
+// Menu hamburguer
+function toggleMenu() {
+  document.getElementById('dropdownMenu').classList.toggle('show');
 }
 
+// Fechar menu ao clicar fora
+document.addEventListener('click', function(event) {
+  if (!event.target.closest('.menu-container')) {
+    document.getElementById('dropdownMenu').classList.remove('show');
+  }
+});
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+// Variáveis globais
+let todasVendas = [];
+let todosProdutos = [];
+let todosClientes = [];
+let vendasFiltradas = [];
+let produtosFiltrados = [];
+let clientesFiltrados = [];
+let paginaAtualVendas = 1;
+let paginaAtualProdutos = 1;
+let paginaAtualClientes = 1;
+const itensPorPagina = 10;
+let chartMaisVendidos;
+
+// Mostrar/esconder loading PDF
+function showPdfLoading(show) {
+  document.getElementById('pdfLoading').classList.toggle('show', show);
+}
+
+// Funções auxiliares
+function formatarMoeda(valor) {
+  return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatarDataHora(data) {
+  return new Date(data).toLocaleString('pt-BR');
+}
+
+function formatarData(data) {
+  return new Date(data).toLocaleDateString('pt-BR');
+}
+
+function getFormaPagamentoIcon(forma) {
+  const icons = {
+    'dinheiro': '💵',
+    'pix': '📱',
+    'credito': '💳',
+    'debito': '💳'
+  };
+  return icons[forma] || '💰';
+}
+
+function getFormaPagamentoNome(forma) {
+  const nomes = {
+    'dinheiro': 'Dinheiro',
+    'pix': 'Pix',
+    'credito': 'Cartão de Crédito',
+    'debito': 'Cartão de Débito'
+  };
+  return nomes[forma] || forma;
+}
+
+/* =====================================================
+   TIPO DE RELATÓRIO
+===================================================== */
+function tipoRelatorio(tipo) {
+  // Esconde todas as áreas
+  document.getElementById('area-vendas').style.display = 'none';
+  document.getElementById('area-produtos').style.display = 'none';
+  document.getElementById('area-clientes').style.display = 'none';
+  
+  // Remove classe ativa de todos os botões
+  document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Ativa botão clicado
+  document.getElementById(`btn-${tipo}`).classList.add('active');
+  
+  // Mostra área correspondente
+  document.getElementById(`area-${tipo}`).style.display = 'block';
+  
+  // Carrega dados
+  if (tipo === 'vendas') {
+    carregarVendas();
+  } else if (tipo === 'produtos') {
+    carregarProdutos();
+  } else if (tipo === 'clientes') {
+    carregarClientes();
+  }
+}
+
+/* =====================================================
+   RELATÓRIO DE VENDAS
+===================================================== */
+async function carregarVendas() {
+  try {
+    // Definir datas padrão (mês atual)
+    const hoje = new Date();
+    const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    const ultimoDia = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+    
+    document.getElementById('inicio').value = primeiroDia.toISOString().split('T')[0];
+    document.getElementById('fim').value = ultimoDia.toISOString().split('T')[0];
+    
+    // Carregar vendas
+    const res = await fetch(API + "/vendas", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todasVendas = await res.json();
+    
+    // Carregar clientes para os nomes
+    const cRes = await fetch(API + "/clientes", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todosClientes = await cRes.json();
+    
+    // Carregar produtos para os nomes
+    const pRes = await fetch(API + "/produtos", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todosProdutos = await pRes.json();
+    
+    // Aplicar filtros iniciais
+    aplicarFiltrosVendas();
+    
+  } catch (error) {
+    console.error('Erro ao carregar vendas:', error);
+  }
+}
+
+function aplicarFiltrosVendas() {
+  const inicio = new Date(document.getElementById('inicio').value);
+  const fim = new Date(document.getElementById('fim').value);
+  fim.setHours(23, 59, 59);
+  
+  const filtroPagamento = document.getElementById('filtroPagamento').value;
+  
+  vendasFiltradas = todasVendas.filter(v => {
+    const dataVenda = new Date(v.dataVenda || v.createdAt);
+    const dentroPeriodo = dataVenda >= inicio && dataVenda <= fim;
+    const mesmoPagamento = !filtroPagamento || v.formaPagamento === filtroPagamento;
+    
+    return dentroPeriodo && mesmoPagamento;
+  });
+  
+  // Ordenar por data (mais recentes primeiro)
+  vendasFiltradas.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
+  
+  // Atualizar cards de resumo
+  atualizarResumoVendas();
+  
+  // Atualizar gráfico
+  atualizarGraficoMaisVendidos();
+  
+  // Atualizar tabela
+  paginaAtualVendas = 1;
+  renderizarPaginacaoVendas();
+  renderizarTabelaVendas();
+}
+
+function atualizarResumoVendas() {
+  // Total do período
+  const totalPeriodo = vendasFiltradas.reduce((acc, v) => acc + v.total, 0);
+  document.getElementById('totalPeriodo').textContent = `R$ ${formatarMoeda(totalPeriodo)}`;
+  document.getElementById('qtdPeriodo').textContent = `${vendasFiltradas.length} vendas`;
+  
+  // Ticket médio
+  const ticketMedio = vendasFiltradas.length > 0 ? totalPeriodo / vendasFiltradas.length : 0;
+  document.getElementById('ticketMedio').textContent = `R$ ${formatarMoeda(ticketMedio)}`;
+  
+  // Total de itens
+  const totalItens = vendasFiltradas.reduce((acc, v) => {
+    const qtd = v.produtos ? v.produtos.reduce((sum, p) => sum + p.quantidade, 0) : 0;
+    return acc + qtd;
+  }, 0);
+  document.getElementById('totalItens').textContent = totalItens;
+  
+  // Pagamento mais usado
+  const pagamentos = {};
+  vendasFiltradas.forEach(v => {
+    const forma = v.formaPagamento || 'dinheiro';
+    pagamentos[forma] = (pagamentos[forma] || 0) + 1;
+  });
+  
+  let maisUsado = { forma: '-', count: 0 };
+  for (const [forma, count] of Object.entries(pagamentos)) {
+    if (count > maisUsado.count) {
+      maisUsado = { forma, count };
+    }
+  }
+  
+  if (maisUsado.forma !== '-') {
+    const percentual = ((maisUsado.count / vendasFiltradas.length) * 100).toFixed(1);
+    document.getElementById('pagamentoMaisUsado').textContent = getFormaPagamentoIcon(maisUsado.forma) + ' ' + getFormaPagamentoNome(maisUsado.forma);
+    document.getElementById('percentualPagamento').textContent = `${percentual}% das vendas`;
+  } else {
+    document.getElementById('pagamentoMaisUsado').textContent = '-';
+    document.getElementById('percentualPagamento').textContent = '0% das vendas';
+  }
+}
+
+function atualizarGraficoMaisVendidos() {
+  // Agrupar produtos
+  const produtosVendidos = {};
+  
+  vendasFiltradas.forEach(v => {
+    if (v.produtos) {
+      v.produtos.forEach(p => {
+        const produto = todosProdutos.find(pr => pr.id == p.produtoId);
+        if (produto) {
+          if (!produtosVendidos[produto.nome]) {
+            produtosVendidos[produto.nome] = {
+              quantidade: 0,
+              total: 0
+            };
+          }
+          produtosVendidos[produto.nome].quantidade += p.quantidade;
+          produtosVendidos[produto.nome].total += p.subtotal || (produto.precoVenda * p.quantidade);
+        }
+      });
+    }
+  });
+  
+  // Ordenar por quantidade (mais vendidos primeiro)
+  const sorted = Object.entries(produtosVendidos)
+    .sort((a, b) => b[1].quantidade - a[1].quantidade)
+    .slice(0, 10); // Top 10
+  
+  const labels = sorted.map(([nome]) => nome.length > 20 ? nome.substring(0, 17) + '...' : nome);
+  const quantidades = sorted.map(([, data]) => data.quantidade);
+  const valores = sorted.map(([, data]) => data.total);
+  
+  if (chartMaisVendidos) chartMaisVendidos.destroy();
+  
+  if (labels.length > 0) {
+    chartMaisVendidos = new Chart(document.getElementById("graficoMaisVendidos"), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Quantidade Vendida',
+            data: quantidades,
+            backgroundColor: 'rgba(37, 99, 235, 0.7)',
+            borderColor: 'rgb(37, 99, 235)',
+            borderWidth: 2,
+            borderRadius: 8,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Faturamento (R$)',
+            data: valores,
+            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+            borderColor: 'rgb(16, 185, 129)',
+            borderWidth: 2,
+            borderRadius: 8,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index' },
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label += ': ';
+                }
+                if (context.dataset.label.includes('R$')) {
+                  label += 'R$ ' + context.raw.toFixed(2);
+                } else {
+                  label += context.raw + ' unidades';
+                }
+                return label;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: { display: true, text: 'Quantidade' }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            title: { display: true, text: 'Faturamento (R$)' },
+            grid: { drawOnChartArea: false }
+          }
+        }
+      }
+    });
+  } else {
+    document.getElementById('graficoMaisVendidos').parentNode.innerHTML = `
+      <div class="empty-state">
+        <i class="fas fa-chart-bar"></i>
+        <p>Nenhuma venda no período selecionado</p>
+      </div>
+    `;
+  }
+}
+
+function renderizarPaginacaoVendas() {
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacaoVendas');
+  
+  if (vendasFiltradas.length <= itensPorPagina) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  html += `<button class="page-btn" onclick="mudarPaginaVendas(${paginaAtualVendas - 1})" ${paginaAtualVendas === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtualVendas - 1 && i <= paginaAtualVendas + 1)) {
+      html += `<button class="page-btn ${i === paginaAtualVendas ? 'active' : ''}" onclick="mudarPaginaVendas(${i})">${i}</button>`;
+    } else if (i === paginaAtualVendas - 2 || i === paginaAtualVendas + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  html += `<button class="page-btn" onclick="mudarPaginaVendas(${paginaAtualVendas + 1})" ${paginaAtualVendas === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPaginaVendas(novaPagina) {
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtualVendas = novaPagina;
+    renderizarPaginacaoVendas();
+    renderizarTabelaVendas();
+  }
+}
+
+function renderizarTabelaVendas() {
+  const inicio = (paginaAtualVendas - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const vendasPagina = vendasFiltradas.slice(inicio, fim);
+  
+  const lista = document.getElementById('listaVendas');
+  lista.innerHTML = "";
+  
+  vendasPagina.forEach(v => {
+    const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'Cliente não encontrado' };
+    const totalItens = v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0;
+    const produtosLista = v.produtos ? v.produtos.map(p => {
+      const prod = todosProdutos.find(pr => pr.id == p.produtoId);
+      return prod ? prod.nome : 'Produto não encontrado';
+    }).join(', ') : 'N/A';
+    
+    lista.innerHTML += `
+      <tr>
+        <td>${formatarDataHora(v.dataVenda || v.createdAt)}</td>
+        <td><strong>${cliente.nome}</strong></td>
+        <td>${produtosLista.substring(0, 30)}${produtosLista.length > 30 ? '...' : ''}</td>
+        <td>${totalItens} unid</td>
+        <td><strong>R$ ${formatarMoeda(v.total)}</strong></td>
+        <td>
+          <span class="payment-badge ${v.formaPagamento || 'dinheiro'}">
+            ${getFormaPagamentoIcon(v.formaPagamento)} ${getFormaPagamentoNome(v.formaPagamento)}
+          </span>
+        </td>
+        <td>
+          <button onclick="verDetalhesVenda('${v.id}')" 
+                  class="action-btn info" title="Detalhes">
+            <i class="fas fa-eye"></i>
+          </button>
+        </td>
+      </tr>`;
+  });
+  
+  if (vendasPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Nenhuma venda encontrada no período</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+function verDetalhesVenda(id) {
+  const venda = todasVendas.find(v => v.id == id);
+  if (!venda) return;
+  
+  const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A' };
+  
+  let produtosHtml = '<div style="max-height: 200px; overflow-y: auto;">';
+  venda.produtos.forEach(p => {
+    const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0 };
+    produtosHtml += `
+      <div style="display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #e2e8f0;">
+        <span>${produto.nome} (${p.quantidade}x)</span>
+        <span style="font-weight: 600;">R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}</span>
+      </div>
+    `;
+  });
+  produtosHtml += '</div>';
+  
+  const detalhes = document.getElementById('detalhesVenda');
+  
+  detalhes.innerHTML = `
+    <div class="detail-item">
+      <div class="detail-label">📅 Data da Venda</div>
+      <div class="detail-value">${formatarDataHora(venda.dataVenda || venda.createdAt)}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">👤 Cliente</div>
+      <div class="detail-value">${cliente.nome}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">📦 Produtos</div>
+      ${produtosHtml}
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">💰 Total da Venda</div>
+      <div class="detail-value" style="color: var(--success); font-size: 1.5rem;">R$ ${formatarMoeda(venda.total)}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">💳 Forma de Pagamento</div>
+      <div class="detail-value">${getFormaPagamentoIcon(venda.formaPagamento)} ${getFormaPagamentoNome(venda.formaPagamento)}</div>
+    </div>
+  `;
+  
+  UIkit.modal('#modalDetalhesVenda').show();
+}
+
+/* =====================================================
+   RELATÓRIO DE PRODUTOS
+===================================================== */
+async function carregarProdutos() {
+  try {
+    const res = await fetch(API + "/produtos", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todosProdutos = await res.json();
+    
+    produtosFiltrados = [...todosProdutos];
+    
+    // Atualizar cards de resumo
+    atualizarResumoProdutos();
+    
+    // Atualizar tabela
+    paginaAtualProdutos = 1;
+    renderizarPaginacaoProdutos();
+    renderizarTabelaProdutos();
+    
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error);
+  }
+}
+
+function atualizarResumoProdutos() {
+  const total = todosProdutos.length;
+  const valorTotal = todosProdutos.reduce((acc, p) => acc + (p.precoCompra * p.estoque), 0);
+  const baixo = todosProdutos.filter(p => p.estoque > 0 && p.estoque < 10).length;
+  const falta = todosProdutos.filter(p => p.estoque === 0).length;
+  
+  document.getElementById('totalProdutos').textContent = total;
+  document.getElementById('valorTotalEstoque').textContent = `R$ ${formatarMoeda(valorTotal)}`;
+  document.getElementById('produtosBaixo').textContent = baixo;
+  document.getElementById('produtosFalta').textContent = falta;
+}
+
+function filtrarProdutos() {
+  const termo = document.getElementById('pesquisa-produto').value.toLowerCase();
+  const status = document.getElementById('filtroStatus').value;
+  
+  produtosFiltrados = todosProdutos.filter(p => {
+    const matchNome = p.nome.toLowerCase().includes(termo) || (p.referencia && p.referencia.toLowerCase().includes(termo));
+    
+    if (!matchNome) return false;
+    
+    if (status === 'normal') return p.estoque >= 10;
+    if (status === 'baixo') return p.estoque > 0 && p.estoque < 10;
+    if (status === 'falta') return p.estoque === 0;
+    
+    return true;
+  });
+  
+  paginaAtualProdutos = 1;
+  renderizarPaginacaoProdutos();
+  renderizarTabelaProdutos();
+}
+
+function renderizarPaginacaoProdutos() {
+  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacaoProdutos');
+  
+  if (produtosFiltrados.length <= itensPorPagina) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  html += `<button class="page-btn" onclick="mudarPaginaProdutos(${paginaAtualProdutos - 1})" ${paginaAtualProdutos === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtualProdutos - 1 && i <= paginaAtualProdutos + 1)) {
+      html += `<button class="page-btn ${i === paginaAtualProdutos ? 'active' : ''}" onclick="mudarPaginaProdutos(${i})">${i}</button>`;
+    } else if (i === paginaAtualProdutos - 2 || i === paginaAtualProdutos + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  html += `<button class="page-btn" onclick="mudarPaginaProdutos(${paginaAtualProdutos + 1})" ${paginaAtualProdutos === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPaginaProdutos(novaPagina) {
+  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtualProdutos = novaPagina;
+    renderizarPaginacaoProdutos();
+    renderizarTabelaProdutos();
+  }
+}
+
+function renderizarTabelaProdutos() {
+  const inicio = (paginaAtualProdutos - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const produtosPagina = produtosFiltrados.slice(inicio, fim);
+  
+  const lista = document.getElementById('listaProdutos');
+  lista.innerHTML = "";
+  
+  produtosPagina.forEach(p => {
+    let statusClass = 'success';
+    let statusText = 'Normal';
+    
+    if (p.estoque === 0) {
+      statusClass = 'danger';
+      statusText = 'Em falta';
+    } else if (p.estoque < 10) {
+      statusClass = 'warning';
+      statusText = 'Baixo';
+    }
+    
+    lista.innerHTML += `
+      <tr>
+        <td><strong>${p.referencia || 'N/A'}</strong></td>
+        <td>${p.nome}</td>
+        <td>R$ ${formatarMoeda(p.precoCompra)}</td>
+        <td>R$ ${formatarMoeda(p.precoVenda)}</td>
+        <td>${p.estoque} unid</td>
+        <td>R$ ${formatarMoeda(p.precoCompra * p.estoque)}</td>
+        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+      </tr>`;
+  });
+  
+  if (produtosPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>Nenhum produto encontrado</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+/* =====================================================
+   RELATÓRIO DE CLIENTES
+===================================================== */
+async function carregarClientes() {
+  try {
+    const res = await fetch(API + "/clientes", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todosClientes = await res.json();
+    
+    // Carregar vendas para estatísticas
+    const vRes = await fetch(API + "/vendas", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todasVendas = await vRes.json();
+    
+    clientesFiltrados = [...todosClientes];
+    
+    // Atualizar cards de resumo
+    atualizarResumoClientes();
+    
+    // Atualizar tabela
+    paginaAtualClientes = 1;
+    renderizarPaginacaoClientes();
+    renderizarTabelaClientes();
+    
+  } catch (error) {
+    console.error('Erro ao carregar clientes:', error);
+  }
+}
+
+function atualizarResumoClientes() {
+  const total = todosClientes.length;
+  
+  // Clientes que compraram no mês
+  const hoje = new Date();
+  const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  const clientesQueCompraram = new Set();
+  todasVendas.forEach(v => {
+    const dataVenda = new Date(v.dataVenda || v.createdAt);
+    if (dataVenda >= inicioMes) {
+      clientesQueCompraram.add(v.clienteId);
+    }
+  });
+  
+  // Clientes cadastrados na última semana
+  const umaSemanaAtras = new Date();
+  umaSemanaAtras.setDate(umaSemanaAtras.getDate() - 7);
+  const novosClientes = todosClientes.filter(c => new Date(c.createdAt) >= umaSemanaAtras).length;
+  
+  // Média de cadastros por dia (últimos 30 dias)
+  const trintaDiasAtras = new Date();
+  trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
+  const clientes30Dias = todosClientes.filter(c => new Date(c.createdAt) >= trintaDiasAtras).length;
+  const mediaPorDia = (clientes30Dias / 30).toFixed(1);
+  
+  document.getElementById('totalClientes').textContent = total;
+  document.getElementById('clientesCompraramMes').textContent = clientesQueCompraram.size;
+  document.getElementById('clientesUltimaSemana').textContent = novosClientes;
+  document.getElementById('clientesPorDia').textContent = mediaPorDia;
+}
+
+function filtrarClientes() {
+  const termo = document.getElementById('pesquisa-cliente').value.toLowerCase();
+  
+  clientesFiltrados = todosClientes.filter(c => 
+    c.nome.toLowerCase().includes(termo) || 
+    (c.telefone && c.telefone.includes(termo))
+  );
+  
+  paginaAtualClientes = 1;
+  renderizarPaginacaoClientes();
+  renderizarTabelaClientes();
+}
+
+function renderizarPaginacaoClientes() {
+  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacaoClientes');
+  
+  if (clientesFiltrados.length <= itensPorPagina) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  html += `<button class="page-btn" onclick="mudarPaginaClientes(${paginaAtualClientes - 1})" ${paginaAtualClientes === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtualClientes - 1 && i <= paginaAtualClientes + 1)) {
+      html += `<button class="page-btn ${i === paginaAtualClientes ? 'active' : ''}" onclick="mudarPaginaClientes(${i})">${i}</button>`;
+    } else if (i === paginaAtualClientes - 2 || i === paginaAtualClientes + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  html += `<button class="page-btn" onclick="mudarPaginaClientes(${paginaAtualClientes + 1})" ${paginaAtualClientes === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPaginaClientes(novaPagina) {
+  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtualClientes = novaPagina;
+    renderizarPaginacaoClientes();
+    renderizarTabelaClientes();
+  }
+}
+
+function renderizarTabelaClientes() {
+  const inicio = (paginaAtualClientes - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const clientesPagina = clientesFiltrados.slice(inicio, fim);
+  
+  const lista = document.getElementById('listaClientes');
+  lista.innerHTML = "";
+  
+  clientesPagina.forEach(c => {
+    // Calcular total de compras do cliente
+    const comprasCliente = todasVendas.filter(v => v.clienteId == c.id);
+    const totalCompras = comprasCliente.reduce((acc, v) => acc + v.total, 0);
+    
+    // Última compra
+    const ultimaCompra = comprasCliente.length > 0 
+      ? new Date(Math.max(...comprasCliente.map(v => new Date(v.dataVenda || v.createdAt))))
+      : null;
+    
+    lista.innerHTML += `
+      <tr>
+        <td><strong>${c.nome}</strong></td>
+        <td>${c.telefone || 'N/A'}</td>
+        <td>${formatarData(c.createdAt)}</td>
+        <td><strong>R$ ${formatarMoeda(totalCompras)}</strong></td>
+        <td>${ultimaCompra ? formatarData(ultimaCompra) : 'Nunca comprou'}</td>
+      </tr>`;
+  });
+  
+  if (clientesPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="5">
+          <div class="empty-state">
+            <i class="fas fa-users-slash"></i>
+            <p>Nenhum cliente encontrado</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+/* =====================================================
+   FUNÇÕES DE EXPORTAÇÃO PDF
+===================================================== */
+
+// Exportar vendas PDF
+async function exportarVendasPDF() {
+  showPdfLoading(true);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    
+    const inicio = document.getElementById('inicio').value.split('-').reverse().join('/');
+    const fim = document.getElementById('fim').value.split('-').reverse().join('/');
+    
+    doc.setFontSize(20);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Relatório de Vendas', 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Período: ${inicio} a ${fim}`, 15, 30);
+    
+    const hoje = new Date().toLocaleDateString('pt-BR');
+    doc.text(`Emitido em: ${hoje}`, 15, 38);
+    
+    const dadosTabela = [];
+    vendasFiltradas.slice(0, 50).forEach(v => {
+      const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'N/A' };
+      const data = formatarDataHora(v.dataVenda || v.createdAt);
+      
+      dadosTabela.push([
+        data,
+        cliente.nome,
+        `R$ ${formatarMoeda(v.total)}`,
+        getFormaPagamentoNome(v.formaPagamento)
+      ]);
+    });
+    
+    if (dadosTabela.length > 0) {
+      doc.autoTable({
+        startY: 50,
+        head: [['Data/Hora', 'Cliente', 'Total', 'Pagamento']],
+        body: dadosTabela,
+        theme: 'striped',
+        headStyles: { fillColor: [37, 99, 235] }
+      });
+    }
+    
+    doc.save(`vendas-${inicio.replace(/\//g, '-')}-a-${fim.replace(/\//g, '-')}.pdf`);
+    
+    UIkit.notification({
+      message: '<i class="fas fa-check-circle"></i> PDF gerado com sucesso!',
+      status: 'success',
+      pos: 'top-center'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao gerar PDF',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  }
+  
+  showPdfLoading(false);
+}
+
+// Exportar vendas completo PDF
+async function exportarVendasCompletoPDF() {
+  showPdfLoading(true);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    
+    const inicio = document.getElementById('inicio').value.split('-').reverse().join('/');
+    const fim = document.getElementById('fim').value.split('-').reverse().join('/');
+    
+    doc.setFontSize(22);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Relatório Completo de Vendas', 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Período: ${inicio} a ${fim}`, 15, 30);
+    doc.text(`Emitido em: ${new Date().toLocaleDateString('pt-BR')}`, 15, 38);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Resumo do Período', 15, 50);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Total em Vendas: ${document.getElementById('totalPeriodo').textContent}`, 15, 60);
+    doc.text(`Quantidade de Vendas: ${document.getElementById('qtdPeriodo').textContent}`, 15, 68);
+    doc.text(`Ticket Médio: ${document.getElementById('ticketMedio').textContent}`, 15, 76);
+    doc.text(`Total de Itens: ${document.getElementById('totalItens').textContent}`, 15, 84);
+    
+    const canvas = document.getElementById('graficoMaisVendidos');
+    if (canvas && canvas.toDataURL) {
+      const chartImage = canvas.toDataURL('image/png');
+      doc.addImage(chartImage, 'PNG', 15, 95, 260, 100);
+    }
+    
+    const dadosTabela = [];
+    vendasFiltradas.slice(0, 20).forEach(v => {
+      const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'N/A' };
+      const data = formatarDataHora(v.dataVenda || v.createdAt);
+      
+      dadosTabela.push([
+        data,
+        cliente.nome,
+        `R$ ${formatarMoeda(v.total)}`,
+        getFormaPagamentoNome(v.formaPagamento)
+      ]);
+    });
+    
+    if (dadosTabela.length > 0) {
+      doc.autoTable({
+        startY: 205,
+        head: [['Data/Hora', 'Cliente', 'Total', 'Pagamento']],
+        body: dadosTabela,
+        theme: 'striped',
+        headStyles: { fillColor: [37, 99, 235] }
+      });
+    }
+    
+    doc.save(`relatorio-completo-vendas-${inicio.replace(/\//g, '-')}-a-${fim.replace(/\//g, '-')}.pdf`);
+    
+    UIkit.notification({
+      message: '<i class="fas fa-check-circle"></i> PDF completo gerado com sucesso!',
+      status: 'success',
+      pos: 'top-center'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF completo:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao gerar PDF completo',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  }
+  
+  showPdfLoading(false);
+}
+
+// Exportar produtos PDF
+async function exportarProdutosPDF() {
+  showPdfLoading(true);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    
+    doc.setFontSize(22);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Relatório de Produtos', 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Emitido em: ${new Date().toLocaleDateString('pt-BR')}`, 15, 30);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Resumo do Estoque', 15, 45);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Total de Produtos: ${document.getElementById('totalProdutos').textContent}`, 15, 55);
+    doc.text(`Valor em Estoque: ${document.getElementById('valorTotalEstoque').textContent}`, 15, 63);
+    doc.text(`Estoque Baixo: ${document.getElementById('produtosBaixo').textContent}`, 15, 71);
+    doc.text(`Em Falta: ${document.getElementById('produtosFalta').textContent}`, 15, 79);
+    
+    const dadosTabela = [];
+    produtosFiltrados.forEach(p => {
+      let status = 'Normal';
+      if (p.estoque === 0) status = 'Em falta';
+      else if (p.estoque < 10) status = 'Baixo';
+      
+      dadosTabela.push([
+        p.referencia || 'N/A',
+        p.nome,
+        `R$ ${formatarMoeda(p.precoCompra)}`,
+        `R$ ${formatarMoeda(p.precoVenda)}`,
+        p.estoque + ' unid',
+        `R$ ${formatarMoeda(p.precoCompra * p.estoque)}`,
+        status
+      ]);
+    });
+    
+    if (dadosTabela.length > 0) {
+      doc.autoTable({
+        startY: 90,
+        head: [['Ref', 'Produto', 'Compra', 'Venda', 'Estoque', 'Valor Total', 'Status']],
+        body: dadosTabela,
+        theme: 'striped',
+        headStyles: { fillColor: [37, 99, 235] }
+      });
+    }
+    
+    doc.save('relatorio-produtos.pdf');
+    
+    UIkit.notification({
+      message: '<i class="fas fa-check-circle"></i> PDF gerado com sucesso!',
+      status: 'success',
+      pos: 'top-center'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao gerar PDF',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  }
+  
+  showPdfLoading(false);
+}
+
+// Exportar clientes PDF
+async function exportarClientesPDF() {
+  showPdfLoading(true);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF('landscape');
+    
+    doc.setFontSize(22);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Relatório de Clientes', 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Emitido em: ${new Date().toLocaleDateString('pt-BR')}`, 15, 30);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Resumo de Clientes', 15, 45);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Total de Clientes: ${document.getElementById('totalClientes').textContent}`, 15, 55);
+    doc.text(`Compraram no mês: ${document.getElementById('clientesCompraramMes').textContent}`, 15, 63);
+    doc.text(`Novos (7 dias): ${document.getElementById('clientesUltimaSemana').textContent}`, 15, 71);
+    doc.text(`Média/dia: ${document.getElementById('clientesPorDia').textContent}`, 15, 79);
+    
+    const dadosTabela = [];
+    clientesFiltrados.forEach(c => {
+      const comprasCliente = todasVendas.filter(v => v.clienteId == c.id);
+      const totalCompras = comprasCliente.reduce((acc, v) => acc + v.total, 0);
+      const ultimaCompra = comprasCliente.length > 0 
+        ? formatarData(Math.max(...comprasCliente.map(v => new Date(v.dataVenda || v.createdAt))))
+        : 'Nunca comprou';
+      
+      dadosTabela.push([
+        c.nome,
+        c.telefone || 'N/A',
+        formatarData(c.createdAt),
+        `R$ ${formatarMoeda(totalCompras)}`,
+        ultimaCompra
+      ]);
+    });
+    
+    if (dadosTabela.length > 0) {
+      doc.autoTable({
+        startY: 90,
+        head: [['Nome', 'Telefone', 'Cadastro', 'Total Compras', 'Última Compra']],
+        body: dadosTabela,
+        theme: 'striped',
+        headStyles: { fillColor: [37, 99, 235] }
+      });
+    }
+    
+    doc.save('relatorio-clientes.pdf');
+    
+    UIkit.notification({
+      message: '<i class="fas fa-check-circle"></i> PDF gerado com sucesso!',
+      status: 'success',
+      pos: 'top-center'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao gerar PDF',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  }
+  
+  showPdfLoading(false);
+}
+
+// Inicializar com vendas
+tipoRelatorio('vendas');
 </script>
 
 </body>

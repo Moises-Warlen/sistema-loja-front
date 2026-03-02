@@ -2,65 +2,1180 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Produtos</title>
+<title>Produtos - Mariá Skincare</title>
 
+<!-- UIkit -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+
+<!-- Input mask -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .uk-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 20px !important;
+    margin: 20px auto;
+    backdrop-filter: blur(10px);
+    max-width: 1400px !important;
+  }
+
+  @media (min-width: 640px) {
+    .uk-container {
+      padding: 30px !important;
+      margin: 30px auto;
+    }
+  }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header {
+      margin: -30px -30px 30px -30px;
+      padding: 25px 30px;
+    }
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  /* Menu Hamburguer */
+  .menu-container {
+    position: relative;
+  }
+
+  .hamburger-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.3rem;
+  }
+
+  .hamburger-btn:hover {
+    background: white;
+    color: var(--primary);
+    border-color: white;
+    transform: scale(1.05);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    min-width: 220px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--dark);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-item:hover {
+    background: #f8fafc;
+    color: var(--primary);
+    padding-left: 25px;
+  }
+
+  .dropdown-item i {
+    width: 20px;
+    color: var(--primary);
+  }
+
+  .dropdown-item.logout:hover {
+    background: #fee2e2;
+    color: var(--danger);
+  }
+
+  .dropdown-item.logout i {
+    color: var(--danger);
+  }
+
+  /* ===================== PESQUISA CORRIGIDA ===================== */
+  .search-section {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  .search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px; /* LIMITA O TAMANHO MÁXIMO */
+  }
+
+  .search-wrapper i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1rem;
+    z-index: 1;
+  }
+
+  .search-wrapper input {
+    padding-left: 45px;
+    height: 45px;
+    border-radius: 25px;
+    border: 2px solid #e2e8f0;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    box-sizing: border-box; /* IMPEDE QUE O PADDING AUMENTE O TAMANHO */
+  }
+
+  .search-wrapper input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  @media (min-width: 640px) {
+    .search-wrapper input {
+      height: 50px;
+      font-size: 1rem;
+    }
+  }
+
+  /* PARA TELAS PEQUENAS - OCUPA 100% */
+  @media (max-width: 480px) {
+    .search-wrapper {
+      max-width: 100%;
+    }
+  }
+
+  /* Card do formulário */
+  .form-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  @media (min-width: 640px) {
+    .form-card {
+      padding: 25px;
+      margin-bottom: 30px;
+    }
+  }
+
+  .form-card h3 {
+    margin: 0 0 15px 0;
+    font-size: 1.3rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  @media (min-width: 640px) {
+    .form-card h3 {
+      font-size: 1.5rem;
+      margin: 0 0 20px 0;
+    }
+  }
+
+  .form-card h3 i {
+    color: var(--primary);
+  }
+
+  /* Inputs */
+  .modern-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .modern-input {
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 12px;
+    }
+  }
+
+  .modern-input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  /* Campo de referência readonly */
+  .modern-input[readonly] {
+    background-color: #f1f5f9;
+    cursor: not-allowed;
+    opacity: 0.8;
+  }
+
+  /* Botões */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .btn-primary {
+      padding: 12px 30px;
+      font-size: 1rem;
+      width: auto;
+      margin-bottom: 0;
+      margin-right: 8px;
+    }
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--dark);
+    border: 2px solid #e2e8f0;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    width: 100%;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  @media (min-width: 640px) {
+    .btn-secondary {
+      padding: 12px 30px;
+      font-size: 1rem;
+      width: auto;
+    }
+  }
+
+  .btn-secondary:hover {
+    background: #f8fafc;
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  /* Container da tabela */
+  .table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    overflow-x: auto;
+  }
+
+  @media (min-width: 640px) {
+    .table-container {
+      padding: 20px;
+    }
+  }
+
+  /* Tabela */
+  .modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    min-width: 900px;
+  }
+
+  .modern-table thead th {
+    background: #f8fafc;
+    padding: 12px 10px;
+    font-weight: 600;
+    color: var(--dark);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-radius: 8px;
+  }
+
+  @media (min-width: 640px) {
+    .modern-table thead th {
+      padding: 15px;
+      font-size: 0.85rem;
+    }
+  }
+
+  .modern-table tbody tr {
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .modern-table tbody tr:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+  }
+
+  .modern-table td {
+    padding: 12px 10px;
+    border: none;
+    color: var(--dark);
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .modern-table td {
+      padding: 15px;
+      font-size: 1rem;
+    }
+  }
+
+  .modern-table td:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .modern-table td:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* Badges */
+  .stock-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  @media (min-width: 640px) {
+    .stock-badge {
+      padding: 5px 12px;
+      font-size: 0.85rem;
+    }
+  }
+
+  .stock-badge.normal {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .stock-badge.baixo {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .stock-badge.falta {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  /* Botões de ação */
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 2px;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 640px) {
+    .action-btn {
+      width: 38px;
+      height: 38px;
+      font-size: 1rem;
+      margin: 0 3px;
+    }
+  }
+
+  .action-btn.info {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .action-btn.info:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .action-btn.edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .action-btn.edit:hover {
+    background: var(--warning);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .action-btn.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  .action-btn.delete:hover {
+    background: var(--danger);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Paginação */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: var(--dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+  }
+
+  .page-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Modal */
+  .uk-modal-dialog {
+    border-radius: 20px !important;
+    padding: 20px !important;
+    margin: 20px !important;
+    max-width: 500px !important;
+    width: calc(100% - 40px) !important;
+  }
+
+  @media (min-width: 640px) {
+    .uk-modal-dialog {
+      padding: 30px !important;
+      margin: auto !important;
+    }
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--dark);
+  }
+
+  @media (min-width: 640px) {
+    .modal-header h2 {
+      font-size: 1.6rem;
+    }
+  }
+
+  .modal-header i {
+    font-size: 1.8rem;
+  }
+
+  .detail-item {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .detail-item {
+      padding: 15px;
+    }
+  }
+
+  .detail-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-bottom: 5px;
+  }
+
+  .detail-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  @media (min-width: 640px) {
+    .detail-value {
+      font-size: 1.2rem;
+    }
+  }
+
+  /* Loading e estados vazios */
+  .empty-state {
+    text-align: center;
+    padding: 30px 15px;
+  }
+
+  .empty-state i {
+    font-size: 40px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+  }
+
+  .empty-state p {
+    color: #64748b;
+    font-size: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .empty-state {
+      padding: 40px;
+    }
+    .empty-state i {
+      font-size: 50px;
+    }
+  }
+</style>
+
 </head>
-<body class="uk-container">
 
-<h2 class="uk-margin-top">Produtos</h2>
+<body>
 
-<div class="uk-grid-small" uk-grid>
-<input id="nome" class="uk-input uk-width-1-3@m" placeholder="Nome">
-<input id="preco" type="number" class="uk-input uk-width-1-3@m" placeholder="Preço">
-<input id="quantidade" type="number" class="uk-input uk-width-1-3@m" placeholder="Quantidade">
-<button onclick="salvar()" class="uk-button uk-button-primary">Salvar</button>
+<div class="uk-container">
+
+  <!-- HEADER COM MENU HAMBURGUER -->
+  <div class="page-header">
+    <h1>
+      <i class="fas fa-box"></i>
+      Produtos
+    </h1>
+    
+    <div class="menu-container">
+      <div class="hamburger-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="index.html" class="dropdown-item">
+          <i class="fas fa-home"></i>
+          Dashboard
+        </a>
+        <a href="clientes.html" class="dropdown-item">
+          <i class="fas fa-users"></i>
+          Clientes
+        </a>
+        <a href="vendas.html" class="dropdown-item">
+          <i class="fas fa-shopping-cart"></i>
+          Vendas
+        </a>
+        <a href="relatorio.html" class="dropdown-item">
+          <i class="fas fa-chart-line"></i>
+          Relatórios
+        </a>
+        <div class="dropdown-item logout" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Sair
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PESQUISA ===================== -->
+<div class="search-section">
+  <div class="search-wrapper">
+    <i class="fas fa-search"></i>
+    <input 
+      type="text" 
+      id="pesquisa" 
+      placeholder="Pesquisar produtos por nome ou referência..." 
+      onkeyup="filtrarProdutos()"
+      class="modern-input"
+    >
+  </div>
 </div>
 
-<table class="uk-table uk-table-striped uk-margin">
-<thead>
-<tr>
-<th>Nome</th>
-<th>Preço</th>
-<th>Qtd</th>
-<th>Data Cadastro</th>
-</tr>
-</thead>
-<tbody id="lista"></tbody>
-</table>
+  <!-- FORMULÁRIO DE CADASTRO -->
+  <div class="form-card">
+    <h3>
+      Novo Produto
+    </h3>
+    
+    <div class="uk-grid-small" uk-grid>
+      <div class="uk-width-1-2@s uk-width-1-5@l">
+        <label class="form-label">Referência (automática)</label>
+        <input id="referencia" class="modern-input" readonly placeholder="Gerado automaticamente">
+      </div>
+      
+      <div class="uk-width-1-2@s uk-width-1-5@l">
+        <label class="form-label">Nome do Produto *</label>
+        <input id="nome" class="modern-input" placeholder="Ex: Hidratante Facial">
+      </div>
+
+      <div class="uk-width-1-2@s uk-width-1-5@l">
+        <label class="form-label">Preço de Compra *</label>
+        <input id="precoCompra" type="text" class="modern-input preco-mask" placeholder="R$ 0,00">
+      </div>
+
+      <div class="uk-width-1-2@s uk-width-1-5@l">
+        <label class="form-label">Preço de Venda *</label>
+        <input id="precoVenda" type="text" class="modern-input preco-mask" placeholder="R$ 0,00">
+      </div>
+
+      <div class="uk-width-1-2@s uk-width-1-5@l">
+        <label class="form-label">Estoque Inicial *</label>
+        <input id="estoque" type="number" min="0" class="modern-input" placeholder="0">
+      </div>
+
+      <div class="uk-width-1-1 uk-margin-top">
+        <button onclick="salvar()" class="btn-primary">
+          <i class="fas fa-save"></i>
+          Salvar Produto
+        </button>
+        <button onclick="limparForm()" class="btn-secondary">
+          <i class="fas fa-eraser"></i>
+          Limpar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABELA DE PRODUTOS -->
+  <div class="table-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+      <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: 1.2rem;">
+        <i class="fas fa-list" style="color: var(--primary);"></i>
+        Lista de Produtos
+      </h3>
+      <span style="color: #64748b; font-size: 0.9rem;" id="totalProdutos">Total: 0</span>
+    </div>
+    
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Referência</th>
+          <th>Nome</th>
+          <th>Compra</th>
+          <th>Venda</th>
+          <th>Estoque</th>
+          <th>Cadastro</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="lista"></tbody>
+    </table>
+
+    <!-- Paginação -->
+    <div class="pagination" id="paginacao"></div>
+  </div>
+
+  <!-- MODAL DETALHES -->
+  <div id="modal-detalhes" uk-modal>
+    <div class="uk-modal-dialog">
+      <div class="modal-header">
+        <i class="fas fa-info-circle" style="color: var(--primary); font-size: 1.8rem;"></i>
+        <h2>Detalhes do Produto</h2>
+      </div>
+      
+      <div id="detalhes-produto"></div>
+      
+      <div style="text-align: right; margin-top: 25px;">
+        <button class="btn-secondary uk-modal-close">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EDIÇÃO -->
+  <div id="modal-editar" uk-modal>
+    <div class="uk-modal-dialog">
+      <div class="modal-header">
+        <i class="fas fa-edit" style="color: var(--warning);"></i>
+        <h2>Editar Produto</h2>
+      </div>
+      
+      <input type="hidden" id="edit-id">
+      
+      <div class="uk-margin">
+        <label class="form-label">Referência</label>
+        <input id="edit-referencia" class="modern-input" readonly>
+      </div>
+      
+      <div class="uk-margin">
+        <label class="form-label">Nome</label>
+        <input id="edit-nome" class="modern-input">
+      </div>
+      
+      <div class="uk-margin">
+        <label class="form-label">Preço de Compra</label>
+        <input id="edit-precoCompra" class="modern-input preco-mask">
+      </div>
+      
+      <div class="uk-margin">
+        <label class="form-label">Preço de Venda</label>
+        <input id="edit-precoVenda" class="modern-input preco-mask">
+      </div>
+      
+      <div class="uk-margin">
+        <label class="form-label">Quantidade em Estoque</label>
+        <input id="edit-estoque" type="number" min="0" class="modern-input">
+      </div>
+      
+      <div style="display: flex; gap: 10px; margin-top: 25px;">
+        <button class="btn-secondary uk-modal-close" style="flex: 1;">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </button>
+        <button onclick="atualizarProduto()" class="btn-primary" style="flex: 1;">
+          <i class="fas fa-save"></i>
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ===================== IMPORTA api.js ===================== -->
+<script src="api.js"></script>
 
 <script>
-const API="https://sistema-loja-api.onrender.com";
-
-async function salvar(){
-await fetch(API+"/produtos",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-nome:nome.value,
-preco:Number(preco.value),
-quantidade:Number(quantidade.value)
-})
-});
-listar();
+if (!localStorage.getItem("token")) {
+  window.location.href = "login.html";
 }
 
-async function listar(){
-const res=await fetch(API+"/produtos");
-const data=await res.json();
-lista.innerHTML="";
-data.forEach(p=>{
-lista.innerHTML+=`
-<tr>
-<td>${p.nome}</td>
-<td>R$ ${p.preco}</td>
-<td>${p.quantidade}</td>
-<td>${new Date(p.dataCadastro).toLocaleDateString()}</td>
-</tr>`;
-});
+let todosProdutos = [];
+let produtosFiltrados = [];
+let paginaAtual = 1;
+const itensPorPagina = 5;
+
+// Menu hamburguer
+function toggleMenu() {
+  document.getElementById('dropdownMenu').classList.toggle('show');
 }
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', function(event) {
+  if (!event.target.closest('.menu-container')) {
+    document.getElementById('dropdownMenu').classList.remove('show');
+  }
+});
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
+}
+
+$(document).ready(function() {
+  $('.preco-mask').mask('000.000.000.000.000,00', {reverse: true});
+});
+
+function converterPrecoParaFloat(valor) {
+  if (!valor) return 0;
+  return parseFloat(valor.replace(/\./g, '').replace(',', '.'));
+}
+
+function formatarPreco(valor) {
+  return valor.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+}
+
+function limparForm() {
+  nome.value = "";
+  precoCompra.value = "";
+  precoVenda.value = "";
+  estoque.value = "";
+  // Não limpa a referência, ela será gerada novamente ao salvar
+}
+
+// Função para gerar próxima referência
+function gerarProximaReferencia() {
+  if (!todosProdutos || todosProdutos.length === 0) {
+    return "M-100";
+  }
+  
+  // Extrair números das referências existentes
+  const numeros = todosProdutos.map(p => {
+    const match = p.referencia?.match(/M-(\d+)/);
+    return match ? parseInt(match[1]) : 0;
+  });
+  
+  const maxNumero = Math.max(...numeros, 99); // Começa de 100 se não houver
+  const proximoNumero = maxNumero + 1;
+  
+  return `M-${proximoNumero}`;
+}
+
+// Função para atualizar o campo de referência com o próximo valor
+function atualizarCampoReferencia() {
+  const referenciaInput = document.getElementById('referencia');
+  referenciaInput.value = gerarProximaReferencia();
+}
+
+async function salvar() {
+  const referenciaProduto = referencia.value.trim(); // Já vem preenchido automaticamente
+  const nomeProduto = nome.value.trim();
+  const precoCompraValor = converterPrecoParaFloat(precoCompra.value);
+  const precoVendaValor = converterPrecoParaFloat(precoVenda.value);
+  const estoqueQtd = parseInt(estoque.value) || 0;
+
+  if (!referenciaProduto || !nomeProduto || precoCompraValor <= 0 || precoVendaValor <= 0) {
+    UIkit.notification({ 
+      message: '<i class="fas fa-exclamation-triangle"></i> Preencha todos os campos corretamente.', 
+      status: 'warning' 
+    });
+    return;
+  }
+
+  await apiFetch("/produtos", {
+    method: "POST",
+    body: JSON.stringify({
+      referencia: referenciaProduto,
+      nome: nomeProduto,
+      precoCompra: precoCompraValor,
+      precoVenda: precoVendaValor,
+      estoque: estoqueQtd
+    })
+  });
+
+  UIkit.notification({ 
+    message: '<i class="fas fa-check-circle"></i> Produto cadastrado!', 
+    status: 'success' 
+  });
+  
+  limparForm();
+  await listar(); // Aguarda listar para atualizar a lista e depois gerar nova referência
+  atualizarCampoReferencia(); // Gera a próxima referência para o próximo cadastro
+}
+
+async function excluir(id) {
+  UIkit.modal.confirm('Confirmar exclusão?').then(async function() {
+    await apiFetch("/produtos/" + id, { method: "DELETE" });
+    UIkit.notification({ message: 'Produto excluído!', status: 'success' });
+    await listar();
+    atualizarCampoReferencia(); // Atualiza referência após exclusão
+  });
+}
+
+function verDetalhes(produto) {
+  const detalhes = document.getElementById('detalhes-produto');
+  
+  detalhes.innerHTML = `
+    <div class="detail-item">
+      <div class="detail-label">📦 Referência</div>
+      <div class="detail-value">${produto.referencia || 'N/A'}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">🏷️ Produto</div>
+      <div class="detail-value">${produto.nome}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">📊 Quantidade em Estoque</div>
+      <div class="detail-value">${produto.estoque} unidades</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">💰 Preço de Venda</div>
+      <div class="detail-value">R$ ${formatarPreco(produto.precoVenda)}</div>
+    </div>
+  `;
+  
+  UIkit.modal('#modal-detalhes').show();
+}
+
+function editar(produto) {
+  document.getElementById('edit-id').value = produto.id;
+  document.getElementById('edit-referencia').value = produto.referencia || '';
+  document.getElementById('edit-nome').value = produto.nome;
+  document.getElementById('edit-precoCompra').value = formatarPreco(produto.precoCompra);
+  document.getElementById('edit-precoVenda').value = formatarPreco(produto.precoVenda);
+  document.getElementById('edit-estoque').value = produto.estoque;
+  
+  $('#edit-precoCompra').mask('000.000.000.000.000,00', {reverse: true});
+  $('#edit-precoVenda').mask('000.000.000.000.000,00', {reverse: true});
+  
+  UIkit.modal('#modal-editar').show();
+}
+
+async function atualizarProduto() {
+  const id = document.getElementById('edit-id').value;
+  const referencia = document.getElementById('edit-referencia').value.trim();
+  const nome = document.getElementById('edit-nome').value.trim();
+  const precoCompra = converterPrecoParaFloat(document.getElementById('edit-precoCompra').value);
+  const precoVenda = converterPrecoParaFloat(document.getElementById('edit-precoVenda').value);
+  const estoque = parseInt(document.getElementById('edit-estoque').value) || 0;
+  
+  if (!referencia || !nome || precoCompra <= 0 || precoVenda <= 0) {
+    UIkit.notification({ message: 'Preencha todos os campos!', status: 'warning' });
+    return;
+  }
+  
+  await apiFetch("/produtos/" + id, {
+    method: "PUT",
+    body: JSON.stringify({ referencia, nome, precoCompra, precoVenda, estoque })
+  });
+  
+  UIkit.notification({ message: 'Produto atualizado!', status: 'success' });
+  UIkit.modal('#modal-editar').hide();
+  await listar();
+  atualizarCampoReferencia(); // Atualiza referência após edição (caso necessário)
+}
+
+function filtrarProdutos() {
+  const termo = pesquisa.value.toLowerCase().trim();
+  if (!termo) {
+    produtosFiltrados = [...todosProdutos];
+  } else {
+    produtosFiltrados = todosProdutos.filter(p => 
+      p.nome.toLowerCase().includes(termo) || 
+      (p.referencia && p.referencia.toLowerCase().includes(termo))
+    );
+  }
+  paginaAtual = 1;
+  renderizarPaginacao();
+  renderizarTabela();
+  document.getElementById('totalProdutos').innerText = `Total: ${produtosFiltrados.length}`;
+}
+
+function renderizarPaginacao() {
+  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacao');
+  
+  if (produtosFiltrados.length <= itensPorPagina) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  // Botão anterior
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual - 1})" ${paginaAtual === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  // Botões de página
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtual - 1 && i <= paginaAtual + 1)) {
+      html += `<button class="page-btn ${i === paginaAtual ? 'active' : ''}" onclick="mudarPagina(${i})">${i}</button>`;
+    } else if (i === paginaAtual - 2 || i === paginaAtual + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  // Botão próximo
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual + 1})" ${paginaAtual === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPagina(novaPagina) {
+  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtual = novaPagina;
+    renderizarPaginacao();
+    renderizarTabela();
+  }
+}
+
+function renderizarTabela() {
+  const inicio = (paginaAtual - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const produtosPagina = produtosFiltrados.slice(inicio, fim);
+  
+  lista.innerHTML = "";
+  
+  produtosPagina.forEach(p => {
+    let stockClass = 'normal';
+    let stockText = 'Normal';
+    
+    if (p.estoque === 0) {
+      stockClass = 'falta';
+      stockText = 'Em falta';
+    } else if (p.estoque < 10) {
+      stockClass = 'baixo';
+      stockText = 'Baixo';
+    }
+    
+    lista.innerHTML += `
+      <tr>
+        <td><strong>${p.referencia || 'N/A'}</strong></td>
+        <td><strong>${p.nome}</strong></td>
+        <td>R$ ${formatarPreco(p.precoCompra)}</td>
+        <td>R$ ${formatarPreco(p.precoVenda)}</td>
+        <td><span class="stock-badge ${stockClass}">${stockText} (${p.estoque})</span></td>
+        <td>${new Date(p.createdAt).toLocaleDateString()}</td>
+        <td>
+          <button onclick='verDetalhes(${JSON.stringify(p).replace(/'/g, "\\'")})' 
+                  class="action-btn info" title="Detalhes">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button onclick='editar(${JSON.stringify(p).replace(/'/g, "\\'")})' 
+                  class="action-btn edit" title="Editar">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button onclick="excluir('${p.id}')" 
+                  class="action-btn delete" title="Excluir">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>`;
+  });
+  
+  if (produtosPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <i class="fas fa-box-open"></i>
+            <p>Nenhum produto encontrado</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+async function listar() {
+  const data = await apiFetch("/produtos");
+  if (!Array.isArray(data)) return;
+  
+  todosProdutos = data;
+  produtosFiltrados = [...todosProdutos];
+  paginaAtual = 1;
+  
+  document.getElementById('totalProdutos').innerText = `Total: ${todosProdutos.length}`;
+  renderizarPaginacao();
+  renderizarTabela();
+  
+  // Atualizar campo de referência para o próximo cadastro
+  atualizarCampoReferencia();
+}
+
+// Inicializar
 listar();
 </script>
 

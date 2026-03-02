@@ -2,47 +2,1341 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Vendas</title>
+<title>Vendas - Mariá Skincare</title>
 
+<!-- UIkit -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  .uk-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 20px !important;
+    margin: 20px auto;
+    backdrop-filter: blur(10px);
+    max-width: 1400px !important;
+  }
+
+  @media (min-width: 640px) {
+    .uk-container {
+      padding: 30px !important;
+      margin: 30px auto;
+    }
+  }
+
+  /* Header */
+  .page-header {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+    border-radius: 20px 20px 0 0;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header {
+      margin: -30px -30px 30px -30px;
+      padding: 25px 30px;
+    }
+  }
+
+  .page-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .page-header h1 {
+      font-size: 2rem;
+    }
+  }
+
+  /* Menu Hamburguer */
+  .menu-container {
+    position: relative;
+  }
+
+  .hamburger-btn {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.5);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.3rem;
+  }
+
+  .hamburger-btn:hover {
+    background: white;
+    color: var(--primary);
+    border-color: white;
+    transform: scale(1.05);
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 55px;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    min-width: 220px;
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .dropdown-menu.show {
+    display: block;
+  }
+
+  .dropdown-item {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--dark);
+    text-decoration: none;
+    transition: all 0.3s;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .dropdown-item:last-child {
+    border-bottom: none;
+  }
+
+  .dropdown-item:hover {
+    background: #f8fafc;
+    color: var(--primary);
+    padding-left: 25px;
+  }
+
+  .dropdown-item i {
+    width: 20px;
+    color: var(--primary);
+  }
+
+  .dropdown-item.logout:hover {
+    background: #fee2e2;
+    color: var(--danger);
+  }
+
+  .dropdown-item.logout i {
+    color: var(--danger);
+  }
+
+  /* Card do formulário */
+  .form-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  .form-card h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.3rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .form-card h3 i {
+    color: var(--primary);
+  }
+
+  /* Inputs modernos */
+  .modern-input, .modern-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background: white;
+  }
+
+  .modern-input:focus, .modern-select:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .modern-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+  }
+
+  /* Botões */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-secondary {
+    background: white;
+    color: var(--dark);
+    border: 2px solid #e2e8f0;
+    padding: 12px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+  }
+
+  .btn-secondary:hover {
+    background: #f8fafc;
+    border-color: var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-add {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    width: 100%;
+  }
+
+  .btn-add:hover {
+    background: #0d9488;
+    transform: translateY(-2px);
+  }
+
+  .btn-remove {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-remove:hover {
+    background: var(--danger);
+    color: white;
+  }
+
+  /* Lista de produtos na venda */
+  .produtos-lista {
+    background: #f8fafc;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px 0;
+  }
+
+  .produto-item {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+
+  .produto-item > * {
+    flex: 1;
+  }
+
+  .produto-item .btn-remove {
+    flex: 0 0 40px;
+  }
+
+  /* Resumo da venda */
+  .resumo-venda {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .resumo-venda h4 {
+    margin: 0 0 15px 0;
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  .resumo-venda .total {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  /* Container da tabela */
+  .table-container {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    margin-top: 30px;
+  }
+
+  /* Tabela */
+  .modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px;
+    min-width: 1000px;
+  }
+
+  .modern-table thead th {
+    background: #f8fafc;
+    padding: 12px 15px;
+    font-weight: 600;
+    color: var(--dark);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-radius: 8px;
+  }
+
+  .modern-table tbody tr {
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .modern-table tbody tr:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+  }
+
+  .modern-table td {
+    padding: 12px 15px;
+    border: none;
+    color: var(--dark);
+  }
+
+  .modern-table td:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .modern-table td:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* Badges */
+  .payment-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .payment-badge.dinheiro {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .payment-badge.pix {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .payment-badge.credito {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .payment-badge.debito {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--secondary);
+  }
+
+  /* Botões de ação */
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 3px;
+  }
+
+  .action-btn.info {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .action-btn.info:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  .action-btn.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+  }
+
+  .action-btn.delete:hover {
+    background: var(--danger);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Filtros */
+  .filters-section {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .filter-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 5px;
+    font-weight: 600;
+  }
+
+  /* Paginação */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: var(--dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: 40px;
+  }
+
+  .empty-state i {
+    font-size: 50px;
+    color: #94a3b8;
+    margin-bottom: 15px;
+  }
+
+  .empty-state p {
+    color: #64748b;
+    font-size: 1.1rem;
+  }
+
+  /* Modal */
+  .uk-modal-dialog {
+    border-radius: 20px !important;
+    padding: 25px !important;
+    max-width: 600px !important;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+
+  .detail-item {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+
+  .detail-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 5px;
+  }
+
+  .detail-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .produtos-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 10px 0;
+  }
+
+  .produto-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .produto-detail-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .produto-item {
+      flex-wrap: wrap;
+    }
+    
+    .produto-item > * {
+      flex: 1 1 100%;
+    }
+    
+    .produto-item .btn-remove {
+      flex: 0 0 40px;
+      margin-left: auto;
+    }
+    
+    .filter-group {
+      min-width: 100%;
+    }
+  }
+</style>
+
 </head>
-<body class="uk-container">
 
-<h2 class="uk-margin-top">Vendas</h2>
+<body>
 
-<div class="uk-grid-small" uk-grid>
-<select id="produto" class="uk-select uk-width-1-3@m"></select>
-<select id="cliente" class="uk-select uk-width-1-3@m"></select>
-<input id="quantidade" type="number" class="uk-input uk-width-1-3@m" placeholder="Quantidade">
-<button onclick="salvar()" class="uk-button uk-button-primary">Salvar</button>
+<div class="uk-container">
+
+  <!-- HEADER COM MENU HAMBURGUER -->
+  <div class="page-header">
+    <h1>
+      <i class="fas fa-shopping-cart"></i>
+      Vendas
+    </h1>
+    
+    <div class="menu-container">
+      <div class="hamburger-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </div>
+      
+      <div class="dropdown-menu" id="dropdownMenu">
+        <a href="index.html" class="dropdown-item">
+          <i class="fas fa-home"></i>
+          Dashboard
+        </a>
+        <a href="produtos.html" class="dropdown-item">
+          <i class="fas fa-box"></i>
+          Produtos
+        </a>
+        <a href="clientes.html" class="dropdown-item">
+          <i class="fas fa-users"></i>
+          Clientes
+        </a>
+        <a href="relatorio.html" class="dropdown-item">
+          <i class="fas fa-chart-line"></i>
+          Relatórios
+        </a>
+        <div class="dropdown-item logout" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i>
+          Sair
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORMULÁRIO DE VENDA -->
+  <div class="form-card">
+    <h3>
+      Nova Venda
+    </h3>
+    
+    <div class="uk-grid-small" uk-grid>
+      <div class="uk-width-1-2@s">
+        <label class="form-label">Cliente</label>
+        <select id="cliente" class="modern-select">
+          <option value="">Selecione um cliente...</option>
+        </select>
+      </div>
+
+      <div class="uk-width-1-2@s">
+        <label class="form-label">Forma de Pagamento</label>
+        <select id="formaPagamento" class="modern-select">
+          <option value="dinheiro">💵 Dinheiro</option>
+          <option value="pix">📱 Pix</option>
+          <option value="credito">💳 Cartão de Crédito</option>
+          <option value="debito">💳 Cartão de Débito</option>
+        </select>
+      </div>
+
+      <div class="uk-width-1-1">
+        <label class="form-label">Data da Venda</label>
+        <input 
+          id="dataVenda" 
+          type="datetime-local" 
+          class="modern-input"
+        >
+      </div>
+    </div>
+
+    <!-- Lista de produtos da venda -->
+    <div class="produtos-lista">
+      <h4 style="margin-top: 0; display: flex; justify-content: space-between; align-items: center;">
+        <span><i class="fas fa-boxes"></i> Produtos</span>
+        <button onclick="adicionarProdutoLinha()" class="btn-add" style="width: auto;">
+          <i class="fas fa-plus"></i> Adicionar Produto
+        </button>
+      </h4>
+      
+      <div id="produtos-container">
+        <!-- Linhas de produtos serão adicionadas aqui -->
+      </div>
+      
+      <!-- Resumo da venda -->
+      <div class="resumo-venda">
+        <h4>Resumo da Venda</h4>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div>Quantidade de itens: <span id="totalItens">0</span></div>
+            <div>Total de produtos: <span id="totalProdutos">0</span></div>
+          </div>
+          <div class="total" id="totalVenda">R$ 0,00</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="uk-margin-top">
+      <button onclick="salvarVenda()" class="btn-primary" style="width: 100%;">
+        <i class="fas fa-save"></i>
+        Finalizar Venda
+      </button>
+    </div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <label>Data Inicial</label>
+      <input type="date" id="filtroInicio" class="modern-input">
+    </div>
+    <div class="filter-group">
+      <label>Data Final</label>
+      <input type="date" id="filtroFim" class="modern-input">
+    </div>
+    <div class="filter-group">
+      <label>Forma de Pagamento</label>
+      <select id="filtroPagamento" class="modern-select" onchange="filtrarVendas()">
+        <option value="">Todas</option>
+        <option value="dinheiro">Dinheiro</option>
+        <option value="pix">Pix</option>
+        <option value="credito">Cartão de Crédito</option>
+        <option value="debito">Cartão de Débito</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>&nbsp;</label>
+      <button onclick="filtrarVendas()" class="btn-primary">
+        <i class="fas fa-filter"></i>
+        Filtrar
+      </button>
+    </div>
+  </div>
+
+  <!-- TABELA DE VENDAS -->
+  <div class="table-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+      <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+        <i class="fas fa-history" style="color: var(--primary);"></i>
+        Histórico de Vendas
+      </h3>
+      <span style="color: #64748b;" id="totalVendas">Total: 0</span>
+    </div>
+    
+    <table class="modern-table">
+      <thead>
+        <tr>
+          <th>Data/Hora</th>
+          <th>Cliente</th>
+          <th>Produtos</th>
+          <th>Qtd Itens</th>
+          <th>Total</th>
+          <th>Pagamento</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="listaVendas"></tbody>
+    </table>
+
+    <!-- Paginação -->
+    <div class="pagination" id="paginacao"></div>
+  </div>
+
+  <!-- MODAL DETALHES DA VENDA -->
+  <div id="modalDetalhesVenda" uk-modal>
+    <div class="uk-modal-dialog">
+      <div class="modal-header">
+        <i class="fas fa-receipt" style="color: var(--primary);"></i>
+        <h2>Detalhes da Venda</h2>
+      </div>
+      
+      <div id="detalhesVenda"></div>
+      
+      <div style="text-align: right; margin-top: 25px;">
+        <button class="btn-secondary uk-modal-close">
+          <i class="fas fa-arrow-left"></i>
+          Voltar
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
+<!-- ===================== IMPORTA api.js ===================== -->
+<script src="api.js"></script>
 <script>
-const API="https://sistema-loja-api.onrender.com";
 
-async function carregar(){
-const p=await fetch(API+"/produtos").then(r=>r.json());
-const c=await fetch(API+"/clientes").then(r=>r.json());
-
-p.forEach(x=>produto.innerHTML+=`<option value="${x.id}">${x.nome}</option>`);
-c.forEach(x=>cliente.innerHTML+=`<option value="${x.id}">${x.nome}</option>`);
+// Verificar autenticação
+if (!localStorage.getItem("token")) {
+  window.location.href = "login.html";
 }
-carregar();
 
-async function salvar(){
-await fetch(API+"/vendas",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-produtoId:produto.value,
-clienteId:cliente.value,
-quantidade:Number(quantidade.value)
-})
+// Variáveis globais
+let produtos = [];
+let clientes = [];
+let todasVendas = [];
+let vendasFiltradas = [];
+let paginaAtual = 1;
+const itensPorPagina = 10;
+
+// Menu hamburguer
+function toggleMenu() {
+  document.getElementById('dropdownMenu').classList.toggle('show');
+}
+
+// Fechar menu ao clicar fora
+document.addEventListener('click', function(event) {
+  if (!event.target.closest('.menu-container')) {
+    document.getElementById('dropdownMenu').classList.remove('show');
+  }
 });
-UIkit.notification("Venda registrada",{status:"success"});
+
+function logout() {
+  localStorage.removeItem("token");
+  window.location.href = "login.html";
 }
+
+// Funções auxiliares
+function formatarMoeda(valor) {
+  return valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatarDataHora(data) {
+  return new Date(data).toLocaleString('pt-BR');
+}
+
+function formatarDataParaInput(data) {
+  const d = new Date(data);
+  return d.toISOString().slice(0, 16);
+}
+
+function getFormaPagamentoIcon(forma) {
+  const icons = {
+    'dinheiro': '💵',
+    'pix': '📱',
+    'credito': '💳',
+    'debito': '💳'
+  };
+  return icons[forma] || '💰';
+}
+
+// Carregar dados iniciais
+async function carregarDados() {
+  try {
+    // Definir data atual no campo de data
+    const agora = new Date();
+    agora.setHours(agora.getHours() - 3); // Ajuste para fuso horário
+    document.getElementById('dataVenda').value = formatarDataParaInput(agora);
+    
+    // Carregar produtos
+    const pRes = await fetch(API + "/produtos", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    produtos = await pRes.json();
+    
+    // Carregar clientes
+    const cRes = await fetch(API + "/clientes", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    clientes = await cRes.json();
+    
+    // Popular selects
+    popularSelects();
+    
+    // Adicionar primeira linha de produto
+    adicionarProdutoLinha();
+    
+    // Carregar vendas
+    await carregarVendas();
+    
+  } catch (error) {
+    console.error('Erro ao carregar dados:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao carregar dados',
+      status: 'danger'
+    });
+  }
+}
+
+function popularSelects() {
+  // Select cliente principal
+  const selectCliente = document.getElementById('cliente');
+  selectCliente.innerHTML = '<option value="">Selecione um cliente...</option>';
+  clientes.forEach(c => {
+    selectCliente.innerHTML += `<option value="${c.id}">${c.nome}</option>`;
+  });
+}
+
+// Adicionar nova linha de produto
+function adicionarProdutoLinha() {
+  const container = document.getElementById('produtos-container');
+  const index = container.children.length;
+  
+  const div = document.createElement('div');
+  div.className = 'produto-item';
+  div.id = `produto-linha-${index}`;
+  div.innerHTML = `
+    <select class="modern-select produto-select" onchange="atualizarPreview(${index})" data-index="${index}">
+      <option value="">Selecione um produto...</option>
+      ${produtos.map(p => `<option value="${p.id}" data-preco="${p.precoVenda}" data-estoque="${p.estoque}">${p.nome} (R$ ${p.precoVenda} - Estoque: ${p.estoque})</option>`).join('')}
+    </select>
+    <input type="number" class="modern-input produto-quantidade" min="1" value="1" placeholder="Quantidade" oninput="atualizarPreview(${index})" data-index="${index}">
+    <span class="produto-subtotal" id="subtotal-${index}">R$ 0,00</span>
+    <button class="btn-remove" onclick="removerProdutoLinha(${index})">
+      <i class="fas fa-trash"></i>
+    </button>
+  `;
+  
+  container.appendChild(div);
+  atualizarPreview(index);
+}
+
+// Remover linha de produto
+function removerProdutoLinha(index) {
+  const linha = document.getElementById(`produto-linha-${index}`);
+  if (linha) {
+    linha.remove();
+    // Reindexar linhas restantes
+    reindexarLinhas();
+  }
+  calcularTotal();
+}
+
+// Reindexar linhas após remoção
+function reindexarLinhas() {
+  const container = document.getElementById('produtos-container');
+  const linhas = container.children;
+  
+  for (let i = 0; i < linhas.length; i++) {
+    const linha = linhas[i];
+    linha.id = `produto-linha-${i}`;
+    
+    const select = linha.querySelector('.produto-select');
+    select.dataset.index = i;
+    select.onclick = function() { atualizarPreview(i); };
+    
+    const input = linha.querySelector('.produto-quantidade');
+    input.dataset.index = i;
+    input.oninput = function() { atualizarPreview(i); };
+    
+    const subtotal = linha.querySelector('.produto-subtotal');
+    subtotal.id = `subtotal-${i}`;
+    
+    const btn = linha.querySelector('.btn-remove');
+    btn.onclick = function() { removerProdutoLinha(i); };
+  }
+}
+
+// Atualizar preview de uma linha
+function atualizarPreview(index) {
+  const select = document.querySelector(`.produto-select[data-index="${index}"]`);
+  const quantidade = document.querySelector(`.produto-quantidade[data-index="${index}"]`);
+  const subtotalSpan = document.getElementById(`subtotal-${index}`);
+  
+  if (select && quantidade && subtotalSpan) {
+    const option = select.options[select.selectedIndex];
+    if (option.value) {
+      const preco = parseFloat(option.dataset.preco);
+      const qtd = parseInt(quantidade.value) || 0;
+      const subtotal = preco * qtd;
+      subtotalSpan.textContent = `R$ ${formatarMoeda(subtotal)}`;
+    } else {
+      subtotalSpan.textContent = 'R$ 0,00';
+    }
+  }
+  
+  calcularTotal();
+}
+
+// Calcular total da venda
+function calcularTotal() {
+  const linhas = document.getElementById('produtos-container').children;
+  let totalItens = 0;
+  let totalProdutos = 0;
+  let totalVenda = 0;
+  
+  for (let i = 0; i < linhas.length; i++) {
+    const select = linhas[i].querySelector('.produto-select');
+    const quantidade = linhas[i].querySelector('.produto-quantidade');
+    
+    if (select.value && quantidade.value) {
+      const option = select.options[select.selectedIndex];
+      const preco = parseFloat(option.dataset.preco);
+      const qtd = parseInt(quantidade.value) || 0;
+      
+      totalItens += qtd;
+      totalProdutos++;
+      totalVenda += preco * qtd;
+    }
+  }
+  
+  document.getElementById('totalItens').textContent = totalItens;
+  document.getElementById('totalProdutos').textContent = totalProdutos;
+  document.getElementById('totalVenda').textContent = `R$ ${formatarMoeda(totalVenda)}`;
+  
+  return totalVenda;
+}
+
+// Validar estoque antes de finalizar
+function validarEstoque() {
+  const linhas = document.getElementById('produtos-container').children;
+  const erros = [];
+  
+  for (let i = 0; i < linhas.length; i++) {
+    const select = linhas[i].querySelector('.produto-select');
+    const quantidade = linhas[i].querySelector('.produto-quantidade');
+    
+    if (select.value && quantidade.value) {
+      const option = select.options[select.selectedIndex];
+      const estoque = parseInt(option.dataset.estoque);
+      const qtd = parseInt(quantidade.value) || 0;
+      
+      if (qtd > estoque) {
+        erros.push(`Estoque insuficiente para ${option.text.split('(')[0].trim()}. Disponível: ${estoque}`);
+      }
+    }
+  }
+  
+  return erros;
+}
+
+// Salvar venda
+async function salvarVenda() {
+  const clienteId = document.getElementById('cliente').value;
+  const formaPagamento = document.getElementById('formaPagamento').value;
+  const dataVenda = document.getElementById('dataVenda').value;
+  
+  if (!clienteId) {
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-triangle"></i> Selecione um cliente!',
+      status: 'warning'
+    });
+    return;
+  }
+  
+  const linhas = document.getElementById('produtos-container').children;
+  const produtosVenda = [];
+  
+  for (let i = 0; i < linhas.length; i++) {
+    const select = linhas[i].querySelector('.produto-select');
+    const quantidade = linhas[i].querySelector('.produto-quantidade');
+    
+    if (select.value && quantidade.value) {
+      produtosVenda.push({
+        produtoId: select.value,
+        quantidade: parseInt(quantidade.value) || 0
+      });
+    }
+  }
+  
+  if (produtosVenda.length === 0) {
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-triangle"></i> Adicione pelo menos um produto!',
+      status: 'warning'
+    });
+    return;
+  }
+  
+  // Validar estoque
+  const erros = validarEstoque();
+  if (erros.length > 0) {
+    UIkit.modal.alert(erros.join('<br>'));
+    return;
+  }
+  
+  try {
+    const res = await fetch(API + "/vendas", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      },
+      body: JSON.stringify({
+        clienteId,
+        produtos: produtosVenda,
+        formaPagamento,
+        dataVenda
+      })
+    });
+    
+    if (res.ok) {
+      UIkit.notification({
+        message: '<i class="fas fa-check-circle"></i> Venda registrada com sucesso!',
+        status: 'success'
+      });
+      
+      // Limpar formulário
+      document.getElementById('cliente').value = '';
+      document.getElementById('formaPagamento').value = 'dinheiro';
+      
+      // Limpar produtos
+      document.getElementById('produtos-container').innerHTML = '';
+      adicionarProdutoLinha();
+      
+      // Atualizar data
+      const agora = new Date();
+      agora.setHours(agora.getHours() - 3);
+      document.getElementById('dataVenda').value = formatarDataParaInput(agora);
+      
+      // Recarregar produtos (para atualizar estoque)
+      await carregarDados();
+      
+    } else {
+      const error = await res.json();
+      UIkit.notification({
+        message: '<i class="fas fa-exclamation-circle"></i> ' + (error.error || 'Erro ao registrar venda'),
+        status: 'danger'
+      });
+    }
+    
+  } catch (error) {
+    console.error('Erro:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao registrar venda',
+      status: 'danger'
+    });
+  }
+}
+
+// Carregar vendas
+async function carregarVendas() {
+  try {
+    const res = await fetch(API + "/vendas", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todasVendas = await res.json();
+    
+    // Definir datas dos filtros
+    const hoje = new Date();
+    const primeiroDia = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+    
+    document.getElementById('filtroInicio').value = primeiroDia.toISOString().split('T')[0];
+    document.getElementById('filtroFim').value = hoje.toISOString().split('T')[0];
+    
+    // Aplicar filtro inicial
+    filtrarVendas();
+    
+  } catch (error) {
+    console.error('Erro ao carregar vendas:', error);
+  }
+}
+
+// Filtrar vendas
+function filtrarVendas() {
+  const inicio = new Date(document.getElementById('filtroInicio').value);
+  const fim = new Date(document.getElementById('filtroFim').value);
+  fim.setHours(23, 59, 59);
+  
+  const filtroPagamento = document.getElementById('filtroPagamento').value;
+  
+  vendasFiltradas = todasVendas.filter(v => {
+    const dataVenda = new Date(v.dataVenda || v.createdAt);
+    const dentroPeriodo = dataVenda >= inicio && dataVenda <= fim;
+    const mesmoPagamento = !filtroPagamento || v.formaPagamento === filtroPagamento;
+    
+    return dentroPeriodo && mesmoPagamento;
+  });
+  
+  // Ordenar por data (mais recentes primeiro)
+  vendasFiltradas.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
+  
+  paginaAtual = 1;
+  document.getElementById('totalVendas').textContent = `Total: ${vendasFiltradas.length}`;
+  renderizarPaginacao();
+  renderizarTabela();
+}
+
+// Renderizar paginação
+function renderizarPaginacao() {
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacao');
+  
+  if (vendasFiltradas.length <= itensPorPagina) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual - 1})" ${paginaAtual === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtual - 1 && i <= paginaAtual + 1)) {
+      html += `<button class="page-btn ${i === paginaAtual ? 'active' : ''}" onclick="mudarPagina(${i})">${i}</button>`;
+    } else if (i === paginaAtual - 2 || i === paginaAtual + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual + 1})" ${paginaAtual === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPagina(novaPagina) {
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtual = novaPagina;
+    renderizarPaginacao();
+    renderizarTabela();
+  }
+}
+
+// Renderizar tabela
+function renderizarTabela() {
+  const inicio = (paginaAtual - 1) * itensPorPagina;
+  const fim = inicio + itensPorPagina;
+  const vendasPagina = vendasFiltradas.slice(inicio, fim);
+  
+  const lista = document.getElementById('listaVendas');
+  lista.innerHTML = "";
+  
+  vendasPagina.forEach(v => {
+    const cliente = clientes.find(c => c.id == v.clienteId) || { nome: 'Cliente não encontrado' };
+    const totalItens = v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0;
+    const produtosLista = v.produtos ? v.produtos.map(p => {
+      const prod = produtos.find(pr => pr.id == p.produtoId);
+      return prod ? prod.nome : 'Produto não encontrado';
+    }).join(', ') : 'N/A';
+    
+    lista.innerHTML += `
+      <tr>
+        <td>${formatarDataHora(v.dataVenda || v.createdAt)}</td>
+        <td><strong>${cliente.nome}</strong></td>
+        <td>${produtosLista}</td>
+        <td>${totalItens} unid</td>
+        <td><strong>R$ ${formatarMoeda(v.total)}</strong></td>
+        <td>
+          <span class="payment-badge ${v.formaPagamento || 'dinheiro'}">
+            ${getFormaPagamentoIcon(v.formaPagamento)} ${v.formaPagamento || 'Dinheiro'}
+          </span>
+        </td>
+        <td>
+          <button onclick="verDetalhesVenda('${v.id}')" 
+                  class="action-btn info" title="Detalhes">
+            <i class="fas fa-eye"></i>
+          </button>
+        </td>
+      </tr>`;
+  });
+  
+  if (vendasPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Nenhuma venda encontrada no período</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+// Ver detalhes da venda
+function verDetalhesVenda(id) {
+  const venda = todasVendas.find(v => v.id == id);
+  if (!venda) return;
+  
+  const cliente = clientes.find(c => c.id == venda.clienteId) || { nome: 'N/A' };
+  
+  let produtosHtml = '<div class="produtos-list">';
+  venda.produtos.forEach(p => {
+    const produto = produtos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0 };
+    produtosHtml += `
+      <div class="produto-detail-item">
+        <span>${produto.nome} (${p.quantidade}x)</span>
+        <span>R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}</span>
+      </div>
+    `;
+  });
+  produtosHtml += '</div>';
+  
+  const detalhes = document.getElementById('detalhesVenda');
+  
+  detalhes.innerHTML = `
+    <div class="detail-item">
+      <div class="detail-label">📅 Data da Venda</div>
+      <div class="detail-value">${formatarDataHora(venda.dataVenda || venda.createdAt)}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">👤 Cliente</div>
+      <div class="detail-value">${cliente.nome}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">📦 Produtos</div>
+      ${produtosHtml}
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">💰 Total da Venda</div>
+      <div class="detail-value" style="color: var(--success); font-size: 1.5rem;">R$ ${formatarMoeda(venda.total)}</div>
+    </div>
+    <div class="detail-item">
+      <div class="detail-label">💳 Forma de Pagamento</div>
+      <div class="detail-value">${getFormaPagamentoIcon(venda.formaPagamento)} ${venda.formaPagamento || 'Dinheiro'}</div>
+    </div>
+  `;
+  
+  UIkit.modal('#modalDetalhesVenda').show();
+}
+
+// Inicializar
+carregarDados();
 </script>
 
 </body>

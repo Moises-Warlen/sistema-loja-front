@@ -2,48 +2,572 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
+<title>Login - Mariá Skincare</title>
 
+<!-- UIkit -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit-icons.min.js"></script>
 
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+  :root {
+    --primary: #2563eb;
+    --secondary: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 20px;
+  }
+
+  /* Container principal - maior */
+  .login-container {
+    width: 100%;
+    max-width: 600px; /* Aumentado de 450px para 600px */
+    margin: 0 auto;
+  }
+
+  /* Card de login - maior */
+  .login-card {
+    background: rgba(255, 255, 255, 0.98); /* Mais opaco */
+    backdrop-filter: blur(10px);
+    border-radius: 40px; /* Aumentado */
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4); /* Sombra mais forte */
+    padding: 50px 45px; /* Aumentado */
+    animation: fadeInUp 0.6s ease;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Logo/Header - maior */
+  .login-header {
+    text-align: center;
+    margin-bottom: 40px; /* Aumentado */
+  }
+
+  .brand-icon {
+    width: 120px; /* Aumentado de 90px */
+    height: 120px; /* Aumentado de 90px */
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 40px; /* Aumentado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px; /* Aumentado */
+    color: white;
+    font-size: 60px; /* Aumentado de 45px */
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+    box-shadow: 0 15px 40px rgba(37, 99, 235, 0.4); /* Sombra maior */
+  }
+
+  .brand-icon:hover {
+    transform: rotate(10deg) scale(1.05);
+  }
+
+  .login-header h1 {
+    font-size: 2.8rem; /* Aumentado de 2.2rem */
+    margin: 0 0 10px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .login-header p {
+    color: #64748b;
+    margin: 0;
+    font-size: 1.2rem; /* Aumentado de 1rem */
+  }
+
+  /* Formulário - maior */
+  .form-group {
+    margin-bottom: 25px; /* Aumentado de 20px */
+    position: relative;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 20px; /* Aumentado de 15px */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 1.4rem; /* Aumentado de 1.2rem */
+    z-index: 1;
+  }
+
+  .modern-input {
+    width: 100%;
+    padding: 18px 18px 18px 55px; /* Aumentado */
+    border: 3px solid #e2e8f0; /* Borda mais grossa */
+    border-radius: 20px; /* Aumentado de 15px */
+    font-size: 1.2rem; /* Aumentado de 1rem */
+    transition: all 0.3s;
+    background: white;
+    box-sizing: border-box;
+  }
+
+  .modern-input:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0.15); /* Sombra maior */
+  }
+
+  .modern-input::placeholder {
+    color: #94a3b8;
+    font-size: 1.1rem; /* Placeholder maior */
+  }
+
+  /* Botão de login - maior */
+  .login-btn {
+    width: 100%;
+    padding: 18px; /* Aumentado de 15px */
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    border-radius: 20px; /* Aumentado de 15px */
+    font-size: 1.3rem; /* Aumentado de 1.1rem */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; /* Aumentado */
+    margin-top: 30px; /* Aumentado de 25px */
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+  }
+
+  .login-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .login-btn:hover::before {
+    left: 100%;
+  }
+
+  .login-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.5); /* Sombra maior */
+  }
+
+  .login-btn:active {
+    transform: translateY(0);
+  }
+
+  .login-btn i {
+    font-size: 1.4rem; /* Aumentado de 1.2rem */
+  }
+
+  /* Opções extras - maior */
+  .login-footer {
+    text-align: center;
+    margin-top: 35px; /* Aumentado de 25px */
+    padding-top: 25px; /* Aumentado de 20px */
+    border-top: 3px solid #f1f5f9; /* Mais grossa */
+  }
+
+  .login-footer p {
+    color: #64748b;
+    font-size: 1rem; /* Aumentado de 0.9rem */
+    margin: 8px 0; /* Aumentado */
+  }
+
+  .login-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+    font-size: 1.1rem; /* Aumentado */
+  }
+
+  .login-footer a:hover {
+    color: var(--secondary);
+    text-decoration: underline;
+  }
+
+  /* Loading state */
+  .login-btn.loading {
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+
+  .login-btn.loading i {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Mensagem de erro - maior */
+  .error-message {
+    background: #fee2e2;
+    color: var(--danger);
+    padding: 15px; /* Aumentado de 12px */
+    border-radius: 15px; /* Aumentado de 10px */
+    font-size: 1rem; /* Aumentado de 0.9rem */
+    margin-top: 20px; /* Aumentado de 15px */
+    display: none;
+    align-items: center;
+    gap: 12px; /* Aumentado */
+    border-left: 5px solid var(--danger); /* Adicionado */
+  }
+
+  .error-message.show {
+    display: flex;
+  }
+
+  .error-message i {
+    font-size: 1.3rem; /* Aumentado de 1.1rem */
+  }
+
+  /* Responsivo ajustado */
+  @media (max-width: 768px) {
+    .login-container {
+      max-width: 500px;
+    }
+    
+    .login-card {
+      padding: 40px 30px;
+    }
+    
+    .brand-icon {
+      width: 100px;
+      height: 100px;
+      font-size: 50px;
+    }
+
+    .login-header h1 {
+      font-size: 2.2rem;
+    }
+    
+    .login-header p {
+      font-size: 1rem;
+    }
+    
+    .modern-input {
+      padding: 15px 15px 15px 50px;
+      font-size: 1rem;
+    }
+    
+    .login-btn {
+      padding: 15px;
+      font-size: 1.1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login-container {
+      max-width: 100%;
+    }
+    
+    .login-card {
+      padding: 30px 20px;
+    }
+    
+    .brand-icon {
+      width: 80px;
+      height: 80px;
+      font-size: 40px;
+    }
+    
+    .login-header h1 {
+      font-size: 1.8rem;
+    }
+  }
+
+  /* Animações adicionais */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+
+  .brand-icon {
+    animation: pulse 3s infinite;
+  }
+
+  /* Efeito de foco nos inputs */
+  .form-group:focus-within .input-icon {
+    color: var(--primary);
+    transition: color 0.3s;
+  }
+
+  /* Versão para telas muito grandes */
+  @media (min-width: 1440px) {
+    .login-container {
+      max-width: 700px;
+    }
+    
+    .login-card {
+      padding: 60px 55px;
+    }
+    
+    .brand-icon {
+      width: 140px;
+      height: 140px;
+      font-size: 70px;
+    }
+    
+    .login-header h1 {
+      font-size: 3.2rem;
+    }
+    
+    .modern-input {
+      padding: 20px 20px 20px 65px;
+      font-size: 1.3rem;
+    }
+    
+    .login-btn {
+      padding: 20px;
+      font-size: 1.4rem;
+    }
+  }
+</style>
+
 </head>
-<body class="uk-flex uk-flex-center uk-flex-middle uk-height-viewport uk-background-muted">
 
-<div class="uk-card uk-card-default uk-card-body uk-width-1-3@m">
-<h3 class="uk-text-center">Mariá skincare</h3>
+<body>
 
-<input id="usuario" class="uk-input uk-margin" placeholder="Usuário">
-<input id="senha" type="password" class="uk-input uk-margin" placeholder="Senha">
+<div class="login-container">
+  
+  <div class="login-card">
+    
+    <!-- Header com ícone - maior -->
+    <div class="login-header">
+      <div class="brand-icon">
+        <i class="fas fa-leaf"></i>
+      </div>
+      <h1>Mariá Skincare</h1>
+      <p>Faça login para acessar o sistema</p>
+    </div>
 
-<button onclick="logar()" class="uk-button uk-button-primary uk-width-1-1">
-Entrar
-</button>
+    <!-- Formulário - maior -->
+    <div class="form-group">
+      <i class="fas fa-user input-icon"></i>
+      <input 
+        type="text" 
+        id="usuario" 
+        class="modern-input" 
+        placeholder="Digite seu usuário"
+        autocomplete="off"
+        autofocus
+        onkeypress="handleKeyPress(event)"
+      >
+    </div>
+
+    <div class="form-group">
+      <i class="fas fa-lock input-icon"></i>
+      <input 
+        type="password" 
+        id="senha" 
+        class="modern-input" 
+        placeholder="Digite sua senha"
+        onkeypress="handleKeyPress(event)"
+      >
+    </div>
+
+    <!-- Botão de login - maior -->
+    <button onclick="logar()" class="login-btn" id="btnLogin">
+      <i class="fas fa-sign-in-alt"></i>
+      <span>Entrar no Sistema</span>
+    </button>
+
+    <!-- Mensagem de erro - maior -->
+    <div class="error-message" id="errorMessage">
+      <i class="fas fa-exclamation-circle"></i>
+      <span></span>
+    </div>
+
+    <!-- Footer com informações - maior -->
+    <div class="login-footer">
+      <p>© 2024 Mariá Skincare. Todos os direitos reservados.</p>
+      <p style="margin-top: 12px; font-size: 0.95rem;">
+        <i class="fas fa-shield-alt" style="color: var(--success);"></i>
+        Sistema seguro com autenticação JWT
+      </p>
+      <p style="margin-top: 10px; font-size: 0.9rem; color: #94a3b8;">
+        <i class="fas fa-lock"></i>
+        Suas informações estão protegidas
+      </p>
+    </div>
+
+  </div>
+
 </div>
 
 <script>
 const API = "https://sistema-loja-api.onrender.com";
 
-async function logar(){
-  const res = await fetch(API+"/login",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      usuario:usuario.value,
-      senha:senha.value
-    })
-  });
-
-  const data = await res.json();
-
-  if(res.ok){
-    localStorage.setItem("token",data.token);
-    location.href="index.html";
-  }else{
-    UIkit.notification(data.error,{status:'danger'});
+// Função para mostrar/esconder loading
+function setLoading(isLoading) {
+  const btn = document.getElementById('btnLogin');
+  
+  if (isLoading) {
+    btn.classList.add('loading');
+    btn.innerHTML = '<i class="fas fa-spinner"></i> <span>Entrando...</span>';
+    btn.disabled = true;
+  } else {
+    btn.classList.remove('loading');
+    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span>Entrar no Sistema</span>';
+    btn.disabled = false;
   }
 }
+
+// Função para mostrar mensagem de erro
+function showError(message) {
+  const errorDiv = document.getElementById('errorMessage');
+  const errorSpan = errorDiv.querySelector('span');
+  errorSpan.textContent = message;
+  errorDiv.classList.add('show');
+  
+  // Esconder após 5 segundos
+  setTimeout(() => {
+    errorDiv.classList.remove('show');
+  }, 5000);
+}
+
+// Função para lidar com a tecla Enter
+function handleKeyPress(event) {
+  if (event.key === 'Enter') {
+    logar();
+  }
+}
+
+// Função principal de login
+async function logar() {
+  const usuarioInput = document.getElementById('usuario');
+  const senhaInput = document.getElementById('senha');
+  
+  const usuario = usuarioInput.value.trim();
+  const senha = senhaInput.value.trim();
+
+  // Validação básica
+  if (!usuario || !senha) {
+    showError('Por favor, preencha usuário e senha!');
+    usuarioInput.focus();
+    return;
+  }
+
+  // Ativar loading
+  setLoading(true);
+  
+  // Esconder mensagem de erro anterior
+  document.getElementById('errorMessage').classList.remove('show');
+
+  try {
+    const res = await fetch(API + "/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        usuario: usuario,
+        senha: senha
+      })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      // Salvar token
+      localStorage.setItem("token", data.token);
+      
+      // Salvar nome do usuário (opcional)
+      if (data.usuario) {
+        localStorage.setItem("usuario", data.usuario);
+      }
+      
+      // Notificação de sucesso
+      UIkit.notification({
+        message: '<i class="fas fa-check-circle"></i> Login realizado com sucesso!',
+        status: 'success',
+        timeout: 2000,
+        pos: 'top-center'
+      });
+      
+      // Redirecionar após um pequeno delay
+      setTimeout(() => {
+        window.location.href = "index.html";
+      }, 500);
+      
+    } else {
+      // Mostrar erro
+      const errorMsg = data.error || "Usuário ou senha inválidos!";
+      showError(errorMsg);
+      
+      // Limpar campos
+      senhaInput.value = "";
+      usuarioInput.focus();
+      
+      UIkit.notification({
+        message: '<i class="fas fa-exclamation-circle"></i> ' + errorMsg,
+        status: 'danger',
+        pos: 'top-center'
+      });
+    }
+  } catch (error) {
+    console.error('Erro na requisição:', error);
+    showError('Erro de conexão com o servidor!');
+    
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro de conexão!',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  } finally {
+    // Desativar loading
+    setLoading(false);
+  }
+}
+
+// Adicionar efeito de entrada suave
+document.addEventListener('DOMContentLoaded', function() {
+  // Pequena animação para os inputs
+  const inputs = document.querySelectorAll('.modern-input');
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.parentElement.style.transform = 'scale(1.02)';
+    });
+    input.addEventListener('blur', function() {
+      this.parentElement.style.transform = 'scale(1)';
+    });
+  });
+});
 </script>
 
 </body>
