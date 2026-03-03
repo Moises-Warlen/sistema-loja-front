@@ -1011,6 +1011,11 @@ function getFormaPagamentoIcon(forma) {
   return icons[forma] || '💰';
 }
 
+function getNomeProduto(produtoId) {
+  const produto = produtos.find(p => p.id == produtoId);
+  return produto ? produto.nome : 'Produto não encontrado';
+}
+
 // Carregar dados iniciais
 async function carregarDados() {
   try {
@@ -1019,13 +1024,14 @@ async function carregarDados() {
     agora.setHours(agora.getHours() - 3); // Ajuste para fuso horário
     document.getElementById('dataVenda').value = formatarDataParaInput(agora);
     
-    // Carregar produtos
+    // Carregar produtos PRIMEIRO
     const pRes = await fetch(API + "/produtos", {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token")
       }
     });
     produtos = await pRes.json();
+    console.log('Produtos carregados:', produtos.length);
     
     // Carregar clientes
     const cRes = await fetch(API + "/clientes", {
@@ -1041,7 +1047,7 @@ async function carregarDados() {
     // Adicionar primeira linha de produto
     adicionarProdutoLinha();
     
-    // Carregar vendas
+    // Carregar vendas DEPOIS dos produtos
     await carregarVendas();
     
   } catch (error) {
@@ -1073,7 +1079,7 @@ function adicionarProdutoLinha() {
   div.innerHTML = `
     <select class="modern-select produto-select" onchange="atualizarPreview(${index})" data-index="${index}">
       <option value="">Selecione um produto...</option>
-      ${produtos.map(p => `<option value="${p.id}" data-preco="${p.precoVenda}" data-estoque="${p.estoque}">${p.nome} (R$ ${p.precoVenda} - Estoque: ${p.estoque})</option>`).join('')}
+      ${produtos.map(p => `<option value="${p.id}" data-preco="${p.precoVenda}" data-estoque="${p.estoque}">${p.nome} (R$ ${formatarMoeda(p.precoVenda)} - Estoque: ${p.estoque})</option>`).join('')}
     </select>
     <input type="number" class="modern-input produto-quantidade" min="1" value="1" placeholder="Quantidade" oninput="atualizarPreview(${index})" data-index="${index}">
     <span class="produto-subtotal" id="subtotal-${index}">R$ 0,00</span>
@@ -1302,6 +1308,7 @@ async function carregarVendas() {
       }
     });
     todasVendas = await res.json();
+    console.log('Vendas carregadas:', todasVendas.length);
     
     // Definir datas dos filtros
     const hoje = new Date();
@@ -1395,10 +1402,17 @@ function renderizarTabela() {
   vendasPagina.forEach(v => {
     const cliente = clientes.find(c => c.id == v.clienteId) || { nome: 'Cliente não encontrado' };
     const totalItens = v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0;
-    const produtosLista = v.produtos ? v.produtos.map(p => {
-      const prod = produtos.find(pr => pr.id == p.produtoId);
-      return prod ? prod.nome : 'Produto não encontrado';
-    }).join(', ') : 'N/A';
+    
+    // Criar lista de nomes de produtos
+    let produtosLista = '';
+    if (v.produtos && v.produtos.length > 0) {
+      produtosLista = v.produtos.map(p => {
+        const nome = getNomeProduto(p.produtoId);
+        return nome;
+      }).join(', ');
+    } else {
+      produtosLista = 'N/A';
+    }
     
     lista.innerHTML += `
       <tr>
@@ -1445,11 +1459,12 @@ function verDetalhesVenda(id) {
   
   let produtosHtml = '<div class="produtos-list">';
   venda.produtos.forEach(p => {
-    const produto = produtos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0 };
+    const produto = produtos.find(pr => pr.id == p.produtoId) || { nome: 'Produto não encontrado', precoVenda: 0 };
+    const subtotal = p.subtotal || (produto.precoVenda * p.quantidade);
     produtosHtml += `
       <div class="produto-detail-item">
         <span>${produto.nome} (${p.quantidade}x)</span>
-        <span>R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}</span>
+        <span>R$ ${formatarMoeda(subtotal)}</span>
       </div>
     `;
   });
