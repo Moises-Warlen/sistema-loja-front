@@ -6,7 +6,7 @@
 <title>Relatórios - Mariá Skincare</title>
 
 <!-- Ícone da página (favicon) -->
-  <link rel="icon" type="image/png" href="logo-m.ico">
+<link rel="icon" type="image/png" href="logo-m.ico">
 <!-- UIkit -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
@@ -1533,7 +1533,7 @@ async function carregarVendas() {
     document.getElementById('inicio').value = primeiroDia.toISOString().split('T')[0];
     document.getElementById('fim').value = ultimoDia.toISOString().split('T')[0];
     
-    // Carregar vendas
+    // Carregar vendas com todos os relacionamentos
     const res = await fetch(API + "/vendas", {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token")
@@ -1541,15 +1541,9 @@ async function carregarVendas() {
     });
     todasVendas = await res.json();
     
-    // Carregar clientes para os nomes
-    const cRes = await fetch(API + "/clientes", {
-      headers: {
-        "Authorization": "Bearer " + localStorage.getItem("token")
-      }
-    });
-    todosClientes = await cRes.json();
+    console.log('Vendas carregadas:', todasVendas); // Para debug
     
-    // Carregar produtos para os nomes
+    // Carregar produtos (para fallback)
     const pRes = await fetch(API + "/produtos", {
       headers: {
         "Authorization": "Bearer " + localStorage.getItem("token")
@@ -1604,7 +1598,7 @@ function atualizarResumoVendas() {
   
   // Total de itens
   const totalItens = vendasFiltradas.reduce((acc, v) => {
-    const qtd = v.produtos ? v.produtos.reduce((sum, p) => sum + p.quantidade, 0) : 0;
+    const qtd = v.itens ? v.itens.reduce((sum, i) => sum + i.quantidade, 0) : 0;
     return acc + qtd;
   }, 0);
   document.getElementById('totalItens').textContent = totalItens;
@@ -1681,12 +1675,20 @@ function renderizarTabelaVendas() {
   lista.innerHTML = "";
   
   vendasPagina.forEach(v => {
-    const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'Cliente não encontrado' };
-    const totalItens = v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0;
-    const produtosLista = v.produtos ? v.produtos.map(p => {
-      const prod = todosProdutos.find(pr => pr.id == p.produtoId);
-      return prod ? prod.nome : 'Produto não encontrado';
-    }).join(', ') : 'N/A';
+    // Cliente pode vir diretamente do relacionamento ou precisar ser buscado
+    const cliente = v.cliente || { nome: 'Cliente não encontrado' };
+    
+    // CORREÇÃO: usar v.itens em vez de v.produtos
+    const totalItens = v.itens ? v.itens.reduce((acc, i) => acc + i.quantidade, 0) : 0;
+    
+    // CORREÇÃO: mapear os itens para obter nomes dos produtos
+    let produtosLista = 'N/A';
+    if (v.itens && v.itens.length > 0) {
+      produtosLista = v.itens.map(i => {
+        // Produto pode vir diretamente do relacionamento
+        return i.produto ? i.produto.nome : 'Produto não encontrado';
+      }).join(', ');
+    }
     
     lista.innerHTML += `
       <tr>
@@ -1730,22 +1732,26 @@ function verDetalhesVenda(id) {
   }
   
   vendaSelecionada = venda;
-  const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A', telefone: 'N/A', endereco: 'N/A' };
+  
+  // CORREÇÃO: usar o cliente que já vem no relacionamento
+  const cliente = venda.cliente || { nome: 'N/A', telefone: 'N/A' };
   
   let produtosHtml = '<div class="produtos-list">';
   let subtotal = 0;
   
-  if (venda.produtos && venda.produtos.length > 0) {
-    venda.produtos.forEach(p => {
-      const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
-      const valorItem = p.subtotal || (produto.precoVenda * p.quantidade);
+  // CORREÇÃO: usar venda.itens em vez de venda.produtos
+  if (venda.itens && venda.itens.length > 0) {
+    venda.itens.forEach(item => {
+      // CORREÇÃO: usar o produto que já vem no relacionamento
+      const produto = item.produto || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
+      const valorItem = item.subtotal || (produto.precoVenda * item.quantidade);
       subtotal += valorItem;
       
       produtosHtml += `
         <div class="produto-detail-item">
           <div>
             <strong>${produto.nome}</strong><br>
-            <small>Ref: ${produto.referencia || 'N/A'} | Qtd: ${p.quantidade}x | Preço: R$ ${formatarMoeda(produto.precoVenda || 0)}</small>
+            <small>Ref: ${produto.referencia || 'N/A'} | Qtd: ${item.quantidade}x | Preço: R$ ${formatarMoeda(produto.precoVenda || 0)}</small>
           </div>
           <span style="font-weight: 600;">R$ ${formatarMoeda(valorItem)}</span>
         </div>
@@ -1762,7 +1768,6 @@ function verDetalhesVenda(id) {
     <div class="cliente-info">
       <p><i class="fas fa-user"></i> <strong>${cliente.nome}</strong></p>
       <p><i class="fas fa-phone"></i> ${cliente.telefone || 'N/A'}</p>
-      ${cliente.endereco ? `<p><i class="fas fa-map-marker-alt"></i> ${cliente.endereco}</p>` : ''}
     </div>
 
     <div class="detail-item">
@@ -1796,11 +1801,6 @@ function verDetalhesVenda(id) {
   // Abrir o modal
   if (typeof UIkit !== 'undefined') {
     UIkit.modal('#modalDetalhesVenda').show();
-  } else {
-    console.error('UIkit não está disponível');
-    // Fallback: mostrar modal manualmente
-    const modal = document.getElementById('modalDetalhesVenda');
-    modal.style.display = 'block';
   }
 }
 
@@ -1815,7 +1815,7 @@ async function exportarVendaDetalhadaPDF() {
     const doc = new jsPDF();
     
     const venda = vendaSelecionada;
-    const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A', telefone: 'N/A', endereco: 'N/A' };
+    const cliente = venda.cliente || { nome: 'N/A', telefone: 'N/A' };
     
     doc.setFontSize(22);
     doc.setTextColor(37, 99, 235);
@@ -1832,27 +1832,26 @@ async function exportarVendaDetalhadaPDF() {
     doc.setFontSize(11);
     doc.text(`Nome: ${cliente.nome}`, 20, 55);
     doc.text(`Telefone: ${cliente.telefone || 'N/A'}`, 20, 63);
-    if (cliente.endereco) doc.text(`Endereço: ${cliente.endereco}`, 20, 71);
     
-    doc.text(`Data da Venda: ${formatarDataHora(venda.dataVenda || venda.createdAt)}`, 15, 85);
-    doc.text(`Forma de Pagamento: ${getFormaPagamentoNome(venda.formaPagamento)}`, 15, 93);
+    doc.text(`Data da Venda: ${formatarDataHora(venda.dataVenda || venda.createdAt)}`, 15, 75);
+    doc.text(`Forma de Pagamento: ${getFormaPagamentoNome(venda.formaPagamento)}`, 15, 83);
     
     const dadosProdutos = [];
-    if (venda.produtos && venda.produtos.length > 0) {
-      venda.produtos.forEach(p => {
-        const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
+    if (venda.itens && venda.itens.length > 0) {
+      venda.itens.forEach(item => {
+        const produto = item.produto || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
         dadosProdutos.push([
           produto.referencia || 'N/A',
           produto.nome,
-          p.quantidade,
+          item.quantidade,
           `R$ ${formatarMoeda(produto.precoVenda)}`,
-          `R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}`
+          `R$ ${formatarMoeda(item.subtotal || (produto.precoVenda * item.quantidade))}`
         ]);
       });
     }
     
     doc.autoTable({
-      startY: 105,
+      startY: 95,
       head: [['Ref', 'Produto', 'Qtd', 'Preço Unit.', 'Subtotal']],
       body: dadosProdutos,
       theme: 'striped',
@@ -2231,7 +2230,7 @@ function verDetalhesCliente(id) {
         <div class="produto-detail-item">
           <div>
             <strong>${formatarDataHora(v.dataVenda || v.createdAt)}</strong><br>
-            <small>${v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0} itens</small>
+            <small>${v.itens ? v.itens.reduce((acc, i) => acc + i.quantidade, 0) : 0} itens</small>
           </div>
           <span style="font-weight: 600;">R$ ${formatarMoeda(v.total)}</span>
         </div>
@@ -2248,9 +2247,6 @@ function verDetalhesCliente(id) {
     <div class="cliente-info">
       <p><i class="fas fa-user"></i> <strong>${cliente.nome}</strong></p>
       <p><i class="fas fa-phone"></i> ${cliente.telefone || 'N/A'}</p>
-      ${cliente.email ? `<p><i class="fas fa-envelope"></i> ${cliente.email}</p>` : ''}
-      ${cliente.endereco ? `<p><i class="fas fa-map-marker-alt"></i> ${cliente.endereco}</p>` : ''}
-      ${cliente.cpf ? `<p><i class="fas fa-id-card"></i> ${cliente.cpf}</p>` : ''}
     </div>
 
     <div class="detail-item">
@@ -2283,11 +2279,6 @@ function verDetalhesCliente(id) {
   // Abrir o modal
   if (typeof UIkit !== 'undefined') {
     UIkit.modal('#modalDetalhesCliente').show();
-  } else {
-    console.error('UIkit não está disponível');
-    // Fallback: mostrar modal manualmente
-    const modal = document.getElementById('modalDetalhesCliente');
-    modal.style.display = 'block';
   }
 }
 
@@ -2322,35 +2313,32 @@ async function exportarClienteDetalhadoPDF() {
     doc.setFontSize(11);
     doc.text(`Nome: ${cliente.nome}`, 20, 55);
     doc.text(`Telefone: ${cliente.telefone || 'N/A'}`, 20, 63);
-    if (cliente.email) doc.text(`E-mail: ${cliente.email}`, 20, 71);
-    if (cliente.cpf) doc.text(`CPF: ${cliente.cpf}`, 20, 79);
-    if (cliente.endereco) doc.text(`Endereço: ${cliente.endereco}`, 20, 87);
-    doc.text(`Data de Cadastro: ${formatarData(cliente.createdAt)}`, 20, 95);
+    doc.text(`Data de Cadastro: ${formatarData(cliente.createdAt)}`, 20, 71);
     
     doc.setFontSize(14);
-    doc.text('Resumo de Compras', 15, 110);
+    doc.text('Resumo de Compras', 15, 86);
     
     doc.setFontSize(11);
-    doc.text(`Total de compras realizadas: ${comprasCliente.length}`, 20, 120);
-    doc.text(`Valor total em compras: R$ ${formatarMoeda(totalCompras)}`, 20, 128);
+    doc.text(`Total de compras realizadas: ${comprasCliente.length}`, 20, 96);
+    doc.text(`Valor total em compras: R$ ${formatarMoeda(totalCompras)}`, 20, 104);
     
     if (comprasCliente.length > 0) {
       const ultimaCompra = new Date(Math.max(...comprasCliente.map(v => new Date(v.dataVenda || v.createdAt))));
-      doc.text(`Última compra: ${formatarData(ultimaCompra)}`, 20, 136);
+      doc.text(`Última compra: ${formatarData(ultimaCompra)}`, 20, 112);
       
       const dadosCompras = [];
       comprasCliente.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
       comprasCliente.slice(0, 10).forEach(v => {
         dadosCompras.push([
           formatarData(v.dataVenda || v.createdAt),
-          v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0,
+          v.itens ? v.itens.reduce((acc, i) => acc + i.quantidade, 0) : 0,
           `R$ ${formatarMoeda(v.total)}`,
           getFormaPagamentoNome(v.formaPagamento)
         ]);
       });
       
       doc.autoTable({
-        startY: 150,
+        startY: 125,
         head: [['Data', 'Itens', 'Total', 'Pagamento']],
         body: dadosCompras,
         theme: 'striped',
@@ -2406,7 +2394,7 @@ async function exportarVendasPDF() {
     
     const dadosTabela = [];
     vendasFiltradas.slice(0, 50).forEach(v => {
-      const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'N/A' };
+      const cliente = v.cliente || { nome: 'N/A' };
       const data = formatarDataHora(v.dataVenda || v.createdAt);
       
       dadosTabela.push([
@@ -2480,7 +2468,7 @@ async function exportarVendasCompletoPDF() {
     
     const dadosTabela = [];
     vendasFiltradas.slice(0, 20).forEach(v => {
-      const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'N/A' };
+      const cliente = v.cliente || { nome: 'N/A' };
       const data = formatarDataHora(v.dataVenda || v.createdAt);
       
       dadosTabela.push([
