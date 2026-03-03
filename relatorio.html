@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <title>Relatórios - Mariá Skincare</title>
 
 <!-- UIkit -->
@@ -33,65 +34,60 @@
     --light: #f8fafc;
   }
 
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
   body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
   }
 
   .uk-container {
     background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    padding: 20px !important;
-    margin: 20px auto;
     backdrop-filter: blur(10px);
+    border-radius: clamp(20px, 5vw, 40px);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.3);
+    padding: clamp(16px, 4vw, 30px) !important;
+    width: 100%;
     max-width: 1400px !important;
+    margin: 0 auto;
+    height: calc(100vh - 32px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
-  @media (min-width: 640px) {
-    .uk-container {
-      padding: 30px !important;
-      margin: 30px auto;
-    }
-  }
-
-  /* Header */
+  /* Header fixo */
   .page-header {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
-    margin: -20px -20px 20px -20px;
-    padding: 20px;
-    border-radius: 20px 20px 0 0;
+    margin: calc(clamp(16px, 4vw, 30px) * -1) calc(clamp(16px, 4vw, 30px) * -1) 0 calc(clamp(16px, 4vw, 30px) * -1);
+    padding: clamp(16px, 3vw, 25px) clamp(20px, 4vw, 30px);
+    border-radius: clamp(20px, 5vw, 40px) clamp(20px, 5vw, 40px) 0 0;
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
-  }
-
-  @media (min-width: 640px) {
-    .page-header {
-      margin: -30px -30px 30px -30px;
-      padding: 25px 30px;
-    }
+    flex-shrink: 0;
   }
 
   .page-header h1 {
-    font-size: 1.5rem;
+    font-size: clamp(1.3rem, 4vw, 2rem);
     margin: 0;
     font-weight: 600;
     display: flex;
     align-items: center;
     gap: 10px;
-  }
-
-  @media (min-width: 640px) {
-    .page-header h1 {
-      font-size: 2rem;
-    }
+    line-height: 1.2;
   }
 
   /* Menu Hamburguer */
@@ -103,15 +99,15 @@
     background: rgba(255,255,255,0.2);
     border: 2px solid rgba(255,255,255,0.5);
     color: white;
-    width: 45px;
-    height: 45px;
+    width: clamp(40px, 8vw, 45px);
+    height: clamp(40px, 8vw, 45px);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s;
-    font-size: 1.3rem;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
   }
 
   .hamburger-btn:hover {
@@ -123,7 +119,7 @@
 
   .dropdown-menu {
     position: absolute;
-    top: 55px;
+    top: calc(100% + 10px);
     right: 0;
     background: white;
     border-radius: 15px;
@@ -136,10 +132,22 @@
 
   .dropdown-menu.show {
     display: block;
+    animation: slideIn 0.3s ease;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .dropdown-item {
-    padding: 15px 20px;
+    padding: clamp(12px, 3vw, 15px) clamp(16px, 4vw, 20px);
     display: flex;
     align-items: center;
     gap: 12px;
@@ -148,6 +156,7 @@
     transition: all 0.3s;
     border-bottom: 1px solid #f1f5f9;
     cursor: pointer;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
   }
 
   .dropdown-item:last-child {
@@ -174,32 +183,56 @@
     color: var(--danger);
   }
 
+  /* Área de conteúdo rolável */
+  .content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 0;
+    margin-top: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) #f1f5f9;
+  }
+
+  .content-area::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .content-area::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 10px;
+  }
+
+  .content-area::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 10px;
+  }
+
   /* Botões de tipo de relatório */
   .report-type-buttons {
     display: flex;
-    gap: 10px;
+    gap: clamp(8px, 2vw, 10px);
     margin-bottom: 25px;
     flex-wrap: wrap;
   }
 
   .type-btn {
-    padding: 12px 20px;
+    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 20px);
     border: 2px solid #e2e8f0;
     background: white;
-    border-radius: 12px;
+    border-radius: clamp(10px, 2vw, 12px);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
     align-items: center;
     gap: 8px;
-    flex: 1;
+    flex: 1 1 150px;
     justify-content: center;
-    min-width: 150px;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
   }
 
   .type-btn i {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
   }
 
   .type-btn.active {
@@ -216,35 +249,36 @@
   /* Cards de filtro */
   .filter-card {
     background: white;
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: clamp(12px, 3vw, 15px);
+    padding: clamp(16px, 3vw, 25px);
     margin-bottom: 30px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     border: 1px solid #e2e8f0;
   }
 
   .filter-card h3 {
-    margin: 0 0 20px 0;
-    font-size: 1.3rem;
+    margin: 0 0 clamp(12px, 2vw, 20px) 0;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
     display: flex;
     align-items: center;
     gap: 10px;
     color: var(--dark);
-    padding-bottom: 15px;
+    padding-bottom: clamp(10px, 2vw, 15px);
     border-bottom: 2px solid #f1f5f9;
   }
 
   .filter-card h3 i {
     color: var(--primary);
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
   }
 
   /* Inputs modernos */
   .modern-input, .modern-select {
     width: 100%;
-    padding: 12px 15px;
+    padding: clamp(10px, 2vw, 12px) clamp(12px, 2.5vw, 15px);
     border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    font-size: 1rem;
+    border-radius: clamp(10px, 2vw, 12px);
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
     transition: all 0.3s;
     background: white;
   }
@@ -268,8 +302,8 @@
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 25px);
+    border-radius: clamp(10px, 2vw, 12px);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
@@ -277,7 +311,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
   }
 
   .btn-primary:hover {
@@ -289,15 +323,15 @@
     background: white;
     color: var(--dark);
     border: 2px solid #e2e8f0;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 25px);
+    border-radius: clamp(10px, 2vw, 12px);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
   }
 
   .btn-secondary:hover {
@@ -310,8 +344,8 @@
     background: linear-gradient(135deg, #dc2626, #ef4444);
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 25px);
+    border-radius: clamp(10px, 2vw, 12px);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
@@ -319,7 +353,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
   }
 
   .btn-pdf:hover {
@@ -331,8 +365,8 @@
     background: linear-gradient(135deg, var(--success), #34d399);
     color: white;
     border: none;
-    padding: 12px 25px;
-    border-radius: 12px;
+    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 25px);
+    border-radius: clamp(10px, 2vw, 12px);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
@@ -340,7 +374,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
   }
 
   .btn-success:hover {
@@ -352,14 +386,14 @@
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+    gap: clamp(12px, 2vw, 20px);
     margin-bottom: 30px;
   }
 
   .stat-card {
     background: white;
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: clamp(12px, 3vw, 15px);
+    padding: clamp(16px, 3vw, 20px);
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     border: 1px solid #e2e8f0;
     transition: all 0.3s;
@@ -390,8 +424,13 @@
     color: white;
   }
 
+  .stat-card.danger {
+    background: linear-gradient(135deg, var(--danger), #f87171);
+    color: white;
+  }
+
   .stat-label {
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
     opacity: 0.9;
     margin-bottom: 8px;
     display: flex;
@@ -400,12 +439,12 @@
   }
 
   .stat-value {
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 4vw, 2rem);
     font-weight: 700;
   }
 
   .stat-sub {
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 1.8vw, 0.85rem);
     opacity: 0.8;
     margin-top: 5px;
   }
@@ -413,40 +452,42 @@
   /* Cards de gráfico */
   .chart-card {
     background: white;
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: clamp(12px, 3vw, 15px);
+    padding: clamp(16px, 3vw, 25px);
     margin-bottom: 30px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     border: 1px solid #e2e8f0;
   }
 
   .chart-card h3 {
-    margin: 0 0 20px 0;
-    font-size: 1.3rem;
+    margin: 0 0 clamp(12px, 2vw, 20px) 0;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
     display: flex;
     align-items: center;
     gap: 10px;
     color: var(--dark);
-    padding-bottom: 15px;
+    padding-bottom: clamp(10px, 2vw, 15px);
     border-bottom: 2px solid #f1f5f9;
   }
 
   .chart-card h3 i {
     color: var(--primary);
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
   }
 
   .chart-container {
-    height: 400px;
+    height: clamp(300px, 40vh, 400px);
     position: relative;
   }
 
   /* Tabelas modernas */
   .table-container {
     background: white;
-    border-radius: 15px;
-    padding: 25px;
+    border-radius: clamp(12px, 3vw, 15px);
+    padding: clamp(16px, 3vw, 25px);
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     margin-bottom: 30px;
   }
 
@@ -461,7 +502,7 @@
 
   .table-header h3 {
     margin: 0;
-    font-size: 1.3rem;
+    font-size: clamp(1.1rem, 3vw, 1.3rem);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -470,23 +511,26 @@
 
   .table-header h3 i {
     color: var(--primary);
+    font-size: clamp(1.2rem, 3vw, 1.4rem);
   }
 
   .modern-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 8px;
+    border-spacing: 0 clamp(4px, 1vw, 8px);
+    min-width: 900px;
   }
 
   .modern-table thead th {
     background: #f8fafc;
-    padding: 12px 15px;
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2vw, 15px);
     font-weight: 600;
     color: var(--dark);
     text-transform: uppercase;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
     letter-spacing: 1px;
     border-radius: 8px;
+    white-space: nowrap;
   }
 
   .modern-table tbody tr {
@@ -502,9 +546,11 @@
   }
 
   .modern-table td {
-    padding: 12px 15px;
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2vw, 15px);
     border: none;
     color: var(--dark);
+    font-size: clamp(0.8rem, 2.2vw, 0.95rem);
+    vertical-align: middle;
   }
 
   .modern-table td:first-child {
@@ -517,11 +563,12 @@
 
   /* Badges */
   .payment-badge {
-    padding: 4px 12px;
+    padding: clamp(4px, 1vw, 8px) clamp(6px, 1.5vw, 12px);
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
     font-weight: 600;
     display: inline-block;
+    white-space: nowrap;
   }
 
   .payment-badge.dinheiro {
@@ -545,11 +592,12 @@
   }
 
   .status-badge {
-    padding: 4px 12px;
+    padding: clamp(4px, 1vw, 8px) clamp(6px, 1.5vw, 12px);
     border-radius: 20px;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
     font-weight: 600;
     display: inline-block;
+    white-space: nowrap;
   }
 
   .status-badge.success {
@@ -569,13 +617,16 @@
 
   /* Botões de ação */
   .action-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
+    width: clamp(32px, 6vw, 36px);
+    height: clamp(32px, 6vw, 36px);
+    border-radius: clamp(6px, 1.5vw, 8px);
     border: none;
     cursor: pointer;
     transition: all 0.3s;
-    margin: 0 3px;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .action-btn.info {
@@ -594,15 +645,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
+    gap: clamp(4px, 1.5vw, 8px);
     margin-top: 25px;
     flex-wrap: wrap;
   }
 
   .page-btn {
-    min-width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    min-width: clamp(35px, 8vw, 40px);
+    height: clamp(35px, 8vw, 40px);
+    border-radius: clamp(8px, 2vw, 10px);
     border: 2px solid #e2e8f0;
     background: white;
     color: var(--dark);
@@ -612,12 +663,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0 5px;
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
   }
 
   .page-btn:hover:not(:disabled) {
     background: var(--primary);
     color: white;
     border-color: var(--primary);
+    transform: scale(1.05);
   }
 
   .page-btn.active {
@@ -634,18 +688,18 @@
   /* Empty state */
   .empty-state {
     text-align: center;
-    padding: 50px;
+    padding: clamp(30px, 8vw, 50px) clamp(16px, 4vw, 20px);
   }
 
   .empty-state i {
-    font-size: 60px;
+    font-size: clamp(40px, 10vw, 60px);
     color: #94a3b8;
     margin-bottom: 15px;
   }
 
   .empty-state p {
     color: #64748b;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 3vw, 1.1rem);
   }
 
   /* Loading para PDF */
@@ -669,14 +723,14 @@
 
   .pdf-loading-content {
     background: white;
-    padding: 30px;
-    border-radius: 20px;
+    padding: clamp(20px, 5vw, 30px);
+    border-radius: clamp(15px, 4vw, 20px);
     text-align: center;
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
 
   .pdf-loading-content i {
-    font-size: 50px;
+    font-size: clamp(40px, 8vw, 50px);
     color: var(--primary);
     margin-bottom: 15px;
     animation: spin 1s linear infinite;
@@ -684,7 +738,7 @@
 
   .pdf-loading-content p {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 2.5vw, 1.1rem);
     color: var(--dark);
   }
 
@@ -693,20 +747,166 @@
     100% { transform: rotate(360deg); }
   }
 
+  /* Modal */
+  .uk-modal-dialog {
+    border-radius: clamp(15px, 4vw, 20px) !important;
+    padding: clamp(16px, 4vw, 25px) !important;
+    margin: 16px !important;
+    max-width: 600px !important;
+    width: calc(100% - 32px) !important;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    line-height: 1.2;
+  }
+
+  .modal-header i {
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
+  }
+
+  .detail-item {
+    background: #f8fafc;
+    border-radius: clamp(8px, 2vw, 10px);
+    padding: clamp(12px, 3vw, 15px);
+    margin-bottom: 10px;
+  }
+
+  .detail-label {
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
+    color: #64748b;
+    margin-bottom: 5px;
+  }
+
+  .detail-value {
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  .produtos-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 10px 0;
+    scrollbar-width: thin;
+  }
+
+  .produto-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: clamp(8px, 2vw, 10px);
+    border-bottom: 1px solid #e2e8f0;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+  }
+
+  .produto-detail-item:last-child {
+    border-bottom: none;
+  }
+
   /* Responsivo */
-  @media (max-width: 960px) {
+  @media (max-width: 640px) {
+    .uk-container {
+      height: calc(100vh - 16px);
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .filter-card .uk-grid-small {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .uk-width-1-4\@m,
+    .uk-width-1-3\@m,
+    .uk-width-1-2\@m {
+      width: 100% !important;
+    }
+
+    .table-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .table-header > div {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .table-header button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      padding: 8px;
+    }
+
+    .page-header h1 {
+      font-size: 1.2rem;
+    }
+
+    .dropdown-menu {
+      min-width: 200px;
+      right: -10px;
+    }
+
+    .report-type-buttons {
+      flex-direction: column;
+    }
+
+    .type-btn {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .menu-container {
+      align-self: flex-end;
+    }
+  }
+
+  /* Suporte para orientação paisagem */
+  @media (max-height: 600px) and (orientation: landscape) {
+    .uk-container {
+      height: calc(100vh - 32px);
+    }
+
+    .chart-container {
+      height: 250px;
+    }
+
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
-  @media (max-width: 640px) {
-    .stats-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .stat-value {
-      font-size: 1.5rem;
+  /* Acessibilidade */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 </style>
@@ -727,7 +927,7 @@
 
   <!-- HEADER COM MENU HAMBURGUER -->
   <div class="page-header">
-    <h1>
+    <h1 style="color: white;">
       <i class="fas fa-chart-line"></i>
       Relatórios
     </h1>
@@ -762,349 +962,354 @@
     </div>
   </div>
 
-  <!-- BOTÕES DE TIPO DE RELATÓRIO -->
-  <div class="report-type-buttons">
-    <button onclick="tipoRelatorio('vendas')" class="type-btn active" id="btn-vendas">
-      <i class="fas fa-shopping-cart"></i>
-      Vendas
-    </button>
-    <button onclick="tipoRelatorio('produtos')" class="type-btn" id="btn-produtos">
-      <i class="fas fa-box"></i>
-      Produtos
-    </button>
-    <button onclick="tipoRelatorio('clientes')" class="type-btn" id="btn-clientes">
-      <i class="fas fa-users"></i>
-      Clientes
-    </button>
-  </div>
+  <!-- Área de conteúdo rolável -->
+  <div class="content-area">
 
-  <!-- ===================== ÁREA VENDAS ===================== -->
-  <div id="area-vendas" style="display: block;">
-    
-    <!-- FILTROS VENDAS -->
-    <div class="filter-card">
-      <h3>
-        <i class="fas fa-filter"></i>
-        Filtros de Vendas
-      </h3>
-      
-      <div class="uk-grid-small" uk-grid>
-        <div class="uk-width-1-4@m">
-          <label class="form-label">Data Inicial</label>
-          <input type="date" id="inicio" class="modern-input">
-        </div>
-        
-        <div class="uk-width-1-4@m">
-          <label class="form-label">Data Final</label>
-          <input type="date" id="fim" class="modern-input">
-        </div>
-        
-        <div class="uk-width-1-4@m">
-          <label class="form-label">Forma de Pagamento</label>
-          <select id="filtroPagamento" class="modern-select">
-            <option value="">Todas</option>
-            <option value="dinheiro">💵 Dinheiro</option>
-            <option value="pix">📱 Pix</option>
-            <option value="credito">💳 Cartão de Crédito</option>
-            <option value="debito">💳 Cartão de Débito</option>
-          </select>
-        </div>
-        
-        <div class="uk-width-1-4@m">
-          <label class="form-label">&nbsp;</label>
-          <button onclick="aplicarFiltrosVendas()" class="btn-primary" style="width: 100%;">
-            <i class="fas fa-search"></i>
-            Filtrar
-          </button>
-        </div>
-      </div>
+    <!-- BOTÕES DE TIPO DE RELATÓRIO -->
+    <div class="report-type-buttons">
+      <button onclick="tipoRelatorio('vendas')" class="type-btn active" id="btn-vendas">
+        <i class="fas fa-shopping-cart"></i>
+        Vendas
+      </button>
+      <button onclick="tipoRelatorio('produtos')" class="type-btn" id="btn-produtos">
+        <i class="fas fa-box"></i>
+        Produtos
+      </button>
+      <button onclick="tipoRelatorio('clientes')" class="type-btn" id="btn-clientes">
+        <i class="fas fa-users"></i>
+        Clientes
+      </button>
     </div>
 
-    <!-- CARDS DE RESUMO VENDAS -->
-    <div class="stats-grid">
-      <div class="stat-card primary">
-        <div class="stat-label">
-          <i class="fas fa-calendar-day"></i> Total no Período
-        </div>
-        <div class="stat-value" id="totalPeriodo">R$ 0,00</div>
-        <div class="stat-sub" id="qtdPeriodo">0 vendas</div>
-      </div>
+    <!-- ===================== ÁREA VENDAS ===================== -->
+    <div id="area-vendas" style="display: block;">
       
-      <div class="stat-card success">
-        <div class="stat-label">
-          <i class="fas fa-tag"></i> Ticket Médio
-        </div>
-        <div class="stat-value" id="ticketMedio">R$ 0,00</div>
-        <div class="stat-sub">por venda</div>
-      </div>
-      
-      <div class="stat-card warning">
-        <div class="stat-label">
-          <i class="fas fa-box"></i> Total de Itens
-        </div>
-        <div class="stat-value" id="totalItens">0</div>
-        <div class="stat-sub">produtos vendidos</div>
-      </div>
-      
-      <div class="stat-card info">
-        <div class="stat-label">
-          <i class="fas fa-chart-pie"></i> Pagamento mais usado
-        </div>
-        <div class="stat-value" id="pagamentoMaisUsado">-</div>
-        <div class="stat-sub" id="percentualPagamento">0% das vendas</div>
-      </div>
-    </div>
-
-    <!-- GRÁFICO DE MAIS VENDIDOS -->
-    <div class="chart-card">
-      <h3>
-        <i class="fas fa-trophy"></i>
-        Produtos Mais Vendidos
-      </h3>
-      <div class="chart-container">
-        <canvas id="graficoMaisVendidos"></canvas>
-      </div>
-    </div>
-
-    <!-- TABELA DE VENDAS -->
-    <div class="table-container">
-      <div class="table-header">
+      <!-- FILTROS VENDAS -->
+      <div class="filter-card">
         <h3>
-          <i class="fas fa-history"></i>
-          Histórico de Vendas
+          <i class="fas fa-filter"></i>
+          Filtros de Vendas
         </h3>
-        <div style="display: flex; gap: 10px;">
-          <button onclick="exportarVendasPDF()" class="btn-pdf">
-            <i class="fas fa-file-pdf"></i>
-            Exportar PDF
-          </button>
-          <button onclick="exportarVendasCompletoPDF()" class="btn-success">
-            <i class="fas fa-file-pdf"></i>
-            Relatório Completo
-          </button>
+        
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-4@m">
+            <label class="form-label">Data Inicial</label>
+            <input type="date" id="inicio" class="modern-input">
+          </div>
+          
+          <div class="uk-width-1-4@m">
+            <label class="form-label">Data Final</label>
+            <input type="date" id="fim" class="modern-input">
+          </div>
+          
+          <div class="uk-width-1-4@m">
+            <label class="form-label">Forma de Pagamento</label>
+            <select id="filtroPagamento" class="modern-select">
+              <option value="">Todas</option>
+              <option value="dinheiro">💵 Dinheiro</option>
+              <option value="pix">📱 Pix</option>
+              <option value="credito">💳 Cartão de Crédito</option>
+              <option value="debito">💳 Cartão de Débito</option>
+            </select>
+          </div>
+          
+          <div class="uk-width-1-4@m">
+            <label class="form-label">&nbsp;</label>
+            <button onclick="aplicarFiltrosVendas()" class="btn-primary" style="width: 100%;">
+              <i class="fas fa-search"></i>
+              Filtrar
+            </button>
+          </div>
         </div>
       </div>
-      
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>Data/Hora</th>
-            <th>Cliente</th>
-            <th>Produtos</th>
-            <th>Qtd Itens</th>
-            <th>Valor Total</th>
-            <th>Pagamento</th>
-            <th>Detalhes</th>
-          </tr>
-        </thead>
-        <tbody id="listaVendas"></tbody>
-      </table>
 
-      <!-- Paginação -->
-      <div class="pagination" id="paginacaoVendas"></div>
-    </div>
-  </div>
-
-  <!-- ===================== ÁREA PRODUTOS ===================== -->
-  <div id="area-produtos" style="display: none;">
-    
-    <!-- FILTROS PRODUTOS -->
-    <div class="filter-card">
-      <h3>
-        <i class="fas fa-filter"></i>
-        Filtros de Produtos
-      </h3>
-      
-      <div class="uk-grid-small" uk-grid>
-        <div class="uk-width-1-3@m">
-          <input type="text" id="pesquisa-produto" class="modern-input" placeholder="🔍 Pesquisar produtos..." onkeyup="filtrarProdutos()">
+      <!-- CARDS DE RESUMO VENDAS -->
+      <div class="stats-grid">
+        <div class="stat-card primary">
+          <div class="stat-label">
+            <i class="fas fa-calendar-day"></i> Total no Período
+          </div>
+          <div class="stat-value" id="totalPeriodo">R$ 0,00</div>
+          <div class="stat-sub" id="qtdPeriodo">0 vendas</div>
         </div>
         
-        <div class="uk-width-1-3@m">
-          <select id="filtroStatus" class="modern-select" onchange="filtrarProdutos()">
-            <option value="">Todos os status</option>
-            <option value="normal">Estoque normal</option>
-            <option value="baixo">Estoque baixo</option>
-            <option value="falta">Em falta</option>
-          </select>
+        <div class="stat-card success">
+          <div class="stat-label">
+            <i class="fas fa-tag"></i> Ticket Médio
+          </div>
+          <div class="stat-value" id="ticketMedio">R$ 0,00</div>
+          <div class="stat-sub">por venda</div>
         </div>
         
-        <div class="uk-width-1-3@m">
-          <button onclick="exportarProdutosPDF()" class="btn-pdf" style="width: 100%;">
-            <i class="fas fa-file-pdf"></i>
-            Exportar PDF
-          </button>
+        <div class="stat-card warning">
+          <div class="stat-label">
+            <i class="fas fa-box"></i> Total de Itens
+          </div>
+          <div class="stat-value" id="totalItens">0</div>
+          <div class="stat-sub">produtos vendidos</div>
+        </div>
+        
+        <div class="stat-card info">
+          <div class="stat-label">
+            <i class="fas fa-chart-pie"></i> Pagamento mais usado
+          </div>
+          <div class="stat-value" id="pagamentoMaisUsado">-</div>
+          <div class="stat-sub" id="percentualPagamento">0% das vendas</div>
         </div>
       </div>
-    </div>
 
-    <!-- CARDS DE RESUMO PRODUTOS -->
-    <div class="stats-grid">
-      <div class="stat-card primary">
-        <div class="stat-label">
-          <i class="fas fa-boxes"></i> Total de Produtos
-        </div>
-        <div class="stat-value" id="totalProdutos">0</div>
-        <div class="stat-sub">cadastrados</div>
-      </div>
-      
-      <div class="stat-card success">
-        <div class="stat-label">
-          <i class="fas fa-dollar-sign"></i> Valor em Estoque
-        </div>
-        <div class="stat-value" id="valorTotalEstoque">R$ 0,00</div>
-        <div class="stat-sub">em produtos</div>
-      </div>
-      
-      <div class="stat-card warning">
-        <div class="stat-label">
-          <i class="fas fa-exclamation-triangle"></i> Estoque Baixo
-        </div>
-        <div class="stat-value" id="produtosBaixo">0</div>
-        <div class="stat-sub">produtos</div>
-      </div>
-      
-      <div class="stat-card danger">
-        <div class="stat-label">
-          <i class="fas fa-times-circle"></i> Em Falta
-        </div>
-        <div class="stat-value" id="produtosFalta">0</div>
-        <div class="stat-sub">produtos</div>
-      </div>
-    </div>
-
-    <!-- TABELA DE PRODUTOS -->
-    <div class="table-container">
-      <div class="table-header">
+      <!-- GRÁFICO DE MAIS VENDIDOS -->
+      <div class="chart-card">
         <h3>
-          <i class="fas fa-box"></i>
-          Lista de Produtos
+          <i class="fas fa-trophy"></i>
+          Produtos Mais Vendidos
         </h3>
+        <div class="chart-container">
+          <canvas id="graficoMaisVendidos"></canvas>
+        </div>
       </div>
-      
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>Referência</th>
-            <th>Produto</th>
-            <th>Preço Compra</th>
-            <th>Preço Venda</th>
-            <th>Estoque</th>
-            <th>Valor Total</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="listaProdutos"></tbody>
-      </table>
 
-      <!-- Paginação -->
-      <div class="pagination" id="paginacaoProdutos"></div>
-    </div>
-  </div>
-
-  <!-- ===================== ÁREA CLIENTES ===================== -->
-  <div id="area-clientes" style="display: none;">
-    
-    <!-- FILTROS CLIENTES -->
-    <div class="filter-card">
-      <h3>
-        <i class="fas fa-filter"></i>
-        Filtros de Clientes
-      </h3>
-      
-      <div class="uk-grid-small" uk-grid>
-        <div class="uk-width-1-2@m">
-          <input type="text" id="pesquisa-cliente" class="modern-input" placeholder="🔍 Pesquisar clientes..." onkeyup="filtrarClientes()">
+      <!-- TABELA DE VENDAS -->
+      <div class="table-container">
+        <div class="table-header">
+          <h3>
+            <i class="fas fa-history"></i>
+            Histórico de Vendas
+          </h3>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button onclick="exportarVendasPDF()" class="btn-pdf">
+              <i class="fas fa-file-pdf"></i>
+              Exportar PDF
+            </button>
+            <button onclick="exportarVendasCompletoPDF()" class="btn-success">
+              <i class="fas fa-file-pdf"></i>
+              Relatório Completo
+            </button>
+          </div>
         </div>
         
-        <div class="uk-width-1-2@m">
-          <button onclick="exportarClientesPDF()" class="btn-pdf" style="width: 100%;">
-            <i class="fas fa-file-pdf"></i>
-            Exportar PDF
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Data/Hora</th>
+              <th>Cliente</th>
+              <th>Produtos</th>
+              <th>Qtd Itens</th>
+              <th>Valor Total</th>
+              <th>Pagamento</th>
+              <th>Detalhes</th>
+            </tr>
+          </thead>
+          <tbody id="listaVendas"></tbody>
+        </table>
+
+        <!-- Paginação -->
+        <div class="pagination" id="paginacaoVendas"></div>
+      </div>
+    </div>
+
+    <!-- ===================== ÁREA PRODUTOS ===================== -->
+    <div id="area-produtos" style="display: none;">
+      
+      <!-- FILTROS PRODUTOS -->
+      <div class="filter-card">
+        <h3>
+          <i class="fas fa-filter"></i>
+          Filtros de Produtos
+        </h3>
+        
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-3@m">
+            <input type="text" id="pesquisa-produto" class="modern-input" placeholder="🔍 Pesquisar produtos..." onkeyup="filtrarProdutos()">
+          </div>
+          
+          <div class="uk-width-1-3@m">
+            <select id="filtroStatus" class="modern-select" onchange="filtrarProdutos()">
+              <option value="">Todos os status</option>
+              <option value="normal">Estoque normal</option>
+              <option value="baixo">Estoque baixo</option>
+              <option value="falta">Em falta</option>
+            </select>
+          </div>
+          
+          <div class="uk-width-1-3@m">
+            <button onclick="exportarProdutosPDF()" class="btn-pdf" style="width: 100%;">
+              <i class="fas fa-file-pdf"></i>
+              Exportar PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS DE RESUMO PRODUTOS -->
+      <div class="stats-grid">
+        <div class="stat-card primary">
+          <div class="stat-label">
+            <i class="fas fa-boxes"></i> Total de Produtos
+          </div>
+          <div class="stat-value" id="totalProdutos">0</div>
+          <div class="stat-sub">cadastrados</div>
+        </div>
+        
+        <div class="stat-card success">
+          <div class="stat-label">
+            <i class="fas fa-dollar-sign"></i> Valor em Estoque
+          </div>
+          <div class="stat-value" id="valorTotalEstoque">R$ 0,00</div>
+          <div class="stat-sub">em produtos</div>
+        </div>
+        
+        <div class="stat-card warning">
+          <div class="stat-label">
+            <i class="fas fa-exclamation-triangle"></i> Estoque Baixo
+          </div>
+          <div class="stat-value" id="produtosBaixo">0</div>
+          <div class="stat-sub">produtos</div>
+        </div>
+        
+        <div class="stat-card danger">
+          <div class="stat-label">
+            <i class="fas fa-times-circle"></i> Em Falta
+          </div>
+          <div class="stat-value" id="produtosFalta">0</div>
+          <div class="stat-sub">produtos</div>
+        </div>
+      </div>
+
+      <!-- TABELA DE PRODUTOS -->
+      <div class="table-container">
+        <div class="table-header">
+          <h3>
+            <i class="fas fa-box"></i>
+            Lista de Produtos
+          </h3>
+        </div>
+        
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Referência</th>
+              <th>Produto</th>
+              <th>Preço Compra</th>
+              <th>Preço Venda</th>
+              <th>Estoque</th>
+              <th>Valor Total</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="listaProdutos"></tbody>
+        </table>
+
+        <!-- Paginação -->
+        <div class="pagination" id="paginacaoProdutos"></div>
+      </div>
+    </div>
+
+    <!-- ===================== ÁREA CLIENTES ===================== -->
+    <div id="area-clientes" style="display: none;">
+      
+      <!-- FILTROS CLIENTES -->
+      <div class="filter-card">
+        <h3>
+          <i class="fas fa-filter"></i>
+          Filtros de Clientes
+        </h3>
+        
+        <div class="uk-grid-small" uk-grid>
+          <div class="uk-width-1-2@m">
+            <input type="text" id="pesquisa-cliente" class="modern-input" placeholder="🔍 Pesquisar clientes..." onkeyup="filtrarClientes()">
+          </div>
+          
+          <div class="uk-width-1-2@m">
+            <button onclick="exportarClientesPDF()" class="btn-pdf" style="width: 100%;">
+              <i class="fas fa-file-pdf"></i>
+              Exportar PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS DE RESUMO CLIENTES -->
+      <div class="stats-grid">
+        <div class="stat-card primary">
+          <div class="stat-label">
+            <i class="fas fa-users"></i> Total de Clientes
+          </div>
+          <div class="stat-value" id="totalClientes">0</div>
+          <div class="stat-sub">cadastrados</div>
+        </div>
+        
+        <div class="stat-card success">
+          <div class="stat-label">
+            <i class="fas fa-shopping-cart"></i> Compraram no mês
+          </div>
+          <div class="stat-value" id="clientesCompraramMes">0</div>
+          <div class="stat-sub">clientes ativos</div>
+        </div>
+        
+        <div class="stat-card warning">
+          <div class="stat-label">
+            <i class="fas fa-clock"></i> Última semana
+          </div>
+          <div class="stat-value" id="clientesUltimaSemana">0</div>
+          <div class="stat-sub">novos clientes</div>
+        </div>
+        
+        <div class="stat-card info">
+          <div class="stat-label">
+            <i class="fas fa-calendar"></i> Média por dia
+          </div>
+          <div class="stat-value" id="clientesPorDia">0</div>
+          <div class="stat-sub">cadastros/dia</div>
+        </div>
+      </div>
+
+      <!-- TABELA DE CLIENTES -->
+      <div class="table-container">
+        <div class="table-header">
+          <h3>
+            <i class="fas fa-users"></i>
+            Lista de Clientes
+          </h3>
+        </div>
+        
+        <table class="modern-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Telefone</th>
+              <th>Data Cadastro</th>
+              <th>Total Compras</th>
+              <th>Última Compra</th>
+            </tr>
+          </thead>
+          <tbody id="listaClientes"></tbody>
+        </table>
+
+        <!-- Paginação -->
+        <div class="pagination" id="paginacaoClientes"></div>
+      </div>
+    </div>
+
+    <!-- MODAL DETALHES DA VENDA -->
+    <div id="modalDetalhesVenda" uk-modal>
+      <div class="uk-modal-dialog">
+        <div class="modal-header">
+          <i class="fas fa-receipt" style="color: var(--primary);"></i>
+          <h2>Detalhes da Venda</h2>
+        </div>
+        
+        <div id="detalhesVenda"></div>
+        
+        <div style="display: flex; justify-content: flex-end; margin-top: 25px;">
+          <button class="btn-secondary uk-modal-close">
+            <i class="fas fa-times"></i>
+            Fechar
           </button>
         </div>
       </div>
     </div>
 
-    <!-- CARDS DE RESUMO CLIENTES -->
-    <div class="stats-grid">
-      <div class="stat-card primary">
-        <div class="stat-label">
-          <i class="fas fa-users"></i> Total de Clientes
-        </div>
-        <div class="stat-value" id="totalClientes">0</div>
-        <div class="stat-sub">cadastrados</div>
-      </div>
-      
-      <div class="stat-card success">
-        <div class="stat-label">
-          <i class="fas fa-shopping-cart"></i> Compraram no mês
-        </div>
-        <div class="stat-value" id="clientesCompraramMes">0</div>
-        <div class="stat-sub">clientes ativos</div>
-      </div>
-      
-      <div class="stat-card warning">
-        <div class="stat-label">
-          <i class="fas fa-clock"></i> Última semana
-        </div>
-        <div class="stat-value" id="clientesUltimaSemana">0</div>
-        <div class="stat-sub">novos clientes</div>
-      </div>
-      
-      <div class="stat-card info">
-        <div class="stat-label">
-          <i class="fas fa-calendar"></i> Média por dia
-        </div>
-        <div class="stat-value" id="clientesPorDia">0</div>
-        <div class="stat-sub">cadastros/dia</div>
-      </div>
-    </div>
-
-    <!-- TABELA DE CLIENTES -->
-    <div class="table-container">
-      <div class="table-header">
-        <h3>
-          <i class="fas fa-users"></i>
-          Lista de Clientes
-        </h3>
-      </div>
-      
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Telefone</th>
-            <th>Data Cadastro</th>
-            <th>Total Compras</th>
-            <th>Última Compra</th>
-          </tr>
-        </thead>
-        <tbody id="listaClientes"></tbody>
-      </table>
-
-      <!-- Paginação -->
-      <div class="pagination" id="paginacaoClientes"></div>
-    </div>
-  </div>
-
-  <!-- MODAL DETALHES DA VENDA -->
-  <div id="modalDetalhesVenda" uk-modal>
-    <div class="uk-modal-dialog">
-      <div class="modal-header">
-        <i class="fas fa-receipt" style="color: var(--primary);"></i>
-        <h2>Detalhes da Venda</h2>
-      </div>
-      
-      <div id="detalhesVenda"></div>
-      
-      <div style="text-align: right; margin-top: 25px;">
-        <button class="btn-secondary uk-modal-close">
-          <i class="fas fa-times"></i>
-          Fechar
-        </button>
-      </div>
-    </div>
   </div>
 
 </div>
@@ -1369,7 +1574,8 @@ function atualizarGraficoMaisVendidos() {
   if (chartMaisVendidos) chartMaisVendidos.destroy();
   
   if (labels.length > 0) {
-    chartMaisVendidos = new Chart(document.getElementById("graficoMaisVendidos"), {
+    const ctx = document.getElementById("graficoMaisVendidos").getContext('2d');
+    chartMaisVendidos = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: labels,
@@ -1399,7 +1605,10 @@ function atualizarGraficoMaisVendidos() {
         maintainAspectRatio: false,
         interaction: { mode: 'index' },
         plugins: {
-          legend: { position: 'top' },
+          legend: { 
+            position: 'top',
+            labels: { font: { size: 11 } }
+          },
           tooltip: {
             callbacks: {
               label: function(context) {
@@ -1422,20 +1631,28 @@ function atualizarGraficoMaisVendidos() {
             type: 'linear',
             display: true,
             position: 'left',
-            title: { display: true, text: 'Quantidade' }
+            title: { display: true, text: 'Quantidade' },
+            ticks: { font: { size: 10 } }
           },
           y1: {
             type: 'linear',
             display: true,
             position: 'right',
             title: { display: true, text: 'Faturamento (R$)' },
-            grid: { drawOnChartArea: false }
+            grid: { drawOnChartArea: false },
+            ticks: { 
+              font: { size: 10 },
+              callback: function(value) {
+                return 'R$ ' + value.toFixed(0);
+              }
+            }
           }
         }
       }
     });
   } else {
-    document.getElementById('graficoMaisVendidos').parentNode.innerHTML = `
+    const container = document.getElementById('graficoMaisVendidos').parentNode;
+    container.innerHTML = `
       <div class="empty-state">
         <i class="fas fa-chart-bar"></i>
         <p>Nenhuma venda no período selecionado</p>
@@ -1539,11 +1756,11 @@ function verDetalhesVenda(id) {
   
   const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A' };
   
-  let produtosHtml = '<div style="max-height: 200px; overflow-y: auto;">';
+  let produtosHtml = '<div class="produtos-list">';
   venda.produtos.forEach(p => {
     const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0 };
     produtosHtml += `
-      <div style="display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #e2e8f0;">
+      <div class="produto-detail-item">
         <span>${produto.nome} (${p.quantidade}x)</span>
         <span style="font-weight: 600;">R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}</span>
       </div>
@@ -1984,8 +2201,12 @@ async function exportarVendasCompletoPDF() {
     
     const canvas = document.getElementById('graficoMaisVendidos');
     if (canvas && canvas.toDataURL) {
-      const chartImage = canvas.toDataURL('image/png');
-      doc.addImage(chartImage, 'PNG', 15, 95, 260, 100);
+      try {
+        const chartImage = canvas.toDataURL('image/png');
+        doc.addImage(chartImage, 'PNG', 15, 95, 260, 100);
+      } catch (e) {
+        console.log('Erro ao adicionar gráfico:', e);
+      }
     }
     
     const dadosTabela = [];
