@@ -506,6 +506,40 @@
     font-size: clamp(1.2rem, 3vw, 1.4rem);
   }
 
+  /* Seletor de itens por página */
+  .items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .items-per-page select {
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: var(--dark);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .items-per-page select:hover {
+    border-color: var(--primary);
+  }
+
+  .items-per-page select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .items-per-page label {
+    color: #64748b;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    white-space: nowrap;
+  }
+
   .modern-table {
     width: 100%;
     border-collapse: separate;
@@ -900,6 +934,14 @@
       flex-direction: column;
       align-items: flex-start;
     }
+    
+    .items-per-page {
+      width: 100%;
+    }
+    
+    .items-per-page select {
+      flex: 1;
+    }
   }
 
   @media (max-width: 480px) {
@@ -1115,6 +1157,17 @@
             Histórico de Vendas
           </h3>
           <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <div class="items-per-page">
+              <label for="itensPorPaginaVendas">Itens por página:</label>
+              <select id="itensPorPaginaVendas" onchange="mudarItensPorPaginaVendas(this.value)">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="todos">Todos</option>
+              </select>
+            </div>
             <button onclick="exportarVendasPDF()" class="btn-pdf">
               <i class="fas fa-file-pdf"></i>
               Exportar PDF
@@ -1221,6 +1274,17 @@
             <i class="fas fa-box"></i>
             Lista de Produtos
           </h3>
+          <div class="items-per-page">
+            <label for="itensPorPaginaProdutos">Itens por página:</label>
+            <select id="itensPorPaginaProdutos" onchange="mudarItensPorPaginaProdutos(this.value)">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="todos">Todos</option>
+            </select>
+          </div>
         </div>
         
         <table class="modern-table">
@@ -1321,6 +1385,17 @@
             <i class="fas fa-users"></i>
             Lista de Clientes
           </h3>
+          <div class="items-per-page">
+            <label for="itensPorPaginaClientes">Itens por página:</label>
+            <select id="itensPorPaginaClientes" onchange="mudarItensPorPaginaClientes(this.value)">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="todos">Todos</option>
+            </select>
+          </div>
         </div>
         
         <table class="modern-table">
@@ -1439,7 +1514,9 @@ let clientesFiltrados = [];
 let paginaAtualVendas = 1;
 let paginaAtualProdutos = 1;
 let paginaAtualClientes = 1;
-const itensPorPagina = 10;
+let itensPorPaginaVendas = 10;
+let itensPorPaginaProdutos = 10;
+let itensPorPaginaClientes = 10;
 let clienteSelecionado = null;
 let vendaSelecionada = null;
 
@@ -1490,6 +1567,34 @@ function getFormaPagamentoNome(forma) {
   return nomes[forma] || forma;
 }
 
+// Função auxiliar para adicionar logo no PDF
+async function adicionarLogoPDF(doc, isLandscape = true) {
+  return new Promise((resolve) => {
+    try {
+      const logoImg = new Image();
+      // Nome do arquivo com espaço - importante manter as aspas
+      logoImg.src = 'logo relatorio.png';
+      
+      logoImg.onload = function() {
+        // Posicionar no canto superior direito
+        // Para landscape (largura 297mm), x=250 fica no canto
+        // Para retrato (largura 210mm), x=170 fica no canto
+        const xPos = isLandscape ? 250 : 170;
+        doc.addImage(logoImg, 'PNG', xPos, 10, 40, 20);
+        resolve();
+      };
+      
+      logoImg.onerror = function() {
+        console.log('Logo não encontrada, continuando sem logo');
+        resolve();
+      };
+    } catch (e) {
+      console.log('Erro ao carregar logo:', e);
+      resolve();
+    }
+  });
+}
+
 /* =====================================================
    TIPO DE RELATÓRIO
 ===================================================== */
@@ -1518,6 +1623,46 @@ function tipoRelatorio(tipo) {
   } else if (tipo === 'clientes') {
     carregarClientes();
   }
+}
+
+/* =====================================================
+   FUNÇÕES DE PAGINAÇÃO E LIMITE
+===================================================== */
+
+// Vendas
+function mudarItensPorPaginaVendas(valor) {
+  if (valor === 'todos') {
+    itensPorPaginaVendas = vendasFiltradas.length;
+  } else {
+    itensPorPaginaVendas = parseInt(valor);
+  }
+  paginaAtualVendas = 1;
+  renderizarPaginacaoVendas();
+  renderizarTabelaVendas();
+}
+
+// Produtos
+function mudarItensPorPaginaProdutos(valor) {
+  if (valor === 'todos') {
+    itensPorPaginaProdutos = produtosFiltrados.length;
+  } else {
+    itensPorPaginaProdutos = parseInt(valor);
+  }
+  paginaAtualProdutos = 1;
+  renderizarPaginacaoProdutos();
+  renderizarTabelaProdutos();
+}
+
+// Clientes
+function mudarItensPorPaginaClientes(valor) {
+  if (valor === 'todos') {
+    itensPorPaginaClientes = clientesFiltrados.length;
+  } else {
+    itensPorPaginaClientes = parseInt(valor);
+  }
+  paginaAtualClientes = 1;
+  renderizarPaginacaoClientes();
+  renderizarTabelaClientes();
 }
 
 /* =====================================================
@@ -1577,6 +1722,12 @@ function aplicarFiltrosVendas() {
   // Ordenar por data (mais recentes primeiro)
   vendasFiltradas.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
   
+  // Atualizar itens por página se estiver em "todos"
+  const selectItens = document.getElementById('itensPorPaginaVendas');
+  if (selectItens.value === 'todos') {
+    itensPorPaginaVendas = vendasFiltradas.length;
+  }
+  
   // Atualizar cards de resumo
   atualizarResumoVendas();
   
@@ -1628,10 +1779,10 @@ function atualizarResumoVendas() {
 }
 
 function renderizarPaginacaoVendas() {
-  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPaginaVendas);
   const paginacao = document.getElementById('paginacaoVendas');
   
-  if (vendasFiltradas.length <= itensPorPagina) {
+  if (vendasFiltradas.length <= itensPorPaginaVendas || totalPaginas <= 1) {
     paginacao.innerHTML = '';
     return;
   }
@@ -1658,7 +1809,7 @@ function renderizarPaginacaoVendas() {
 }
 
 function mudarPaginaVendas(novaPagina) {
-  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPaginaVendas);
   if (novaPagina >= 1 && novaPagina <= totalPaginas) {
     paginaAtualVendas = novaPagina;
     renderizarPaginacaoVendas();
@@ -1667,8 +1818,8 @@ function mudarPaginaVendas(novaPagina) {
 }
 
 function renderizarTabelaVendas() {
-  const inicio = (paginaAtualVendas - 1) * itensPorPagina;
-  const fim = inicio + itensPorPagina;
+  const inicio = (paginaAtualVendas - 1) * itensPorPaginaVendas;
+  const fim = Math.min(inicio + itensPorPaginaVendas, vendasFiltradas.length);
   const vendasPagina = vendasFiltradas.slice(inicio, fim);
   
   const lista = document.getElementById('listaVendas');
@@ -1817,6 +1968,9 @@ async function exportarVendaDetalhadaPDF() {
     const venda = vendaSelecionada;
     const cliente = venda.cliente || { nome: 'N/A', telefone: 'N/A' };
     
+    // Adicionar logo no canto direito (formato retrato)
+    await adicionarLogoPDF(doc, false);
+    
     doc.setFontSize(22);
     doc.setTextColor(37, 99, 235);
     doc.text('Detalhes da Venda', 15, 20);
@@ -1894,6 +2048,12 @@ async function carregarProdutos() {
     
     produtosFiltrados = [...todosProdutos];
     
+    // Atualizar itens por página se estiver em "todos"
+    const selectItens = document.getElementById('itensPorPaginaProdutos');
+    if (selectItens.value === 'todos') {
+      itensPorPaginaProdutos = produtosFiltrados.length;
+    }
+    
     // Atualizar cards de resumo
     atualizarResumoProdutos();
     
@@ -1935,16 +2095,22 @@ function filtrarProdutos() {
     return true;
   });
   
+  // Atualizar itens por página se estiver em "todos"
+  const selectItens = document.getElementById('itensPorPaginaProdutos');
+  if (selectItens.value === 'todos') {
+    itensPorPaginaProdutos = produtosFiltrados.length;
+  }
+  
   paginaAtualProdutos = 1;
   renderizarPaginacaoProdutos();
   renderizarTabelaProdutos();
 }
 
 function renderizarPaginacaoProdutos() {
-  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
+  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPaginaProdutos);
   const paginacao = document.getElementById('paginacaoProdutos');
   
-  if (produtosFiltrados.length <= itensPorPagina) {
+  if (produtosFiltrados.length <= itensPorPaginaProdutos || totalPaginas <= 1) {
     paginacao.innerHTML = '';
     return;
   }
@@ -1971,7 +2137,7 @@ function renderizarPaginacaoProdutos() {
 }
 
 function mudarPaginaProdutos(novaPagina) {
-  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
+  const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPaginaProdutos);
   if (novaPagina >= 1 && novaPagina <= totalPaginas) {
     paginaAtualProdutos = novaPagina;
     renderizarPaginacaoProdutos();
@@ -1980,8 +2146,8 @@ function mudarPaginaProdutos(novaPagina) {
 }
 
 function renderizarTabelaProdutos() {
-  const inicio = (paginaAtualProdutos - 1) * itensPorPagina;
-  const fim = inicio + itensPorPagina;
+  const inicio = (paginaAtualProdutos - 1) * itensPorPaginaProdutos;
+  const fim = Math.min(inicio + itensPorPaginaProdutos, produtosFiltrados.length);
   const produtosPagina = produtosFiltrados.slice(inicio, fim);
   
   const lista = document.getElementById('listaProdutos');
@@ -2045,6 +2211,12 @@ async function carregarClientes() {
     todasVendas = await vRes.json();
     
     clientesFiltrados = [...todosClientes];
+    
+    // Atualizar itens por página se estiver em "todos"
+    const selectItens = document.getElementById('itensPorPaginaClientes');
+    if (selectItens.value === 'todos') {
+      itensPorPaginaClientes = clientesFiltrados.length;
+    }
     
     // Atualizar cards de resumo
     atualizarResumoClientes();
@@ -2115,16 +2287,22 @@ function aplicarFiltroClientes() {
   
   clientesFiltrados = clientesTemp;
   
+  // Atualizar itens por página se estiver em "todos"
+  const selectItens = document.getElementById('itensPorPaginaClientes');
+  if (selectItens.value === 'todos') {
+    itensPorPaginaClientes = clientesFiltrados.length;
+  }
+  
   paginaAtualClientes = 1;
   renderizarPaginacaoClientes();
   renderizarTabelaClientes();
 }
 
 function renderizarPaginacaoClientes() {
-  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPagina);
+  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPaginaClientes);
   const paginacao = document.getElementById('paginacaoClientes');
   
-  if (clientesFiltrados.length <= itensPorPagina) {
+  if (clientesFiltrados.length <= itensPorPaginaClientes || totalPaginas <= 1) {
     paginacao.innerHTML = '';
     return;
   }
@@ -2151,7 +2329,7 @@ function renderizarPaginacaoClientes() {
 }
 
 function mudarPaginaClientes(novaPagina) {
-  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPagina);
+  const totalPaginas = Math.ceil(clientesFiltrados.length / itensPorPaginaClientes);
   if (novaPagina >= 1 && novaPagina <= totalPaginas) {
     paginaAtualClientes = novaPagina;
     renderizarPaginacaoClientes();
@@ -2160,8 +2338,8 @@ function mudarPaginaClientes(novaPagina) {
 }
 
 function renderizarTabelaClientes() {
-  const inicio = (paginaAtualClientes - 1) * itensPorPagina;
-  const fim = inicio + itensPorPagina;
+  const inicio = (paginaAtualClientes - 1) * itensPorPaginaClientes;
+  const fim = Math.min(inicio + itensPorPaginaClientes, clientesFiltrados.length);
   const clientesPagina = clientesFiltrados.slice(inicio, fim);
   
   const lista = document.getElementById('listaClientes');
@@ -2298,6 +2476,9 @@ async function exportarClienteDetalhadoPDF() {
     const comprasCliente = todasVendas.filter(v => v.clienteId == cliente.id);
     const totalCompras = comprasCliente.reduce((acc, v) => acc + v.total, 0);
     
+    // Adicionar logo no canto direito (formato retrato)
+    await adicionarLogoPDF(doc, false);
+    
     doc.setFontSize(22);
     doc.setTextColor(37, 99, 235);
     doc.text('Ficha do Cliente', 15, 20);
@@ -2381,6 +2562,9 @@ async function exportarVendasPDF() {
     const inicio = document.getElementById('inicio').value.split('-').reverse().join('/');
     const fim = document.getElementById('fim').value.split('-').reverse().join('/');
     
+    // Adicionar logo no canto direito (formato landscape)
+    await adicionarLogoPDF(doc, true);
+    
     doc.setFontSize(20);
     doc.setTextColor(37, 99, 235);
     doc.text('Relatório de Vendas', 15, 20);
@@ -2445,6 +2629,9 @@ async function exportarVendasCompletoPDF() {
     
     const inicio = document.getElementById('inicio').value.split('-').reverse().join('/');
     const fim = document.getElementById('fim').value.split('-').reverse().join('/');
+    
+    // Adicionar logo no canto direito (formato landscape)
+    await adicionarLogoPDF(doc, true);
     
     doc.setFontSize(22);
     doc.setTextColor(37, 99, 235);
@@ -2516,6 +2703,9 @@ async function exportarProdutosPDF() {
   try {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('landscape');
+    
+    // Adicionar logo no canto direito (formato landscape)
+    await adicionarLogoPDF(doc, true);
     
     doc.setFontSize(22);
     doc.setTextColor(37, 99, 235);
@@ -2590,6 +2780,9 @@ async function exportarClientesPDF() {
   try {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('landscape');
+    
+    // Adicionar logo no canto direito (formato landscape)
+    await adicionarLogoPDF(doc, true);
     
     doc.setFontSize(22);
     doc.setTextColor(37, 99, 235);

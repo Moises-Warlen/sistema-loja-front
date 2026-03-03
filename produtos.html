@@ -365,6 +365,50 @@
     -webkit-overflow-scrolling: touch;
   }
 
+  /* Cabeçalho da tabela com seletor de itens por página */
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Seletor de itens por página */
+  .items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .items-per-page select {
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: var(--dark);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .items-per-page select:hover {
+    border-color: var(--primary);
+  }
+
+  .items-per-page select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .items-per-page label {
+    color: #64748b;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    white-space: nowrap;
+  }
+
   /* Tabela */
   .modern-table {
     width: 100%;
@@ -627,6 +671,19 @@
     .action-buttons {
       justify-content: flex-end;
     }
+
+    .table-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .items-per-page {
+      width: 100%;
+    }
+
+    .items-per-page select {
+      flex: 1;
+    }
   }
 
   @media (max-width: 480px) {
@@ -832,13 +889,26 @@
 
     <!-- TABELA DE PRODUTOS -->
     <div class="table-container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-        <h3 style="margin: 0; display: flex; align-items: center; gap: 8px; font-size: clamp(1rem, 3vw, 1.2rem);">
-          <i class="fas fa-list" style="color: var(--primary);"></i>
-          Lista de Produtos
-        </h3>
-        <span style="color: #64748b; font-size: clamp(0.8rem, 2.5vw, 0.9rem);" id="totalProdutos">Total: 0</span>
+      <div class="table-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-list" style="color: var(--primary); font-size: 1.2rem;"></i>
+          <h3 style="margin: 0; font-size: clamp(1rem, 3vw, 1.2rem);">Lista de Produtos</h3>
+        </div>
+        
+        <div class="items-per-page">
+          <label for="itensPorPagina">Itens por página:</label>
+          <select id="itensPorPagina" onchange="mudarItensPorPagina(this.value)">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="todos">Todos</option>
+          </select>
+        </div>
       </div>
+      
+      <span style="color: #64748b; font-size: clamp(0.8rem, 2.5vw, 0.9rem); display: block; margin-bottom: 15px;" id="totalProdutos">Total: 0</span>
       
       <table class="modern-table">
         <thead>
@@ -941,7 +1011,7 @@ if (!localStorage.getItem("token")) {
 let todosProdutos = [];
 let produtosFiltrados = [];
 let paginaAtual = 1;
-const itensPorPagina = 5;
+let itensPorPagina = 10; // Valor padrão
 
 // Menu hamburguer
 function toggleMenu() {
@@ -958,6 +1028,18 @@ document.addEventListener('click', function(event) {
 function logout() {
   localStorage.removeItem("token");
   window.location.href = "login.html";
+}
+
+// Função para mudar quantidade de itens por página
+function mudarItensPorPagina(valor) {
+  if (valor === 'todos') {
+    itensPorPagina = produtosFiltrados.length;
+  } else {
+    itensPorPagina = parseInt(valor);
+  }
+  paginaAtual = 1;
+  renderizarPaginacao();
+  renderizarTabela();
 }
 
 $(document).ready(function() {
@@ -1124,6 +1206,13 @@ function filtrarProdutos() {
     );
   }
   paginaAtual = 1;
+  
+  // Atualizar o select de itens por página se estiver em "todos"
+  const selectItens = document.getElementById('itensPorPagina');
+  if (selectItens.value === 'todos') {
+    itensPorPagina = produtosFiltrados.length;
+  }
+  
   renderizarPaginacao();
   renderizarTabela();
   document.getElementById('totalProdutos').innerText = `Total: ${produtosFiltrados.length}`;
@@ -1133,7 +1222,7 @@ function renderizarPaginacao() {
   const totalPaginas = Math.ceil(produtosFiltrados.length / itensPorPagina);
   const paginacao = document.getElementById('paginacao');
   
-  if (produtosFiltrados.length <= itensPorPagina) {
+  if (produtosFiltrados.length <= itensPorPagina || totalPaginas <= 1) {
     paginacao.innerHTML = '';
     return;
   }
@@ -1173,7 +1262,7 @@ function mudarPagina(novaPagina) {
 
 function renderizarTabela() {
   const inicio = (paginaAtual - 1) * itensPorPagina;
-  const fim = inicio + itensPorPagina;
+  const fim = Math.min(inicio + itensPorPagina, produtosFiltrados.length);
   const produtosPagina = produtosFiltrados.slice(inicio, fim);
   
   const lista = document.getElementById('lista');
@@ -1238,6 +1327,14 @@ async function listar() {
   todosProdutos = data;
   produtosFiltrados = [...todosProdutos];
   paginaAtual = 1;
+  
+  // Atualizar itens por página baseado no select atual
+  const selectItens = document.getElementById('itensPorPagina');
+  if (selectItens.value === 'todos') {
+    itensPorPagina = produtosFiltrados.length;
+  } else {
+    itensPorPagina = parseInt(selectItens.value);
+  }
   
   document.getElementById('totalProdutos').innerText = `Total: ${todosProdutos.length}`;
   renderizarPaginacao();

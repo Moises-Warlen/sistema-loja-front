@@ -436,6 +436,307 @@
     font-weight: 700;
   }
 
+  /* Container da tabela */
+  .table-container {
+    background: white;
+    border-radius: clamp(12px, 3vw, 15px);
+    padding: clamp(12px, 2.5vw, 20px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 25px;
+  }
+
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .items-per-page select {
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    color: var(--dark);
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .items-per-page select:hover {
+    border-color: var(--primary);
+  }
+
+  .items-per-page select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .items-per-page label {
+    color: #64748b;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+    white-space: nowrap;
+  }
+
+  .modern-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 clamp(4px, 1vw, 8px);
+    min-width: 800px;
+  }
+
+  .modern-table thead th {
+    background: #f8fafc;
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2vw, 15px);
+    font-weight: 600;
+    color: var(--dark);
+    text-transform: uppercase;
+    font-size: clamp(0.7rem, 2vw, 0.85rem);
+    letter-spacing: 1px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  .modern-table tbody tr {
+    background: #f8fafc;
+    border-radius: 12px;
+    transition: all 0.3s;
+  }
+
+  .modern-table tbody tr:hover {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+  }
+
+  .modern-table td {
+    padding: clamp(8px, 2vw, 12px) clamp(10px, 2vw, 15px);
+    border: none;
+    color: var(--dark);
+    font-size: clamp(0.8rem, 2.2vw, 0.95rem);
+    vertical-align: middle;
+  }
+
+  .modern-table td:first-child {
+    border-radius: 12px 0 0 12px;
+  }
+
+  .modern-table td:last-child {
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* Badge de status de pagamento */
+  .payment-badge {
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .payment-badge.dinheiro {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+  }
+
+  .payment-badge.pix {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .payment-badge.credito {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+  }
+
+  .payment-badge.debito {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--secondary);
+  }
+
+  /* Botões de ação */
+  .action-btn {
+    width: clamp(28px, 6vw, 38px);
+    height: clamp(28px, 6vw, 38px);
+    border-radius: clamp(6px, 1.5vw, 8px);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .action-btn.info {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary);
+  }
+
+  .action-btn.info:hover {
+    background: var(--primary);
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Paginação */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(4px, 1.5vw, 8px);
+    margin-top: 25px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn {
+    min-width: clamp(35px, 8vw, 40px);
+    height: clamp(35px, 8vw, 40px);
+    border-radius: clamp(8px, 2vw, 10px);
+    border: 2px solid #e2e8f0;
+    background: white;
+    color: var(--dark);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    font-size: clamp(0.8rem, 2.2vw, 0.9rem);
+  }
+
+  .page-btn:hover:not(:disabled) {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: scale(1.05);
+  }
+
+  .page-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+
+  .page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center;
+    padding: clamp(30px, 8vw, 40px) clamp(16px, 4vw, 20px);
+  }
+
+  .empty-state i {
+    font-size: clamp(40px, 10vw, 50px);
+    color: #94a3b8;
+    margin-bottom: 15px;
+  }
+
+  .empty-state p {
+    color: #64748b;
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    margin: 0;
+  }
+
+  /* Modal de detalhes */
+  .uk-modal-dialog {
+    border-radius: clamp(15px, 4vw, 20px) !important;
+    padding: clamp(16px, 4vw, 25px) !important;
+    margin: 16px !important;
+    max-width: 600px !important;
+    width: calc(100% - 32px) !important;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .modal-header h2 {
+    margin: 0;
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    line-height: 1.2;
+  }
+
+  .modal-header i {
+    font-size: clamp(1.5rem, 5vw, 1.8rem);
+  }
+
+  .detail-item {
+    background: #f8fafc;
+    border-radius: clamp(8px, 2vw, 10px);
+    padding: clamp(12px, 3vw, 15px);
+    margin-bottom: 10px;
+  }
+
+  .detail-label {
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
+    color: #64748b;
+    margin-bottom: 5px;
+  }
+
+  .detail-value {
+    font-size: clamp(1rem, 3vw, 1.1rem);
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  .produtos-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin: 10px 0;
+    scrollbar-width: thin;
+  }
+
+  .produto-detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: clamp(8px, 2vw, 10px);
+    border-bottom: 1px solid #e2e8f0;
+    font-size: clamp(0.85rem, 2.2vw, 0.95rem);
+  }
+
+  .produto-detail-item:last-child {
+    border-bottom: none;
+  }
+
+  .cliente-info {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-radius: clamp(8px, 2vw, 10px);
+    padding: clamp(12px, 3vw, 15px);
+    margin-bottom: 15px;
+  }
+
+  .cliente-info p {
+    margin: 5px 0;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+  }
+
+  .cliente-info i {
+    width: 20px;
+    color: var(--primary);
+  }
+
   /* Estilos Select2 personalizados */
   .select2-container--default .select2-selection--single {
     height: 40px !important;
@@ -549,6 +850,19 @@
     .resumo-venda .total {
       align-self: flex-end;
     }
+
+    .table-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .items-per-page {
+      width: 100%;
+    }
+
+    .items-per-page select {
+      flex: 1;
+    }
   }
 
   @media (max-width: 480px) {
@@ -592,6 +906,11 @@
       width: 30px;
       height: 30px;
       font-size: 0.8rem;
+    }
+
+    .modern-table td {
+      white-space: normal;
+      word-break: break-word;
     }
   }
 
@@ -789,6 +1108,48 @@
       </div>
     </div>
 
+    <!-- HISTÓRICO DE VENDAS -->
+    <div class="table-container">
+      <div class="table-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <i class="fas fa-history" style="color: var(--primary); font-size: 1.2rem;"></i>
+          <h3 style="margin: 0; font-size: clamp(1rem, 3vw, 1.2rem);">Histórico de Vendas</h3>
+        </div>
+        
+        <div class="items-per-page">
+          <label for="itensPorPagina">Itens por página:</label>
+          <select id="itensPorPagina" onchange="mudarItensPorPagina(this.value)">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="todos">Todos</option>
+          </select>
+        </div>
+      </div>
+      
+      <span style="color: #64748b; font-size: clamp(0.8rem, 2.5vw, 0.9rem); display: block; margin-bottom: 15px;" id="totalVendas">Total: 0</span>
+      
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>Data/Hora</th>
+            <th>Cliente</th>
+            <th>Produtos</th>
+            <th>Qtd Itens</th>
+            <th>Valor Total</th>
+            <th>Pagamento</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="listaVendas"></tbody>
+      </table>
+
+      <!-- Paginação -->
+      <div class="pagination" id="paginacao"></div>
+    </div>
+
   </div>
 
   <!-- MODAL DETALHES DA VENDA -->
@@ -797,6 +1158,7 @@
       <div class="modal-header">
         <i class="fas fa-receipt" style="color: var(--primary);"></i>
         <h2>Detalhes da Venda</h2>
+        <button class="uk-modal-close" type="button" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; margin-left: auto;">&times;</button>
       </div>
       
       <div id="detalhesVenda"></div>
@@ -824,6 +1186,10 @@ if (!localStorage.getItem("token")) {
 // Variáveis globais
 let produtos = [];
 let clientes = [];
+let todasVendas = [];
+let vendasFiltradas = [];
+let paginaAtual = 1;
+let itensPorPagina = 10;
 
 // Menu hamburguer
 function toggleMenu() {
@@ -854,6 +1220,38 @@ function formatarDataHora(data) {
 function formatarDataParaInput(data) {
   const d = new Date(data);
   return d.toISOString().slice(0, 16);
+}
+
+function getFormaPagamentoIcon(forma) {
+  const icons = {
+    'dinheiro': '💵',
+    'pix': '📱',
+    'credito': '💳',
+    'debito': '💳'
+  };
+  return icons[forma] || '💰';
+}
+
+function getFormaPagamentoNome(forma) {
+  const nomes = {
+    'dinheiro': 'Dinheiro',
+    'pix': 'Pix',
+    'credito': 'Cartão de Crédito',
+    'debito': 'Cartão de Débito'
+  };
+  return nomes[forma] || forma;
+}
+
+// Funções de paginação
+function mudarItensPorPagina(valor) {
+  if (valor === 'todos') {
+    itensPorPagina = vendasFiltradas.length;
+  } else {
+    itensPorPagina = parseInt(valor);
+  }
+  paginaAtual = 1;
+  renderizarPaginacao();
+  renderizarTabelaVendas();
 }
 
 // Inicializar Select2 para busca
@@ -893,6 +1291,21 @@ async function carregarDados() {
     });
     clientes = await cRes.json();
     
+    // Carregar vendas
+    const vRes = await fetch(API + "/vendas", {
+      headers: {
+        "Authorization": "Bearer " + localStorage.getItem("token")
+      }
+    });
+    todasVendas = await vRes.json();
+    vendasFiltradas = [...todasVendas];
+    
+    // Ordenar por data (mais recentes primeiro)
+    vendasFiltradas.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
+    
+    // Atualizar total de vendas
+    document.getElementById('totalVendas').innerText = `Total: ${todasVendas.length}`;
+    
     // Popular selects
     popularSelects();
     
@@ -901,6 +1314,11 @@ async function carregarDados() {
     
     // Adicionar primeira linha de produto
     adicionarProdutoLinha();
+    
+    // Renderizar tabela de vendas
+    paginaAtual = 1;
+    renderizarPaginacao();
+    renderizarTabelaVendas();
     
   } catch (error) {
     console.error('Erro ao carregar dados:', error);
@@ -1254,6 +1672,174 @@ async function salvarVenda() {
       message: '<i class="fas fa-exclamation-circle"></i> Erro ao registrar venda',
       status: 'danger'
     });
+  }
+}
+
+// Funções da tabela de vendas
+function renderizarPaginacao() {
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  const paginacao = document.getElementById('paginacao');
+  
+  if (vendasFiltradas.length <= itensPorPagina || totalPaginas <= 1) {
+    paginacao.innerHTML = '';
+    return;
+  }
+  
+  let html = '';
+  
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual - 1})" ${paginaAtual === 1 ? 'disabled' : ''}>
+    <i class="fas fa-chevron-left"></i>
+  </button>`;
+  
+  for (let i = 1; i <= totalPaginas; i++) {
+    if (i === 1 || i === totalPaginas || (i >= paginaAtual - 1 && i <= paginaAtual + 1)) {
+      html += `<button class="page-btn ${i === paginaAtual ? 'active' : ''}" onclick="mudarPagina(${i})">${i}</button>`;
+    } else if (i === paginaAtual - 2 || i === paginaAtual + 2) {
+      html += `<button class="page-btn" disabled>...</button>`;
+    }
+  }
+  
+  html += `<button class="page-btn" onclick="mudarPagina(${paginaAtual + 1})" ${paginaAtual === totalPaginas ? 'disabled' : ''}>
+    <i class="fas fa-chevron-right"></i>
+  </button>`;
+  
+  paginacao.innerHTML = html;
+}
+
+function mudarPagina(novaPagina) {
+  const totalPaginas = Math.ceil(vendasFiltradas.length / itensPorPagina);
+  if (novaPagina >= 1 && novaPagina <= totalPaginas) {
+    paginaAtual = novaPagina;
+    renderizarPaginacao();
+    renderizarTabelaVendas();
+  }
+}
+
+function renderizarTabelaVendas() {
+  const inicio = (paginaAtual - 1) * itensPorPagina;
+  const fim = Math.min(inicio + itensPorPagina, vendasFiltradas.length);
+  const vendasPagina = vendasFiltradas.slice(inicio, fim);
+  
+  const lista = document.getElementById('listaVendas');
+  lista.innerHTML = "";
+  
+  vendasPagina.forEach(v => {
+    const cliente = v.cliente || { nome: 'Cliente não encontrado' };
+    const totalItens = v.itens ? v.itens.reduce((acc, i) => acc + i.quantidade, 0) : 0;
+    
+    let produtosLista = 'N/A';
+    if (v.itens && v.itens.length > 0) {
+      produtosLista = v.itens.map(i => {
+        return i.produto ? i.produto.nome : 'Produto não encontrado';
+      }).join(', ');
+    }
+    
+    lista.innerHTML += `
+      <tr>
+        <td>${formatarDataHora(v.dataVenda || v.createdAt)}</td>
+        <td><strong>${cliente.nome}</strong></td>
+        <td>${produtosLista.substring(0, 30)}${produtosLista.length > 30 ? '...' : ''}</td>
+        <td>${totalItens} unid</td>
+        <td><strong>R$ ${formatarMoeda(v.total)}</strong></td>
+        <td>
+          <span class="payment-badge ${v.formaPagamento || 'dinheiro'}">
+            ${getFormaPagamentoIcon(v.formaPagamento)} ${getFormaPagamentoNome(v.formaPagamento)}
+          </span>
+        </td>
+        <td>
+          <button onclick="verDetalhesVenda('${v.id}')" 
+                  class="action-btn info" title="Detalhes">
+            <i class="fas fa-eye"></i>
+          </button>
+        </td>
+      </tr>`;
+  });
+  
+  if (vendasPagina.length === 0) {
+    lista.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty-state">
+            <i class="fas fa-shopping-cart"></i>
+            <p>Nenhuma venda encontrada</p>
+          </div>
+        </td>
+      </tr>`;
+  }
+}
+
+function verDetalhesVenda(id) {
+  const venda = todasVendas.find(v => v.id == id);
+  if (!venda) {
+    console.error('Venda não encontrada:', id);
+    return;
+  }
+  
+  const cliente = venda.cliente || { nome: 'N/A', telefone: 'N/A' };
+  
+  let produtosHtml = '<div class="produtos-list">';
+  let subtotal = 0;
+  
+  if (venda.itens && venda.itens.length > 0) {
+    venda.itens.forEach(item => {
+      const produto = item.produto || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
+      const valorItem = item.subtotal || (produto.precoVenda * item.quantidade);
+      subtotal += valorItem;
+      
+      produtosHtml += `
+        <div class="produto-detail-item">
+          <div>
+            <strong>${produto.nome}</strong><br>
+            <small>Ref: ${produto.referencia || 'N/A'} | Qtd: ${item.quantidade}x | Preço: R$ ${formatarMoeda(produto.precoVenda || 0)}</small>
+          </div>
+          <span style="font-weight: 600;">R$ ${formatarMoeda(valorItem)}</span>
+        </div>
+      `;
+    });
+  } else {
+    produtosHtml += '<p style="text-align: center; color: #64748b;">Nenhum produto nesta venda</p>';
+  }
+  produtosHtml += '</div>';
+  
+  const detalhes = document.getElementById('detalhesVenda');
+  
+  detalhes.innerHTML = `
+    <div class="cliente-info">
+      <p><i class="fas fa-user"></i> <strong>${cliente.nome}</strong></p>
+      <p><i class="fas fa-phone"></i> ${cliente.telefone || 'N/A'}</p>
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-label">📅 Data da Venda</div>
+      <div class="detail-value">${formatarDataHora(venda.dataVenda || venda.createdAt)}</div>
+    </div>
+    
+    <div class="detail-item">
+      <div class="detail-label">📦 Produtos</div>
+      ${produtosHtml}
+    </div>
+    
+    <div class="detail-item">
+      <div class="detail-label">💰 Resumo Financeiro</div>
+      <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+        <span>Subtotal:</span>
+        <span>R$ ${formatarMoeda(subtotal)}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--success); font-size: 1.2rem; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+        <span>Total:</span>
+        <span>R$ ${formatarMoeda(venda.total)}</span>
+      </div>
+    </div>
+    
+    <div class="detail-item">
+      <div class="detail-label">💳 Forma de Pagamento</div>
+      <div class="detail-value">${getFormaPagamentoIcon(venda.formaPagamento)} ${getFormaPagamentoNome(venda.formaPagamento)}</div>
+    </div>
+  `;
+  
+  // Abrir o modal
+  if (typeof UIkit !== 'undefined') {
+    UIkit.modal('#modalDetalhesVenda').show();
   }
 }
 
