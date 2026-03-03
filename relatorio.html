@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
 <title>Relatórios - Mariá Skincare</title>
 
+<!-- Ícone da página (favicon) -->
+  <link rel="icon" type="image/png" href="logo-m.ico">
 <!-- UIkit -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/css/uikit.min.css"/>
 <script src="https://cdn.jsdelivr.net/npm/uikit@3.19.4/dist/js/uikit.min.js"></script>
@@ -207,32 +209,32 @@
     border-radius: 10px;
   }
 
-  /* Botões de tipo de relatório */
+  /* Botões de tipo de relatório - REDUZIDOS */
   .report-type-buttons {
     display: flex;
-    gap: clamp(8px, 2vw, 10px);
+    gap: 8px;
     margin-bottom: 25px;
     flex-wrap: wrap;
   }
 
   .type-btn {
-    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 20px);
+    padding: 8px 16px;
     border: 2px solid #e2e8f0;
     background: white;
-    border-radius: clamp(10px, 2vw, 12px);
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex: 1 1 150px;
+    gap: 6px;
+    flex: 0 1 auto;
     justify-content: center;
-    font-size: clamp(0.9rem, 2.2vw, 1rem);
+    font-size: 0.9rem;
   }
 
   .type-btn i {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: 1rem;
   }
 
   .type-btn.active {
@@ -382,6 +384,27 @@
     box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
   }
 
+  .btn-info {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    color: white;
+    border: none;
+    padding: clamp(10px, 2vw, 12px) clamp(16px, 3vw, 25px);
+    border-radius: clamp(10px, 2vw, 12px);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+  }
+
+  .btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+  }
+
   /* Cards de estatísticas */
   .stats-grid {
     display: grid;
@@ -447,37 +470,6 @@
     font-size: clamp(0.75rem, 1.8vw, 0.85rem);
     opacity: 0.8;
     margin-top: 5px;
-  }
-
-  /* Cards de gráfico */
-  .chart-card {
-    background: white;
-    border-radius: clamp(12px, 3vw, 15px);
-    padding: clamp(16px, 3vw, 25px);
-    margin-bottom: 30px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    border: 1px solid #e2e8f0;
-  }
-
-  .chart-card h3 {
-    margin: 0 0 clamp(12px, 2vw, 20px) 0;
-    font-size: clamp(1.1rem, 3vw, 1.3rem);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--dark);
-    padding-bottom: clamp(10px, 2vw, 15px);
-    border-bottom: 2px solid #f1f5f9;
-  }
-
-  .chart-card h3 i {
-    color: var(--primary);
-    font-size: clamp(1.2rem, 3vw, 1.4rem);
-  }
-
-  .chart-container {
-    height: clamp(300px, 40vh, 400px);
-    position: relative;
   }
 
   /* Tabelas modernas */
@@ -640,14 +632,48 @@
     transform: scale(1.1);
   }
 
-  /* Paginação */
+  .action-btn.pdf {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+  }
+
+  .action-btn.pdf:hover {
+    background: #dc2626;
+    color: white;
+    transform: scale(1.1);
+  }
+
+  /* Paginação e controles de limite */
+  .pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 25px;
+  }
+
   .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: clamp(4px, 1.5vw, 8px);
-    margin-top: 25px;
     flex-wrap: wrap;
+  }
+
+  .limit-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .limit-selector select {
+    width: 80px;
+    padding: 8px 12px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.9rem;
   }
 
   .page-btn {
@@ -759,6 +785,7 @@
   .modal-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     margin-bottom: 20px;
     padding-bottom: 15px;
@@ -795,7 +822,7 @@
   }
 
   .produtos-list {
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
     margin: 10px 0;
     scrollbar-width: thin;
@@ -811,6 +838,24 @@
 
   .produto-detail-item:last-child {
     border-bottom: none;
+  }
+
+  /* Informações do cliente no modal */
+  .cliente-info {
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    border-radius: clamp(8px, 2vw, 10px);
+    padding: clamp(12px, 3vw, 15px);
+    margin-bottom: 15px;
+  }
+
+  .cliente-info p {
+    margin: 5px 0;
+    font-size: clamp(0.9rem, 2.2vw, 1rem);
+  }
+
+  .cliente-info i {
+    width: 20px;
+    color: var(--primary);
   }
 
   /* Responsivo */
@@ -850,6 +895,11 @@
     .table-header button {
       width: 100%;
     }
+
+    .pagination-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 
   @media (max-width: 480px) {
@@ -867,11 +917,14 @@
     }
 
     .report-type-buttons {
-      flex-direction: column;
+      flex-direction: row;
+      flex-wrap: wrap;
     }
 
     .type-btn {
-      width: 100%;
+      width: calc(50% - 4px);
+      font-size: 0.85rem;
+      padding: 8px 12px;
     }
   }
 
@@ -890,10 +943,6 @@
   @media (max-height: 600px) and (orientation: landscape) {
     .uk-container {
       height: calc(100vh - 32px);
-    }
-
-    .chart-container {
-      height: 250px;
     }
 
     .stats-grid {
@@ -965,7 +1014,7 @@
   <!-- Área de conteúdo rolável -->
   <div class="content-area">
 
-    <!-- BOTÕES DE TIPO DE RELATÓRIO -->
+    <!-- BOTÕES DE TIPO DE RELATÓRIO - REDUZIDOS -->
     <div class="report-type-buttons">
       <button onclick="tipoRelatorio('vendas')" class="type-btn active" id="btn-vendas">
         <i class="fas fa-shopping-cart"></i>
@@ -1058,17 +1107,6 @@
         </div>
       </div>
 
-      <!-- GRÁFICO DE MAIS VENDIDOS -->
-      <div class="chart-card">
-        <h3>
-          <i class="fas fa-trophy"></i>
-          Produtos Mais Vendidos
-        </h3>
-        <div class="chart-container">
-          <canvas id="graficoMaisVendidos"></canvas>
-        </div>
-      </div>
-
       <!-- TABELA DE VENDAS -->
       <div class="table-container">
         <div class="table-header">
@@ -1097,7 +1135,7 @@
               <th>Qtd Itens</th>
               <th>Valor Total</th>
               <th>Pagamento</th>
-              <th>Detalhes</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody id="listaVendas"></tbody>
@@ -1216,11 +1254,23 @@
         </h3>
         
         <div class="uk-grid-small" uk-grid>
-          <div class="uk-width-1-2@m">
+          <div class="uk-width-1-3@m">
             <input type="text" id="pesquisa-cliente" class="modern-input" placeholder="🔍 Pesquisar clientes..." onkeyup="filtrarClientes()">
           </div>
           
-          <div class="uk-width-1-2@m">
+          <div class="uk-width-1-3@m">
+            <div class="limit-selector">
+              <label>Mostrar:</label>
+              <select id="limiteClientes" onchange="alterarLimiteClientes()">
+                <option value="20">20 primeiros</option>
+                <option value="50">50 primeiros</option>
+                <option value="100">100 primeiros</option>
+                <option value="0">Todos</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="uk-width-1-3@m">
             <button onclick="exportarClientesPDF()" class="btn-pdf" style="width: 100%;">
               <i class="fas fa-file-pdf"></i>
               Exportar PDF
@@ -1281,13 +1331,16 @@
               <th>Data Cadastro</th>
               <th>Total Compras</th>
               <th>Última Compra</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody id="listaClientes"></tbody>
         </table>
 
-        <!-- Paginação -->
-        <div class="pagination" id="paginacaoClientes"></div>
+        <!-- Paginação e controle de limite -->
+        <div class="pagination-container">
+          <div class="pagination" id="paginacaoClientes"></div>
+        </div>
       </div>
     </div>
 
@@ -1295,13 +1348,46 @@
     <div id="modalDetalhesVenda" uk-modal>
       <div class="uk-modal-dialog">
         <div class="modal-header">
-          <i class="fas fa-receipt" style="color: var(--primary);"></i>
-          <h2>Detalhes da Venda</h2>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-receipt" style="color: var(--primary);"></i>
+            <h2>Detalhes da Venda</h2>
+          </div>
+          <button class="uk-modal-close" type="button" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
         
         <div id="detalhesVenda"></div>
         
-        <div style="display: flex; justify-content: flex-end; margin-top: 25px;">
+        <div style="display: flex; justify-content: space-between; margin-top: 25px;">
+          <button class="btn-info" onclick="exportarVendaDetalhadaPDF()">
+            <i class="fas fa-file-pdf"></i>
+            Exportar PDF da Venda
+          </button>
+          <button class="btn-secondary uk-modal-close">
+            <i class="fas fa-times"></i>
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DETALHES DO CLIENTE -->
+    <div id="modalDetalhesCliente" uk-modal>
+      <div class="uk-modal-dialog">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-user" style="color: var(--primary);"></i>
+            <h2>Detalhes do Cliente</h2>
+          </div>
+          <button class="uk-modal-close" type="button" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        
+        <div id="detalhesCliente"></div>
+        
+        <div style="display: flex; justify-content: space-between; margin-top: 25px;">
+          <button class="btn-info" onclick="exportarClienteDetalhadoPDF()">
+            <i class="fas fa-file-pdf"></i>
+            Exportar PDF do Cliente
+          </button>
           <button class="btn-secondary uk-modal-close">
             <i class="fas fa-times"></i>
             Fechar
@@ -1354,7 +1440,17 @@ let paginaAtualVendas = 1;
 let paginaAtualProdutos = 1;
 let paginaAtualClientes = 1;
 const itensPorPagina = 10;
-let chartMaisVendidos;
+let clienteSelecionado = null;
+let vendaSelecionada = null;
+
+// Inicializar UIkit modais quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+  // Garantir que os modais sejam inicializados
+  if (typeof UIkit !== 'undefined') {
+    UIkit.modal('#modalDetalhesVenda');
+    UIkit.modal('#modalDetalhesCliente');
+  }
+});
 
 // Mostrar/esconder loading PDF
 function showPdfLoading(show) {
@@ -1490,9 +1586,6 @@ function aplicarFiltrosVendas() {
   // Atualizar cards de resumo
   atualizarResumoVendas();
   
-  // Atualizar gráfico
-  atualizarGraficoMaisVendidos();
-  
   // Atualizar tabela
   paginaAtualVendas = 1;
   renderizarPaginacaoVendas();
@@ -1537,127 +1630,6 @@ function atualizarResumoVendas() {
   } else {
     document.getElementById('pagamentoMaisUsado').textContent = '-';
     document.getElementById('percentualPagamento').textContent = '0% das vendas';
-  }
-}
-
-function atualizarGraficoMaisVendidos() {
-  // Agrupar produtos
-  const produtosVendidos = {};
-  
-  vendasFiltradas.forEach(v => {
-    if (v.produtos) {
-      v.produtos.forEach(p => {
-        const produto = todosProdutos.find(pr => pr.id == p.produtoId);
-        if (produto) {
-          if (!produtosVendidos[produto.nome]) {
-            produtosVendidos[produto.nome] = {
-              quantidade: 0,
-              total: 0
-            };
-          }
-          produtosVendidos[produto.nome].quantidade += p.quantidade;
-          produtosVendidos[produto.nome].total += p.subtotal || (produto.precoVenda * p.quantidade);
-        }
-      });
-    }
-  });
-  
-  // Ordenar por quantidade (mais vendidos primeiro)
-  const sorted = Object.entries(produtosVendidos)
-    .sort((a, b) => b[1].quantidade - a[1].quantidade)
-    .slice(0, 10); // Top 10
-  
-  const labels = sorted.map(([nome]) => nome.length > 20 ? nome.substring(0, 17) + '...' : nome);
-  const quantidades = sorted.map(([, data]) => data.quantidade);
-  const valores = sorted.map(([, data]) => data.total);
-  
-  if (chartMaisVendidos) chartMaisVendidos.destroy();
-  
-  if (labels.length > 0) {
-    const ctx = document.getElementById("graficoMaisVendidos").getContext('2d');
-    chartMaisVendidos = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Quantidade Vendida',
-            data: quantidades,
-            backgroundColor: 'rgba(37, 99, 235, 0.7)',
-            borderColor: 'rgb(37, 99, 235)',
-            borderWidth: 2,
-            borderRadius: 8,
-            yAxisID: 'y'
-          },
-          {
-            label: 'Faturamento (R$)',
-            data: valores,
-            backgroundColor: 'rgba(16, 185, 129, 0.7)',
-            borderColor: 'rgb(16, 185, 129)',
-            borderWidth: 2,
-            borderRadius: 8,
-            yAxisID: 'y1'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: { mode: 'index' },
-        plugins: {
-          legend: { 
-            position: 'top',
-            labels: { font: { size: 11 } }
-          },
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                let label = context.dataset.label || '';
-                if (label) {
-                  label += ': ';
-                }
-                if (context.dataset.label.includes('R$')) {
-                  label += 'R$ ' + context.raw.toFixed(2);
-                } else {
-                  label += context.raw + ' unidades';
-                }
-                return label;
-              }
-            }
-          }
-        },
-        scales: {
-          y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
-            title: { display: true, text: 'Quantidade' },
-            ticks: { font: { size: 10 } }
-          },
-          y1: {
-            type: 'linear',
-            display: true,
-            position: 'right',
-            title: { display: true, text: 'Faturamento (R$)' },
-            grid: { drawOnChartArea: false },
-            ticks: { 
-              font: { size: 10 },
-              callback: function(value) {
-                return 'R$ ' + value.toFixed(0);
-              }
-            }
-          }
-        }
-      }
-    });
-  } else {
-    const container = document.getElementById('graficoMaisVendidos').parentNode;
-    container.innerHTML = `
-      <div class="empty-state">
-        <i class="fas fa-chart-bar"></i>
-        <p>Nenhuma venda no período selecionado</p>
-      </div>
-    `;
   }
 }
 
@@ -1752,48 +1724,161 @@ function renderizarTabelaVendas() {
 
 function verDetalhesVenda(id) {
   const venda = todasVendas.find(v => v.id == id);
-  if (!venda) return;
+  if (!venda) {
+    console.error('Venda não encontrada:', id);
+    return;
+  }
   
-  const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A' };
+  vendaSelecionada = venda;
+  const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A', telefone: 'N/A', endereco: 'N/A' };
   
   let produtosHtml = '<div class="produtos-list">';
-  venda.produtos.forEach(p => {
-    const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0 };
-    produtosHtml += `
-      <div class="produto-detail-item">
-        <span>${produto.nome} (${p.quantidade}x)</span>
-        <span style="font-weight: 600;">R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}</span>
-      </div>
-    `;
-  });
+  let subtotal = 0;
+  
+  if (venda.produtos && venda.produtos.length > 0) {
+    venda.produtos.forEach(p => {
+      const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
+      const valorItem = p.subtotal || (produto.precoVenda * p.quantidade);
+      subtotal += valorItem;
+      
+      produtosHtml += `
+        <div class="produto-detail-item">
+          <div>
+            <strong>${produto.nome}</strong><br>
+            <small>Ref: ${produto.referencia || 'N/A'} | Qtd: ${p.quantidade}x | Preço: R$ ${formatarMoeda(produto.precoVenda || 0)}</small>
+          </div>
+          <span style="font-weight: 600;">R$ ${formatarMoeda(valorItem)}</span>
+        </div>
+      `;
+    });
+  } else {
+    produtosHtml += '<p style="text-align: center; color: #64748b;">Nenhum produto nesta venda</p>';
+  }
   produtosHtml += '</div>';
   
   const detalhes = document.getElementById('detalhesVenda');
   
   detalhes.innerHTML = `
+    <div class="cliente-info">
+      <p><i class="fas fa-user"></i> <strong>${cliente.nome}</strong></p>
+      <p><i class="fas fa-phone"></i> ${cliente.telefone || 'N/A'}</p>
+      ${cliente.endereco ? `<p><i class="fas fa-map-marker-alt"></i> ${cliente.endereco}</p>` : ''}
+    </div>
+
     <div class="detail-item">
       <div class="detail-label">📅 Data da Venda</div>
       <div class="detail-value">${formatarDataHora(venda.dataVenda || venda.createdAt)}</div>
     </div>
-    <div class="detail-item">
-      <div class="detail-label">👤 Cliente</div>
-      <div class="detail-value">${cliente.nome}</div>
-    </div>
+    
     <div class="detail-item">
       <div class="detail-label">📦 Produtos</div>
       ${produtosHtml}
     </div>
+    
     <div class="detail-item">
-      <div class="detail-label">💰 Total da Venda</div>
-      <div class="detail-value" style="color: var(--success); font-size: 1.5rem;">R$ ${formatarMoeda(venda.total)}</div>
+      <div class="detail-label">💰 Resumo Financeiro</div>
+      <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+        <span>Subtotal:</span>
+        <span>R$ ${formatarMoeda(subtotal)}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--success); font-size: 1.2rem; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+        <span>Total:</span>
+        <span>R$ ${formatarMoeda(venda.total)}</span>
+      </div>
     </div>
+    
     <div class="detail-item">
       <div class="detail-label">💳 Forma de Pagamento</div>
       <div class="detail-value">${getFormaPagamentoIcon(venda.formaPagamento)} ${getFormaPagamentoNome(venda.formaPagamento)}</div>
     </div>
   `;
   
-  UIkit.modal('#modalDetalhesVenda').show();
+  // Abrir o modal
+  if (typeof UIkit !== 'undefined') {
+    UIkit.modal('#modalDetalhesVenda').show();
+  } else {
+    console.error('UIkit não está disponível');
+    // Fallback: mostrar modal manualmente
+    const modal = document.getElementById('modalDetalhesVenda');
+    modal.style.display = 'block';
+  }
+}
+
+// Exportar PDF da venda detalhada
+async function exportarVendaDetalhadaPDF() {
+  if (!vendaSelecionada) return;
+  
+  showPdfLoading(true);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const venda = vendaSelecionada;
+    const cliente = todosClientes.find(c => c.id == venda.clienteId) || { nome: 'N/A', telefone: 'N/A', endereco: 'N/A' };
+    
+    doc.setFontSize(22);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Detalhes da Venda', 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Emitido em: ${new Date().toLocaleDateString('pt-BR')}`, 15, 30);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Informações do Cliente', 15, 45);
+    
+    doc.setFontSize(11);
+    doc.text(`Nome: ${cliente.nome}`, 20, 55);
+    doc.text(`Telefone: ${cliente.telefone || 'N/A'}`, 20, 63);
+    if (cliente.endereco) doc.text(`Endereço: ${cliente.endereco}`, 20, 71);
+    
+    doc.text(`Data da Venda: ${formatarDataHora(venda.dataVenda || venda.createdAt)}`, 15, 85);
+    doc.text(`Forma de Pagamento: ${getFormaPagamentoNome(venda.formaPagamento)}`, 15, 93);
+    
+    const dadosProdutos = [];
+    if (venda.produtos && venda.produtos.length > 0) {
+      venda.produtos.forEach(p => {
+        const produto = todosProdutos.find(pr => pr.id == p.produtoId) || { nome: 'N/A', precoVenda: 0, referencia: 'N/A' };
+        dadosProdutos.push([
+          produto.referencia || 'N/A',
+          produto.nome,
+          p.quantidade,
+          `R$ ${formatarMoeda(produto.precoVenda)}`,
+          `R$ ${formatarMoeda(p.subtotal || (produto.precoVenda * p.quantidade))}`
+        ]);
+      });
+    }
+    
+    doc.autoTable({
+      startY: 105,
+      head: [['Ref', 'Produto', 'Qtd', 'Preço Unit.', 'Subtotal']],
+      body: dadosProdutos,
+      theme: 'striped',
+      headStyles: { fillColor: [37, 99, 235] },
+      foot: [['', '', '', 'TOTAL:', `R$ ${formatarMoeda(venda.total)}`]],
+      footStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0], fontStyle: 'bold' }
+    });
+    
+    doc.save(`venda-${venda.id}-${formatarData(venda.dataVenda || venda.createdAt).replace(/\//g, '-')}.pdf`);
+    
+    UIkit.notification({
+      message: '<i class="fas fa-check-circle"></i> PDF da venda gerado com sucesso!',
+      status: 'success',
+      pos: 'top-center'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF da venda:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao gerar PDF',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  }
+  
+  showPdfLoading(false);
 }
 
 /* =====================================================
@@ -1965,10 +2050,9 @@ async function carregarClientes() {
     // Atualizar cards de resumo
     atualizarResumoClientes();
     
-    // Atualizar tabela
+    // Atualizar tabela com limite
     paginaAtualClientes = 1;
-    renderizarPaginacaoClientes();
-    renderizarTabelaClientes();
+    aplicarFiltroClientes();
     
   } catch (error) {
     console.error('Erro ao carregar clientes:', error);
@@ -2007,12 +2091,30 @@ function atualizarResumoClientes() {
 }
 
 function filtrarClientes() {
+  aplicarFiltroClientes();
+}
+
+function alterarLimiteClientes() {
+  paginaAtualClientes = 1;
+  aplicarFiltroClientes();
+}
+
+function aplicarFiltroClientes() {
   const termo = document.getElementById('pesquisa-cliente').value.toLowerCase();
+  const limite = parseInt(document.getElementById('limiteClientes').value);
   
-  clientesFiltrados = todosClientes.filter(c => 
+  // Aplicar filtro de pesquisa
+  let clientesTemp = todosClientes.filter(c => 
     c.nome.toLowerCase().includes(termo) || 
     (c.telefone && c.telefone.includes(termo))
   );
+  
+  // Aplicar limite se não for "todos" (limite = 0)
+  if (limite > 0) {
+    clientesTemp = clientesTemp.slice(0, limite);
+  }
+  
+  clientesFiltrados = clientesTemp;
   
   paginaAtualClientes = 1;
   renderizarPaginacaoClientes();
@@ -2083,13 +2185,19 @@ function renderizarTabelaClientes() {
         <td>${formatarData(c.createdAt)}</td>
         <td><strong>R$ ${formatarMoeda(totalCompras)}</strong></td>
         <td>${ultimaCompra ? formatarData(ultimaCompra) : 'Nunca comprou'}</td>
+        <td>
+          <button onclick="verDetalhesCliente('${c.id}')" 
+                  class="action-btn info" title="Detalhes">
+            <i class="fas fa-eye"></i>
+          </button>
+        </td>
       </tr>`;
   });
   
   if (clientesPagina.length === 0) {
     lista.innerHTML = `
       <tr>
-        <td colspan="5">
+        <td colspan="6">
           <div class="empty-state">
             <i class="fas fa-users-slash"></i>
             <p>Nenhum cliente encontrado</p>
@@ -2097,6 +2205,177 @@ function renderizarTabelaClientes() {
         </td>
       </tr>`;
   }
+}
+
+function verDetalhesCliente(id) {
+  const cliente = todosClientes.find(c => c.id == id);
+  if (!cliente) {
+    console.error('Cliente não encontrado:', id);
+    return;
+  }
+  
+  clienteSelecionado = cliente;
+  
+  // Compras do cliente
+  const comprasCliente = todasVendas.filter(v => v.clienteId == id);
+  const totalCompras = comprasCliente.reduce((acc, v) => acc + v.total, 0);
+  const ultimaCompra = comprasCliente.length > 0 
+    ? new Date(Math.max(...comprasCliente.map(v => new Date(v.dataVenda || v.createdAt))))
+    : null;
+  
+  let comprasHtml = '<div class="produtos-list">';
+  if (comprasCliente.length > 0) {
+    comprasCliente.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
+    comprasCliente.slice(0, 5).forEach(v => {
+      comprasHtml += `
+        <div class="produto-detail-item">
+          <div>
+            <strong>${formatarDataHora(v.dataVenda || v.createdAt)}</strong><br>
+            <small>${v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0} itens</small>
+          </div>
+          <span style="font-weight: 600;">R$ ${formatarMoeda(v.total)}</span>
+        </div>
+      `;
+    });
+  } else {
+    comprasHtml += '<p style="text-align: center; color: #64748b;">Nenhuma compra realizada</p>';
+  }
+  comprasHtml += '</div>';
+  
+  const detalhes = document.getElementById('detalhesCliente');
+  
+  detalhes.innerHTML = `
+    <div class="cliente-info">
+      <p><i class="fas fa-user"></i> <strong>${cliente.nome}</strong></p>
+      <p><i class="fas fa-phone"></i> ${cliente.telefone || 'N/A'}</p>
+      ${cliente.email ? `<p><i class="fas fa-envelope"></i> ${cliente.email}</p>` : ''}
+      ${cliente.endereco ? `<p><i class="fas fa-map-marker-alt"></i> ${cliente.endereco}</p>` : ''}
+      ${cliente.cpf ? `<p><i class="fas fa-id-card"></i> ${cliente.cpf}</p>` : ''}
+    </div>
+
+    <div class="detail-item">
+      <div class="detail-label">📅 Data de Cadastro</div>
+      <div class="detail-value">${formatarData(cliente.createdAt)}</div>
+    </div>
+    
+    <div class="detail-item">
+      <div class="detail-label">💰 Resumo de Compras</div>
+      <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+        <span>Total de compras:</span>
+        <span>${comprasCliente.length}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Valor total:</span>
+        <span style="font-weight: bold; color: var(--success);">R$ ${formatarMoeda(totalCompras)}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span>Última compra:</span>
+        <span>${ultimaCompra ? formatarData(ultimaCompra) : 'Nunca comprou'}</span>
+      </div>
+    </div>
+    
+    <div class="detail-item">
+      <div class="detail-label">🛒 Últimas Compras</div>
+      ${comprasHtml}
+    </div>
+  `;
+  
+  // Abrir o modal
+  if (typeof UIkit !== 'undefined') {
+    UIkit.modal('#modalDetalhesCliente').show();
+  } else {
+    console.error('UIkit não está disponível');
+    // Fallback: mostrar modal manualmente
+    const modal = document.getElementById('modalDetalhesCliente');
+    modal.style.display = 'block';
+  }
+}
+
+// Exportar PDF do cliente detalhado
+async function exportarClienteDetalhadoPDF() {
+  if (!clienteSelecionado) return;
+  
+  showPdfLoading(true);
+  
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    const cliente = clienteSelecionado;
+    
+    // Compras do cliente
+    const comprasCliente = todasVendas.filter(v => v.clienteId == cliente.id);
+    const totalCompras = comprasCliente.reduce((acc, v) => acc + v.total, 0);
+    
+    doc.setFontSize(22);
+    doc.setTextColor(37, 99, 235);
+    doc.text('Ficha do Cliente', 15, 20);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(100, 116, 139);
+    doc.text(`Emitido em: ${new Date().toLocaleDateString('pt-BR')}`, 15, 30);
+    
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Dados Pessoais', 15, 45);
+    
+    doc.setFontSize(11);
+    doc.text(`Nome: ${cliente.nome}`, 20, 55);
+    doc.text(`Telefone: ${cliente.telefone || 'N/A'}`, 20, 63);
+    if (cliente.email) doc.text(`E-mail: ${cliente.email}`, 20, 71);
+    if (cliente.cpf) doc.text(`CPF: ${cliente.cpf}`, 20, 79);
+    if (cliente.endereco) doc.text(`Endereço: ${cliente.endereco}`, 20, 87);
+    doc.text(`Data de Cadastro: ${formatarData(cliente.createdAt)}`, 20, 95);
+    
+    doc.setFontSize(14);
+    doc.text('Resumo de Compras', 15, 110);
+    
+    doc.setFontSize(11);
+    doc.text(`Total de compras realizadas: ${comprasCliente.length}`, 20, 120);
+    doc.text(`Valor total em compras: R$ ${formatarMoeda(totalCompras)}`, 20, 128);
+    
+    if (comprasCliente.length > 0) {
+      const ultimaCompra = new Date(Math.max(...comprasCliente.map(v => new Date(v.dataVenda || v.createdAt))));
+      doc.text(`Última compra: ${formatarData(ultimaCompra)}`, 20, 136);
+      
+      const dadosCompras = [];
+      comprasCliente.sort((a, b) => new Date(b.dataVenda || b.createdAt) - new Date(a.dataVenda || a.createdAt));
+      comprasCliente.slice(0, 10).forEach(v => {
+        dadosCompras.push([
+          formatarData(v.dataVenda || v.createdAt),
+          v.produtos ? v.produtos.reduce((acc, p) => acc + p.quantidade, 0) : 0,
+          `R$ ${formatarMoeda(v.total)}`,
+          getFormaPagamentoNome(v.formaPagamento)
+        ]);
+      });
+      
+      doc.autoTable({
+        startY: 150,
+        head: [['Data', 'Itens', 'Total', 'Pagamento']],
+        body: dadosCompras,
+        theme: 'striped',
+        headStyles: { fillColor: [37, 99, 235] }
+      });
+    }
+    
+    doc.save(`cliente-${cliente.nome.replace(/\s+/g, '-').toLowerCase()}.pdf`);
+    
+    UIkit.notification({
+      message: '<i class="fas fa-check-circle"></i> PDF do cliente gerado com sucesso!',
+      status: 'success',
+      pos: 'top-center'
+    });
+    
+  } catch (error) {
+    console.error('Erro ao gerar PDF do cliente:', error);
+    UIkit.notification({
+      message: '<i class="fas fa-exclamation-circle"></i> Erro ao gerar PDF',
+      status: 'danger',
+      pos: 'top-center'
+    });
+  }
+  
+  showPdfLoading(false);
 }
 
 /* =====================================================
@@ -2199,16 +2478,6 @@ async function exportarVendasCompletoPDF() {
     doc.text(`Ticket Médio: ${document.getElementById('ticketMedio').textContent}`, 15, 76);
     doc.text(`Total de Itens: ${document.getElementById('totalItens').textContent}`, 15, 84);
     
-    const canvas = document.getElementById('graficoMaisVendidos');
-    if (canvas && canvas.toDataURL) {
-      try {
-        const chartImage = canvas.toDataURL('image/png');
-        doc.addImage(chartImage, 'PNG', 15, 95, 260, 100);
-      } catch (e) {
-        console.log('Erro ao adicionar gráfico:', e);
-      }
-    }
-    
     const dadosTabela = [];
     vendasFiltradas.slice(0, 20).forEach(v => {
       const cliente = todosClientes.find(c => c.id == v.clienteId) || { nome: 'N/A' };
@@ -2224,7 +2493,7 @@ async function exportarVendasCompletoPDF() {
     
     if (dadosTabela.length > 0) {
       doc.autoTable({
-        startY: 205,
+        startY: 95,
         head: [['Data/Hora', 'Cliente', 'Total', 'Pagamento']],
         body: dadosTabela,
         theme: 'striped',
